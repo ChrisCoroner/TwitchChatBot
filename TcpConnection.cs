@@ -68,13 +68,13 @@ namespace TwitchChatBot
 			}
 
 
-            Send("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
-            Send("NICK sovietmade\r\n");
+            SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
+            SendMessage("NICK sovietmade\r\n");
             //ReadMessage();
-            
-            Send("JOIN #sovietmade\r\n");
+
+            SendMessage("JOIN #sovietmade\r\n");
             //ReadMessage();
-            Send("PRIVMSG #sovietmade :test\r\n");
+            SendMessage("PRIVMSG #sovietmade :test\r\n");
             //SendMessage("JOIN sovietmade\r\n");
             //ReadMessage();
 		}
