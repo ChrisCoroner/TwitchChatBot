@@ -56,21 +56,31 @@ namespace TwitchChatBot
 				ReadMessage();
 
 			}
+			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
             SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
             SendMessage("NICK sovietmade\r\n");
-            ReadMessage();
+            //ReadMessage();
             SendMessage("USER sovietmade 0 * :lol\r\n");
             SendMessage("JOIN #sovietmade\r\n");
-            ReadMessage();
+            //ReadMessage();
             SendMessage("PRIVMSG #sovietmade :test\r\n");
             //SendMessage("JOIN sovietmade\r\n");
-            ReadMessage();
+            //ReadMessage();
+		}
+
+		private void DataReceived( IAsyncResult result)
+		{
+			int receivedDataLength = mNetworkStream.EndRead(result);
+			Console.WriteLine("Received {0} bytes: {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
+
 		}
 
 		TcpClient mTcpClient;
 		NetworkStream mNetworkStream;
 		public Endpoint Proxy;
 		public Endpoint Destination;
+		byte[] Buffer = new byte[2048];
 	}
 }
 

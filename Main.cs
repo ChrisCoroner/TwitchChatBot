@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 //oauth:4286uj803vttts1k6reigd8snxngmjl
 namespace TwitchChatBot {
 	class Flow{
@@ -11,6 +12,7 @@ namespace TwitchChatBot {
 			tt.Destination.EndpointAddress = "irc.twitch.tv";
 			tt.Destination.EndpointPort = 6667;
 			tt.Connect();
+			Thread.Sleep(1000000);
             Console.WriteLine("");
 		}
 	}
