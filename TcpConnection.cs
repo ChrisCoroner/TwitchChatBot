@@ -8,6 +8,38 @@ using System.IO;
 namespace TwitchChatBot
 {
 
+	public class ReceivedDataArgs : EventArgs
+	{
+		private byte[] mData;
+
+		ReceivedDataArgs ()
+		{
+
+		}
+
+		ReceivedDataArgs (byte[] inData)
+		{
+			mData = inData;
+		}
+
+		public byte[] Data {
+			get{
+				return mData;
+			}
+			set{
+				mData = value;
+			}
+		}
+	}
+
+	public interface ITcpConnection 
+	{
+		void Connect();
+		void SendMessage (string inMessage);
+		event EventHandler<ReceivedDataArgs> DataReceived;
+
+	}
+
 	public class Endpoint{
 		public string EndpointAddress
 		{
@@ -30,59 +62,73 @@ namespace TwitchChatBot
 	 * TcpConnection class should perform TCP connection to the endpoint;
 	 * Its should be able to connect *through* the proxy;
 	*/
-	public class TcpConnection
+
+	//TODO: split the IRC and TCP parts
+
+	public class TcpConnection : ITcpConnection
 	{
 		public TcpConnection ()
 		{
 
 		}
 
-		public void SendMessage (string inMessage)
+		public bool Connected {
+			get{
+				return mTcpClient != null && mTcpClient.Connected;
+			}
+		}
+
+		public void Connect ()
 		{
-			byte[] byteMessageAsBufferOfBytes = Encoding.UTF8.GetBytes(inMessage);
-			mNetworkStream.Write(byteMessageAsBufferOfBytes,0,byteMessageAsBufferOfBytes.Length);
-			mNetworkStream.Flush();
+			if (Connected) {
+				throw new InvalidOperationException ("Already Connected");
+			}
+			if (mTcpClient == null) {
+				mTcpClient = new TcpClient();
+			}
+			if (Proxy == null) {
+				mTcpClient.Connect(Destination.EndpointAddress, Destination.EndpointPort);
+				mNetworkStream = mTcpClient.GetStream ();
+				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
+			} else {
+				mTcpClient.Connect(Proxy.EndpointAddress, Proxy.EndpointPort);
+				mNetworkStream = mTcpClient.GetStream ();
+				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
+				string tunnelRequest = String.Format ("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString ());
+				SendMessage (tunnelRequest);
+			}
+			
+
+            SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
+            SendMessage("NICK sovietmade\r\n");
+       
+
+            SendMessage("JOIN #sovietmade\r\n");
+       
+            SendMessage("PRIVMSG #sovietmade :test\r\n");
 		}
 
 
-		public void Send (string inMessage)
+		/*
+		 *	SendMessage appends the message queue with an inMessage 
+		 */
+
+		public void SendMessage (string inMessage)
 		{
 			lock (MessageQ) {
 				MessageQ.Enqueue(inMessage);
 			}
-			SendData(null);
+			SendMessageCallback(null);
 		}
 
-		public void Connect(){
-			if (Proxy == null) {
-				mTcpClient = new TcpClient(Destination.EndpointAddress,Destination.EndpointPort);
-				mNetworkStream = mTcpClient.GetStream();
-				mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
-			} 
-			else {
-				mTcpClient = new TcpClient(Proxy.EndpointAddress,Proxy.EndpointPort);
-				mNetworkStream = mTcpClient.GetStream();
-				mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
-				string tunnelRequest = String.Format("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString());
-				Send(tunnelRequest);
-			}
+		/*
+		 *	SendMessageCallback transfer data to the destination through the NetworkStream 
+		 */
 
-
-            Send("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
-            Send("NICK sovietmade\r\n");
-            //ReadMessage();
-
-            Send("JOIN #sovietmade\r\n");
-            //ReadMessage();
-            Send("PRIVMSG #sovietmade :test\r\n");
-            //SendMessage("JOIN sovietmade\r\n");
-            //ReadMessage();
-		}
-
-
-		private void SendData (IAsyncResult result)
+		private void SendMessageCallback (IAsyncResult result)
 		{
-
+			//	result wont be null if current call to the SendMessageCallback is a continuation of BeginWrite execution
+			//	result will be null if current call to the SendMessageCallback is a continuation of SendMessage execution 
 			if (result != null) {
 				mNetworkStream.EndWrite(result);
 				lock(MessageQ){
@@ -93,6 +139,8 @@ namespace TwitchChatBot
 			string CurrentMessage = null;
 
 			lock (MessageQ) {
+				//There is a possibility, that call to SendMessageCallback was made through SendMessage,
+				//while another writing is in progress, so the call just returns, as inMessage was appended to the queue, and will be delivered in its turn
 				if (sending) {
 					return;
 				}
@@ -100,30 +148,45 @@ namespace TwitchChatBot
 					sending = true;
 					CurrentMessage = MessageQ.Dequeue();
 
-					Console.WriteLine(CurrentMessage);
+					//Console.WriteLine(CurrentMessage);
 				}
 			}
 
+			//CurrentMessage wont be null if the queue was not empty
+			//CurrentMessage will be null if the queue was empty
 			if (CurrentMessage != null) {
 
-				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendData), null);
+				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
 			}
 		}
-		private void DataReceived( IAsyncResult result)
+		private void DataReceivedCallback( IAsyncResult result)
 		{
 			int receivedDataLength = mNetworkStream.EndRead(result);
 			Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
-			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
+			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceivedCallback),null);
 
 		}
 
+		protected virtual void OnDataReceived (ReceivedDataArgs ea)
+		{
+			if (DataReceived != null) {
+				DataReceived(this,ea);
+			}
+		}
+
+		public event EventHandler<ReceivedDataArgs> DataReceived;
+
 		TcpClient mTcpClient;
 		NetworkStream mNetworkStream;
+
+		byte[] Buffer = new byte[2048];
+
+		Queue<string> MessageQ = new Queue<string>();
+
+		bool sending = false;
+
 		public Endpoint Proxy;
 		public Endpoint Destination;
-		byte[] Buffer = new byte[2048];
-		Queue<string> MessageQ = new Queue<string>();
-		bool sending = false;
 	}
 }
 
