@@ -83,6 +83,9 @@ namespace TwitchChatBot
 			if (Connected) {
 				throw new InvalidOperationException ("Already Connected");
 			}
+			if (Destination == null) {
+				throw new InvalidOperationException("You should atleast specify destination endpoint");
+			}
 			if (mTcpClient == null) {
 				mTcpClient = new TcpClient();
 			}
