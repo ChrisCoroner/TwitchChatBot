@@ -12,12 +12,12 @@ namespace TwitchChatBot
 	{
 		private byte[] mData;
 
-		ReceivedDataArgs ()
+		public ReceivedDataArgs ()
 		{
 
 		}
 
-		ReceivedDataArgs (byte[] inData)
+		public ReceivedDataArgs (byte[] inData)
 		{
 			mData = inData;
 		}
@@ -163,6 +163,11 @@ namespace TwitchChatBot
 		{
 			int receivedDataLength = mNetworkStream.EndRead(result);
 			Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+
+			byte[] ReceivedData = new byte[receivedDataLength];
+			Array.Copy(Buffer,ReceivedData,receivedDataLength);
+
+			OnDataReceived(new ReceivedDataArgs(ReceivedData));
 			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceivedCallback),null);
 
 		}
