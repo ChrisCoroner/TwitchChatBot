@@ -100,15 +100,7 @@ namespace TwitchChatBot
 				string tunnelRequest = String.Format ("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString ());
 				SendMessage (tunnelRequest);
 			}
-			
 
-            SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
-            SendMessage("NICK sovietmade\r\n");
-       
-
-            SendMessage("JOIN #sovietmade\r\n");
-       
-            SendMessage("PRIVMSG #sovietmade :test\r\n");
 		}
 
 

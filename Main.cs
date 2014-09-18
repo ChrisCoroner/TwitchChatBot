@@ -15,8 +15,15 @@ namespace TwitchChatBot {
 
 			bot.Destination.EndpointAddress = "irc.twitch.tv";
 			bot.Destination.EndpointPort = 6667;
-			bot.Connect();
 
+			bot.Connect();
+            
+			bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
+            bot.SendMessage("NICK sovietmade\r\n");
+            bot.SendMessage("JOIN #sovietmade\r\n");
+            bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
+			Thread.Sleep(10000);
+			bot.DumpMessageQ();
 			Thread.Sleep(1000000);
             Console.WriteLine("");
 		}
