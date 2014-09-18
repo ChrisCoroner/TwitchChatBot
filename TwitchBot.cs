@@ -63,7 +63,7 @@ namespace TwitchChatBot
 		        {
 		            byte[] message = new byte[i - msgStart];
 		            Array.Copy(tempTotalData, msgStart, message, 0, i - msgStart); // Copy data[msgStart:i] to message
-					Console.WriteLine("Command Received: {0}",Encoding.UTF8.GetString(message));
+					//Console.WriteLine("Command Received: {0}",Encoding.UTF8.GetString(message));
 					mMessageQ.Enqueue(Encoding.UTF8.GetString(message));
 		            msgStart = i = i + 2;
 		        }
