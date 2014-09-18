@@ -48,7 +48,7 @@ namespace TwitchChatBot
 		public void Send (string inMessage)
 		{
 			lock (MessageQ) {
-				MessageQ.Write(Encoding.UTF8.GetBytes(inMessage),0,Encoding.UTF8.GetBytes(inMessage).Length);
+				MessageQ.Enqueue(inMessage);
 			}
 			SendData(null);
 		}
@@ -64,17 +64,17 @@ namespace TwitchChatBot
 				mNetworkStream = mTcpClient.GetStream();
 				mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceived),null);
 				string tunnelRequest = String.Format("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString());
-				SendMessage(tunnelRequest);
+				Send(tunnelRequest);
 			}
 
 
-            SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
-            SendMessage("NICK sovietmade\r\n");
+            Send("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
+            Send("NICK sovietmade\r\n");
             //ReadMessage();
 
-            SendMessage("JOIN #sovietmade\r\n");
+            Send("JOIN #sovietmade\r\n");
             //ReadMessage();
-            SendMessage("PRIVMSG #sovietmade :test\r\n");
+            Send("PRIVMSG #sovietmade :test\r\n");
             //SendMessage("JOIN sovietmade\r\n");
             //ReadMessage();
 		}
@@ -90,26 +90,23 @@ namespace TwitchChatBot
 				}
 			}
 
-			MemoryStream ms = null;
+			string CurrentMessage = null;
 
 			lock (MessageQ) {
 				if (sending) {
 					return;
 				}
-				if (MessageQ.Length != 0) {
+				if (MessageQ.Count != 0) {
 					sending = true;
-					ms = new MemoryStream();
+					CurrentMessage = MessageQ.Dequeue();
 
-					MessageQ.CopyTo(ms);
-					MessageQ.SetLength(0);
-
-					Console.WriteLine(Encoding.UTF8.GetString(ms.ToArray()));
+					Console.WriteLine(CurrentMessage);
 				}
 			}
 
-			if (ms != null) {
+			if (CurrentMessage != null) {
 
-				mNetworkStream.BeginWrite(ms.ToArray(),0,(int)ms.Length, new AsyncCallback(SendData), null);
+				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendData), null);
 			}
 		}
 		private void DataReceived( IAsyncResult result)
@@ -125,7 +122,7 @@ namespace TwitchChatBot
 		public Endpoint Proxy;
 		public Endpoint Destination;
 		byte[] Buffer = new byte[2048];
-		MemoryStream MessageQ = new MemoryStream();
+		Queue<string> MessageQ = new Queue<string>();
 		bool sending = false;
 	}
 }
