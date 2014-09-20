@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TwitchChatBot
 {
@@ -30,6 +31,7 @@ namespace TwitchChatBot
 		public static IrcCommand Parse (string inCommandString)
 		{
 			string prefix = null, name = null;
+            List<IrcCommandParameter> parameters = new List<IrcCommandParameter>(); 
 			if (inCommandString [0] == ':') {
 				prefix = inCommandString.Substring(1,inCommandString.IndexOf(' ') - 1);
 				inCommandString = inCommandString.Substring(inCommandString.IndexOf(' ') + 1);
@@ -37,7 +39,34 @@ namespace TwitchChatBot
 			name = inCommandString.Substring(0,inCommandString.IndexOf(' '));
 			inCommandString = inCommandString.Substring(inCommandString.IndexOf(' ') + 1);
 
-			return new IrcCommand(prefix,name); 
+            while (inCommandString.Length > 0)
+            {
+                if (inCommandString[0] == ':')
+                {
+                    parameters.Add(inCommandString.Substring(1).AsIrcCommandTraillingParameter());
+                    inCommandString = "";
+                }
+                else 
+                {
+                    int nextParamEnd = inCommandString.IndexOf(' ');
+                    if (nextParamEnd == -1) 
+                    {
+                        nextParamEnd = inCommandString.Length;
+                    }
+                    string nextParam = inCommandString.Substring(0, nextParamEnd);
+                    parameters.Add(new IrcCommandParameter(nextParam,false)); //TODO: create an extension for not trailling - parameter case
+                    if (nextParamEnd != inCommandString.Length)
+                    {
+                        inCommandString = inCommandString.Substring(nextParamEnd + 1);
+                    }
+                    else
+                    {
+                        inCommandString = "";
+                    }
+                }
+            }
+
+			return new IrcCommand(prefix,name,parameters.ToArray()); 
 		}
 
 		public override string ToString ()
@@ -50,6 +79,12 @@ namespace TwitchChatBot
 				return mName;
 			}
 		}
+
+        public IrcCommandParameter[] Parameters{
+            get {
+                return mParams;
+            }
+        }
 
 		string mPrefix;
 		string mName;
@@ -73,5 +108,14 @@ namespace TwitchChatBot
 			return (mTrailling ? ":" : "") + mValue;
 		}
 	}
+
+    public static class IrcCommandParameterExtensions
+    {
+        public static IrcCommandParameter AsIrcCommandTraillingParameter(this string inParameter) 
+        {
+            return new IrcCommandParameter(inParameter, true);
+        }
+    }
+
 }
 

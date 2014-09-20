@@ -157,7 +157,7 @@ namespace TwitchChatBot
 		private void DataReceivedCallback( IAsyncResult result)
 		{
 			int receivedDataLength = mNetworkStream.EndRead(result);
-			Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+			//Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
 
 			byte[] ReceivedData = new byte[receivedDataLength];
 			Array.Copy(Buffer,ReceivedData,receivedDataLength);
