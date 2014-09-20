@@ -68,6 +68,10 @@ namespace TwitchChatBot
 					if(inMessage.Length > 0){
 						mMessageQ.Enqueue(inMessage);
 						Console.WriteLine("COMMAND NAME: {0}",IrcCommand.Parse(inMessage).Name);
+                        Console.WriteLine("PARAMETER: ");
+                        foreach (var p in IrcCommand.Parse(inMessage).Parameters) {
+                            Console.WriteLine(p.ToString());
+                        }
 					}
 					msgStart = i = i + 2;
 		        }
