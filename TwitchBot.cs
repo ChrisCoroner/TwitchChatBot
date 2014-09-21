@@ -72,6 +72,11 @@ namespace TwitchChatBot
                         foreach (var p in IrcCommand.Parse(inMessage).Parameters) {
                             Console.WriteLine(p.ToString());
                         }
+
+                        IrcCommand incCommand = mIrcCommandAnalyzer.GetResponse(IrcCommand.Parse(inMessage));
+                        if (incCommand != null) {
+                            SendMessage(incCommand.ToString());
+                        }
 					}
 					msgStart = i = i + 2;
 		        }
@@ -93,6 +98,7 @@ namespace TwitchChatBot
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
 		MemoryStream mMessagesBuffer = new MemoryStream();
+        IrcCommandAnalyzer mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 	}
 }
 

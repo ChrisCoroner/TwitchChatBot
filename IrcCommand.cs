@@ -117,5 +117,35 @@ namespace TwitchChatBot
         }
     }
 
+    public abstract class IrcCommandAnalyzer
+    {
+        public abstract IrcCommand GetResponse(IrcCommand inRequestCommand);
+
+    }
+
+    public class SimpleTwitchBotIrcCommandAnalyzer : IrcCommandAnalyzer
+    {
+        public SimpleTwitchBotIrcCommandAnalyzer()
+        {
+            mDispatchTable = new Dictionary<string, Func<IrcCommand, IrcCommand>>();
+            mDispatchTable["PING"] = Ping;
+        }
+
+        public override IrcCommand GetResponse(IrcCommand inRequestCommand)
+        {
+            return mDispatchTable.ContainsKey(inRequestCommand.Name) ? mDispatchTable[inRequestCommand.Name].Invoke(inRequestCommand) : null;
+            
+        }
+
+        IrcCommand Ping(IrcCommand inCommand) 
+        {
+            return new IrcCommand(null, "PONG", inCommand.Parameters);
+        }
+
+        Dictionary<string, Func<IrcCommand, IrcCommand>> mDispatchTable;
+    }
+
+
+
 }
 
