@@ -66,7 +66,7 @@ namespace TwitchChatBot
 		}
 
 		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
-
+		//TODO: make a timered method, which is extracting quiz pairs from Q over time, assigning to the temp pair
 
 		bool QuizRuns = false;
 
