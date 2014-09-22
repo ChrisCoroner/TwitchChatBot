@@ -12,6 +12,8 @@ namespace TwitchChatBot
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
+			string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
+			mQE = new QuizEngine(Quiz);
 		}
 
 		public Endpoint Proxy {
@@ -100,6 +102,7 @@ namespace TwitchChatBot
 		Queue<string> mMessageQ = new Queue<string>();
 		MemoryStream mMessagesBuffer = new MemoryStream();
 		IrcCommandAnalyzer mIrcCommandAnalyzer;
+		QuizEngine mQE;
 	}
 }
 
