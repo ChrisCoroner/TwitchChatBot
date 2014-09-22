@@ -81,7 +81,9 @@ namespace TwitchChatBot
             
             while (true)
             {
-                IrcCommand ic = await GetMessageFromQ();
+                Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ);
+                //IrcCommand ic = await GetMessageFromQ();
+                IrcCommand ic = await tic;
                 Console.WriteLine("after GetMessageFromQ:{0} ",ic.Name);
             }
         }
