@@ -13,6 +13,8 @@ namespace TwitchChatBot
 		public QuizEngine ()
 		{
 			mQuizQueue = new Queue<Tuple<string, string>>();
+            mIncomingMessagesQueue = new Queue<IrcCommand>();
+           
 		}
 
 		public QuizEngine (string inFileWithQuiz) : this()
@@ -65,15 +67,44 @@ namespace TwitchChatBot
 
 		}
 
+        async Task<IrcCommand> GetMessageFromQ()
+        { 
+            while(mIncomingMessagesQueue.Count == 0)
+            {
+                await Task.Delay(100);
+            }
+            return mIncomingMessagesQueue.Dequeue();
+        }
+
+        async Task ReadIncomingMessages(CancellationToken ct)
+        {
+            
+            while (true)
+            {
+                IrcCommand ic = await GetMessageFromQ();
+                Console.WriteLine("after GetMessageFromQ:{0} ",ic.Name);
+            }
+        }
+
+        async public void StartQuiz()
+        {
+            if (cts != null) {
+                cts.Cancel();
+            }
+            cts = new CancellationTokenSource();
+            await  ReadIncomingMessages(cts.Token);
+        }
+
 		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
 		//TODO: make a timered method, which is extracting quiz pairs from Q over time, assigning to the temp pair
 
-		bool QuizRuns = false;
+		
 
 		public Action<string> SendMessage;
 		Queue<IrcCommand> mIncomingMessagesQueue;
 		Queue<Tuple<string,string>> mQuizQueue;
 		System.Timers.Timer mTimer;
+        CancellationTokenSource cts;
 	}
 }
 

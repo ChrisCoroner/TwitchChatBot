@@ -14,6 +14,7 @@ namespace TwitchChatBot
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 			string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
 			mQE = new QuizEngine(Quiz);
+            mQE.StartQuiz();
 		}
 
 		public Endpoint Proxy {
@@ -75,10 +76,15 @@ namespace TwitchChatBot
                         foreach (var p in IrcCommand.Parse(inMessage).Parameters) {
                             Console.WriteLine(p.ToString());
                         }
-
-                        IrcCommand incCommand = mIrcCommandAnalyzer.GetResponse(IrcCommand.Parse(inMessage));
-                        if (incCommand != null) {
-                            SendMessage(incCommand.ToString());
+                        IrcCommand incCommand = IrcCommand.Parse(inMessage);
+                        IrcCommand outCommand = mIrcCommandAnalyzer.GetResponse(IrcCommand.Parse(inMessage));
+                        if (outCommand != null)
+                        {
+                            SendMessage(outCommand.ToString());
+                        }
+                        if (incCommand.Name != null)
+                        {
+                            mQE.Process(incCommand);
                         }
 					}
 					msgStart = i = i + 2;
