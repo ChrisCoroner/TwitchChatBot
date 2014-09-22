@@ -142,6 +142,11 @@ namespace TwitchChatBot
             return new IrcCommand(null, "PONG", inCommand.Parameters);
         }
 
+		IrcCommand Privmsg(IrcCommand inCommand)
+		{
+			return null;
+		}
+
         Dictionary<string, Func<IrcCommand, IrcCommand>> mDispatchTable;
     }
 

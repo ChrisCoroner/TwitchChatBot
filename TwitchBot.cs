@@ -11,6 +11,7 @@ namespace TwitchChatBot
 		{
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
+			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 		}
 
 		public Endpoint Proxy {
@@ -51,7 +52,7 @@ namespace TwitchChatBot
 			byte[] tempTotalData = new byte[MessagesBufferLength + ea.Data.Length];
 			mMessagesBuffer.ToArray().CopyTo(tempTotalData,0);
 			Array.Copy(ea.Data,0,tempTotalData,MessagesBufferLength,ea.Data.Length);
-			//ea.Data.CopyTo(tempTotalData,MessagesBufferLength);
+
 			mMessagesBuffer.SetLength(0);
 			//Collecting finishes here.
 			//Parsing data...
@@ -98,7 +99,7 @@ namespace TwitchChatBot
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
 		MemoryStream mMessagesBuffer = new MemoryStream();
-        IrcCommandAnalyzer mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
+		IrcCommandAnalyzer mIrcCommandAnalyzer;
 	}
 }
 

@@ -41,6 +41,7 @@
     <Compile Include="TcpConnection.cs" />
     <Compile Include="TwitchBot.cs" />
     <Compile Include="IrcCommand.cs" />
+    <Compile Include="QuizEngine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
