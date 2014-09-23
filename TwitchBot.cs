@@ -14,6 +14,7 @@ namespace TwitchChatBot
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 			string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
 			mQE = new QuizEngine(Quiz);
+            mQE.SendMessage = SendMessage;
             mQE.StartQuiz();
 		}
 
@@ -82,7 +83,7 @@ namespace TwitchChatBot
                         {
                             SendMessage(outCommand.ToString());
                         }
-                        if (incCommand.Name != null)
+                        if (incCommand.Name == "PRIVMSG")
                         {
                             mQE.Process(incCommand);
                         }

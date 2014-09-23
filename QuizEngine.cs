@@ -8,13 +8,51 @@ using System.Linq;
 
 namespace TwitchChatBot
 {
+    public class QuizHint
+    {
+        public QuizHint(string inAnswer)
+        {
+            mAnswer = inAnswer;
+            mHint = new string('_', inAnswer.Length);
+        }
+
+        public string GiveAHint()
+        {
+            HintNum++;
+            OpenChar();
+            return mHint;
+        }
+
+        void OpenChar()
+        {
+            if ( (HintNum - 2) > 0 && (HintNum - 1) < mHint.Length ) {
+                //mHint[HintNum - 1] = mAnswer[HintNum - 1];
+                char[] temp = new char[mHint.Length];
+                mHint.CopyTo(0, temp, 0, mHint.Length);
+                temp[HintNum - 1] = mAnswer[HintNum - 1];
+                mHint = new string(temp);
+            }
+        }
+
+        static int HintNum
+        {
+            get;
+            set;
+        }
+
+        string mHint;
+
+        string mAnswer;
+    }
+
 	public class QuizEngine
 	{
 		public QuizEngine ()
 		{
 			mQuizQueue = new Queue<Tuple<string, string>>();
             mIncomingMessagesQueue = new Queue<IrcCommand>();
-           
+            mTimeBetweenQuestions = 60000;
+            mTimeBetweenHints = 15000;
 		}
 
 		public QuizEngine (string inFileWithQuiz) : this()
@@ -48,10 +86,10 @@ namespace TwitchChatBot
 					mQuizQueue.Enqueue(new Tuple<string, string>(result[0],result[1]));
 				}
 
-				Console.WriteLine("Strings in result: {0}",result.Length);
-				foreach(var str in result){
-					Console.WriteLine(str);
-				}
+				//Console.WriteLine("Strings in result: {0}",result.Length);
+				//foreach(var str in result){
+				//	Console.WriteLine(str);
+				//}
 			}
 		}
 
@@ -78,7 +116,6 @@ namespace TwitchChatBot
 
         async Task ReadIncomingMessages(CancellationToken ct)
         {
-            
             while (true)
             {
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ);
@@ -90,23 +127,74 @@ namespace TwitchChatBot
 
         async public void StartQuiz()
         {
+            if (mQuizQueue.Count == 0) {
+                throw new InvalidDataException("mQuizQueue is empty!");
+            }
+
             if (cts != null) {
                 cts.Cancel();
             }
             cts = new CancellationTokenSource();
+
+            mTimeToAskAQuestion = new System.Timers.Timer(mTimeBetweenQuestions);
+            mTimeToGiveAHint = new System.Timers.Timer(mTimeBetweenHints);
+
+            mTimeToAskAQuestion.Elapsed += OnTimeToAskAQuestion;
+            mTimeToAskAQuestion.Enabled = true;
+
+            mTimeToGiveAHint.Elapsed += OnTimeToGiveAHint;
+            
+
             await  ReadIncomingMessages(cts.Token);
         }
 
 		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
 		//TODO: make a timered method, which is extracting quiz pairs from Q over time, assigning to the temp pair
+        //TODO: make a timered method, which is giving a hints for current question/answer over time
 
+        void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
+        {
+            //if there is no more items in Q, then the exception will be rised
+            if (mQuizQueue.Count == 0) {
+                return;
+                //throw new InvalidDataException("mQuizQueue is empty!");
+            }
+            
+            mCurrentQAPair = mQuizQueue.Dequeue();
+
+            mQuizHint = new QuizHint(mCurrentQAPair.Item2);
+            mTimeToGiveAHint.Enabled = true;
+
+            SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString());
+        }
+
+        void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
+        {
+            string currentHint = mQuizHint.GiveAHint();
+            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString());
+        }
+
+        //delegate for communicating back to the outer world
+		public Action<string> SendMessage;
+
+        //Queue of PRIVMSGes - source of answers
+		Queue<IrcCommand> mIncomingMessagesQueue;
+		
+        //Queue of tuples, containing questions and answers
+        Queue<Tuple<string,string>> mQuizQueue;
 		
 
-		public Action<string> SendMessage;
-		Queue<IrcCommand> mIncomingMessagesQueue;
-		Queue<Tuple<string,string>> mQuizQueue;
-		System.Timers.Timer mTimer;
+        System.Timers.Timer mTimeToAskAQuestion;
+        System.Timers.Timer mTimeToGiveAHint;
+
+        Tuple<string, string> mCurrentQAPair;
+        
         CancellationTokenSource cts;
+
+        int mTimeBetweenQuestions;
+        int mTimeBetweenHints;
+
+        QuizHint mQuizHint;
 	}
 }
 
