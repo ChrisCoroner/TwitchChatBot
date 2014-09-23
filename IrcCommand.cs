@@ -80,6 +80,12 @@ namespace TwitchChatBot
 			}
 		}
 
+        public string Prefix {
+            get {
+                return mPrefix;
+            }
+        }
+
         public IrcCommandParameter[] Parameters{
             get {
                 return mParams;
@@ -107,6 +113,15 @@ namespace TwitchChatBot
 		{
 			return (mTrailling ? ":" : "") + mValue;
 		}
+
+        public string Value
+        {
+            get {
+                return mValue;
+            }
+        }
+
+
 	}
 
     public static class IrcCommandParameterExtensions

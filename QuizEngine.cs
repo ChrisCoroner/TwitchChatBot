@@ -121,6 +121,10 @@ namespace TwitchChatBot
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ);
                 //IrcCommand ic = await GetMessageFromQ();
                 IrcCommand ic = await tic;
+                //here we have a privmsg and have to check for a valid answer
+                if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2) {
+                    Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
+                }
                 Console.WriteLine("after GetMessageFromQ:{0} ",ic.Name);
             }
         }
@@ -149,8 +153,6 @@ namespace TwitchChatBot
         }
 
 		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
-		//TODO: make a timered method, which is extracting quiz pairs from Q over time, assigning to the temp pair
-        //TODO: make a timered method, which is giving a hints for current question/answer over time
 
         void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
         {
