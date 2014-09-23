@@ -6,12 +6,12 @@ namespace TwitchChatBot {
 		static void Main(){
 
 			TwitchBot bot = new TwitchBot();
-			bot.Proxy = new Endpoint();
+			//bot.Proxy = new Endpoint();
 			bot.Destination = new Endpoint();
 
 		
-			bot.Proxy.EndpointAddress = "eproxy.volga";
-			bot.Proxy.EndpointPort = 8080;
+			//bot.Proxy.EndpointAddress = "eproxy.volga";
+			//bot.Proxy.EndpointPort = 8080;
 
 			bot.Destination.EndpointAddress = "irc.twitch.tv";
 			bot.Destination.EndpointPort = 6667;

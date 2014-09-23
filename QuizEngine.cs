@@ -122,9 +122,9 @@ namespace TwitchChatBot
                 //IrcCommand ic = await GetMessageFromQ();
                 IrcCommand ic = await tic;
                 //here we have a privmsg and have to check for a valid answer
-                if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2) {
-                    Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
-                }
+                //if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2) {
+                //    Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
+                //}
                 Console.WriteLine("after GetMessageFromQ:{0} ",ic.Name);
             }
         }
@@ -167,13 +167,13 @@ namespace TwitchChatBot
             mQuizHint = new QuizHint(mCurrentQAPair.Item2);
             mTimeToGiveAHint.Enabled = true;
 
-            SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString());
+            SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
         }
 
         void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
         {
             string currentHint = mQuizHint.GiveAHint();
-            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString());
+            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString() + "\r\n");
         }
 
         //delegate for communicating back to the outer world

@@ -51,7 +51,7 @@ namespace TwitchChatBotGUI
 
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
-            if(ProxyAddress.Text != null && ProxyPort.Text != null){
+            if(ProxyAddress.Text != "" && ProxyPort.Text != ""){
                 bot.Proxy = new Endpoint();
                 bot.Proxy.EndpointAddress = ProxyAddress.Text;
                 bot.Proxy.EndpointPort = Int32.Parse(ProxyPort.Text);
