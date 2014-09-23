@@ -98,6 +98,11 @@ namespace TwitchChatBot
 
 		}
 
+        public void StartQuiz()
+        {
+            mQE.StartQuiz();
+        }
+
 		public void DumpMessageQ ()
 		{
 			foreach (var i in mMessageQ) {

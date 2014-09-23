@@ -25,7 +25,7 @@ namespace TwitchChatBot
 
         void OpenChar()
         {
-            if ( (HintNum - 2) > 0 && (HintNum - 1) < mHint.Length ) {
+            if ( (HintNum - 1) >= 0 && (HintNum - 1) < mHint.Length ) {
                 //mHint[HintNum - 1] = mAnswer[HintNum - 1];
                 char[] temp = new char[mHint.Length];
                 mHint.CopyTo(0, temp, 0, mHint.Length);
