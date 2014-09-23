@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid>
-        <TextBox Name="ProxyAddress"  HorizontalAlignment="Left" Height="24" Margin="52,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="ProxyAddressChanged"/>
-        <TextBox Name="ProxyPort"  HorizontalAlignment="Left" Height="22" Margin="52,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="56" TextChanged="ProxyPortChanged"/>
-        <Button Content="Connect" HorizontalAlignment="Left" Margin="52,100,0,0" VerticalAlignment="Top" Width="75" Click="ConnectClick"/>
+        <TextBox Name="ProxyAddress"  HorizontalAlignment="Left" Height="24" Margin="162,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="ProxyAddressChanged"/>
+        <TextBox Name="ProxyPort"  HorizontalAlignment="Left" Height="22" Margin="162,82,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="56" TextChanged="ProxyPortChanged"/>
+        <Button Content="Connect" HorizontalAlignment="Left" Margin="162,123,0,0" VerticalAlignment="Top" Width="75" Click="ConnectClick"/>
+        <TextBlock HorizontalAlignment="Left" Margin="72,41,0,0" TextWrapping="Wrap" Text="Proxy Address:" VerticalAlignment="Top" Height="24" Width="78"/>
+        <TextBlock HorizontalAlignment="Left" Margin="95,88,0,0" TextWrapping="Wrap" Text="Proxy Port:" VerticalAlignment="Top" Height="16" Width="62"/>
 
     </Grid>
 </Window>
