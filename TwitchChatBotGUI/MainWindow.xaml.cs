@@ -58,7 +58,10 @@ namespace TwitchChatBotGUI
                 bot.Proxy.EndpointPort = Int32.Parse(ProxyPort.Text);
             }
             bot.Connect();
-            
+
+            SendButton.IsEnabled = true;
+            StartQuizButton.IsEnabled = true;
+            //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=dqduj4zu9q73j3l59wrvq1zbb500kyy&redirect_uri=http://localhost
             bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
             bot.SendMessage("NICK sovietmade\r\n");
             bot.SendMessage("JOIN #sovietmade\r\n");

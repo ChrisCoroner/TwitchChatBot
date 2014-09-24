@@ -104,6 +104,7 @@ namespace TwitchChatBot
         public void StartQuiz()
         {
             string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\Quiz.txt";
+            //string Quiz = @"Quiz.txt";
             mQE.AddQuiz(Quiz);
             mQE.StartQuiz();
         }
