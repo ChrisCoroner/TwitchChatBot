@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -57,7 +58,7 @@ namespace TwitchChatBotGUI
                 bot.Proxy.EndpointPort = Int32.Parse(ProxyPort.Text);
             }
             bot.Connect();
-
+            
             bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
             bot.SendMessage("NICK sovietmade\r\n");
             bot.SendMessage("JOIN #sovietmade\r\n");
@@ -71,7 +72,50 @@ namespace TwitchChatBotGUI
             bot.SendMessage(ic.ToString() + "\r\n");
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer--;
+        }
+        async Task CountDown(CancellationToken ct)
+        {
+            while (timer >= 0)
+            {
+                TimerLabel.Content = String.Format("Quiz starting in {0}",timer);
+                await Task.Delay(100);
+            }
+        }
 
+        async Task ShowTimer(CancellationToken ct) 
+        {
+            t = new System.Timers.Timer(1000);
+            t.Elapsed += timer1_Tick;
+            t.Start();
+
+            await CountDown(ct);
+        }
+
+        async private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (StartQuizCT != null) {
+                if (t != null)
+                {
+                    t.Stop();
+                }
+                StartQuizCT.Cancel();
+            }
+            StartQuizCT = new CancellationTokenSource();
+            IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter("Starting Quiz in 60 seconds!", true));
+            bot.SendMessage(ic.ToString() + "\r\n");
+            bot.StartQuiz();
+            TimerLabel.Content = 60;
+            timer = 60;
+            await ShowTimer(StartQuizCT.Token);
+            TimerLabel.Content = "Quiz is running...";
+        }
+
+        CancellationTokenSource StartQuizCT;
+        int timer;
+        System.Timers.Timer t;
         
     }
 }

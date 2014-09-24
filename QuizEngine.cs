@@ -64,7 +64,18 @@ namespace TwitchChatBot
 
 		public QuizEngine (string inFileWithQuiz) : this()
 		{
-			if (File.Exists (inFileWithQuiz)) {
+            AddQuiz(inFileWithQuiz);
+
+		}
+
+		public QuizEngine (string[] inQuiz) : this()
+		{
+			ProcessStringsArrayAsQuiz(inQuiz);
+		}
+
+        public void AddQuiz(string inFileWithQuiz)
+        {
+        	if (File.Exists (inFileWithQuiz)) {
 				using(FileStream fs = File.OpenRead(inFileWithQuiz)){
 					
 					string[] linesOfFile = File.ReadAllLines(inFileWithQuiz);
@@ -73,13 +84,7 @@ namespace TwitchChatBot
 			} else {
 				throw new FileNotFoundException();
 			}
-
-		}
-
-		public QuizEngine (string[] inQuiz) : this()
-		{
-			ProcessStringsArrayAsQuiz(inQuiz);
-		}
+        }
 
 		void ProcessStringsArrayAsQuiz (string[] inStringsArray)
 		{
@@ -163,7 +168,9 @@ namespace TwitchChatBot
 
             //OnTimeToAskAQuestion(null,null);
 
-            await  ReadIncomingMessages(cts.Token);
+            await ReadIncomingMessages(cts.Token);
+           
+  
         }
 
 		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
@@ -207,7 +214,7 @@ namespace TwitchChatBot
         Dictionary<string, int> mScore;
 
         CancellationTokenSource cts;
-
+        
         int mTimeBetweenQuestions;
         int mTimeBetweenHints;
 

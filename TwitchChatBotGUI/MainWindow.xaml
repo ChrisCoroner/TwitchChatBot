@@ -11,6 +11,18 @@
         <TextBox Name="MessageBox" HorizontalAlignment="Left" Height="22" Margin="99,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBlock HorizontalAlignment="Left" Margin="41,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="53"><Run Language="ru-ru" Text="Message:"/></TextBlock>
         <Button Content="Send" HorizontalAlignment="Left" Margin="99,202,0,0" VerticalAlignment="Top" Width="75" Click="SendClick"/>
+        <Separator HorizontalAlignment="Left" Height="100" Margin="148,114,0,0" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+        <Button Content="Start Quiz" HorizontalAlignment="Left" Margin="385,88,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="365,34,0,0" VerticalAlignment="Top" Width="113" Height="31"/>
 
     </Grid>
 </Window>

@@ -8,4 +8,3 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.pdb
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.pdb
-C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.csprojResolveAssemblyReference.cache
