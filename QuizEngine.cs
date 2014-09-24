@@ -129,18 +129,35 @@ namespace TwitchChatBot
         {
             while (true)
             {
-                Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ);
+                Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ,ct);
                 //IrcCommand ic = await GetMessageFromQ();
                 IrcCommand ic = await tic;
                 //here we have a privmsg and have to check for a valid answer
                 if (mCurrentQAPair != null && ic.Prefix != null)
                 {
+                   
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentQAPair.Item2);
 
                     if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2)
                     {
-                        Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
-                        mScore[ic.Prefix]++;
+
+                        int indexOfExclamationSign = ic.Prefix.IndexOf('!');
+                        string name = ic.Prefix.Substring(0, indexOfExclamationSign);
+
+                        if (mScore.ContainsKey(name))
+                        {
+                            mScore[name]++;
+                        }
+                        else {
+                            mScore[name] = 1;
+                        }
+
+                        
+                        //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
+                        string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentQAPair.Item2, mScore[name]);
+                        SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
+
+                        OnTimeToAskAQuestion(null, null);
                     }
                     Console.WriteLine("after GetMessageFromQ:{0} ", ic.Name);
                 }
@@ -154,6 +171,8 @@ namespace TwitchChatBot
             }
 
             if (cts != null) {
+                mTimeToAskAQuestion.Enabled = false;
+                mTimeToGiveAHint.Enabled = false;
                 cts.Cancel();
             }
             cts = new CancellationTokenSource();
@@ -167,9 +186,9 @@ namespace TwitchChatBot
             mTimeToGiveAHint.Elapsed += OnTimeToGiveAHint;
 
             //OnTimeToAskAQuestion(null,null);
-
+            OnTimeToAskAQuestion(null, null);
             await ReadIncomingMessages(cts.Token);
-           
+            
   
         }
 
