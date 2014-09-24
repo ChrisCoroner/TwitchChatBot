@@ -33,8 +33,25 @@ namespace TwitchChatBot
         void ListenerCallback(IAsyncResult result)
         {
             HttpListenerContext context = mListener.EndGetContext(result);
+            //HttpListenerRequest request = context.Request;
+            //Console.WriteLine(request.RawUrl);
             HttpListenerResponse response = context.Response;
-            string stringResponse = "<HTML><BODY>QuizBot</BODY></HTML>";
+            string stringResponse = "<HTML>" +
+                                        "<BODY>" +
+                                            "QuizBot" +
+                                            //"<button type=\"button\" onclick=\"myFunction()\">Date</button>"+
+                                            "<p id=\"demo\"></p>" +
+                                            "<script>" +
+                                                "var x = location.hash;" +
+                                                "document.getElementById(\"demo\").innerHTML = x;" +
+                                            "</script>" +
+                                            //"<script>" +
+                                            //"function myFunction() {" +
+                                            //    "document.getElementById(\"demo\").innerHTML = Date();" +
+                                            //"}" +
+                                            //"</script>" +
+                                        "</BODY>" +
+                                    "</HTML>";
             byte[] bufferResponse = Encoding.UTF8.GetBytes(stringResponse);
             response.ContentLength64 = bufferResponse.Length;
             response.OutputStream.Write(bufferResponse, 0, bufferResponse.Length);
