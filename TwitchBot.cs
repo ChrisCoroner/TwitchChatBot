@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Net;
 namespace TwitchChatBot
 {
 	public class TwitchBot
@@ -17,9 +17,30 @@ namespace TwitchChatBot
 			//mQE = new QuizEngine(Quiz);
             //mQE.SendMessage = SendMessage;
             //mQE.StartQuiz();
+            StartHttpListener();
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessage;
 		}
+
+        public void StartHttpListener()
+        {
+            mListener = new HttpListener();
+            mListener.Prefixes.Add("http://localhost:6555/");
+            mListener.Start();
+            mListener.BeginGetContext(ListenerCallback, mListener);
+        }
+
+        void ListenerCallback(IAsyncResult result)
+        {
+            HttpListenerContext context = mListener.EndGetContext(result);
+            HttpListenerResponse response = context.Response;
+            string stringResponse = "<HTML><BODY>QuizBot</BODY></HTML>";
+            byte[] bufferResponse = Encoding.UTF8.GetBytes(stringResponse);
+            response.ContentLength64 = bufferResponse.Length;
+            response.OutputStream.Write(bufferResponse, 0, bufferResponse.Length);
+            response.OutputStream.Close();
+            mListener.BeginGetContext(ListenerCallback, mListener);
+        }
 
 		public Endpoint Proxy {
 			get {
@@ -121,6 +142,7 @@ namespace TwitchChatBot
 		MemoryStream mMessagesBuffer = new MemoryStream();
 		IrcCommandAnalyzer mIrcCommandAnalyzer;
 		QuizEngine mQE;
+        HttpListener mListener;
 	}
 }
 
