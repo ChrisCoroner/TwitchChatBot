@@ -12,7 +12,8 @@ namespace TwitchChatBot
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
-			string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
+			//string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
+            string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\Quiz.txt";
 			mQE = new QuizEngine(Quiz);
             mQE.SendMessage = SendMessage;
             mQE.StartQuiz();

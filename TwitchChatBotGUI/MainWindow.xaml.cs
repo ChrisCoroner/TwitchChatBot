@@ -61,7 +61,14 @@ namespace TwitchChatBotGUI
             bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
             bot.SendMessage("NICK sovietmade\r\n");
             bot.SendMessage("JOIN #sovietmade\r\n");
-            bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
+            //bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
+        }
+
+        private void SendClick(object sender, RoutedEventArgs e)
+        {
+            string messageToSend = MessageBox.Text;
+            IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(messageToSend, true));
+            bot.SendMessage(ic.ToString() + "\r\n");
         }
 
 

@@ -14,6 +14,12 @@ namespace TwitchChatBot
         {
             mAnswer = inAnswer;
             mHint = new string('_', inAnswer.Length);
+            HintNum = 0;
+            //for (int i = 0; i < inAnswer.Length; i++) {
+            //    if (inAnswer[i] == ' ') {
+                    
+            //    }
+            //}
         }
 
         public string GiveAHint()
@@ -25,11 +31,11 @@ namespace TwitchChatBot
 
         void OpenChar()
         {
-            if ( (HintNum - 1) >= 0 && (HintNum - 1) < mHint.Length ) {
+            if ( (HintNum - 2) >= 0 && (HintNum - 1) < mHint.Length ) {
                 //mHint[HintNum - 1] = mAnswer[HintNum - 1];
                 char[] temp = new char[mHint.Length];
                 mHint.CopyTo(0, temp, 0, mHint.Length);
-                temp[HintNum - 1] = mAnswer[HintNum - 1];
+                temp[HintNum - 2] = mAnswer[HintNum - 2];
                 mHint = new string(temp);
             }
         }
@@ -51,6 +57,7 @@ namespace TwitchChatBot
 		{
 			mQuizQueue = new Queue<Tuple<string, string>>();
             mIncomingMessagesQueue = new Queue<IrcCommand>();
+            mScore = new Dictionary<string, int>();
             mTimeBetweenQuestions = 60000;
             mTimeBetweenHints = 15000;
 		}
@@ -59,8 +66,8 @@ namespace TwitchChatBot
 		{
 			if (File.Exists (inFileWithQuiz)) {
 				using(FileStream fs = File.OpenRead(inFileWithQuiz)){
-					string[] linesOfFile = null;
-					File.ReadAllLines(inFileWithQuiz);
+					
+					string[] linesOfFile = File.ReadAllLines(inFileWithQuiz);
 					ProcessStringsArrayAsQuiz(linesOfFile);
 				}
 			} else {
@@ -72,7 +79,6 @@ namespace TwitchChatBot
 		public QuizEngine (string[] inQuiz) : this()
 		{
 			ProcessStringsArrayAsQuiz(inQuiz);
-
 		}
 
 		void ProcessStringsArrayAsQuiz (string[] inStringsArray)
@@ -122,10 +128,17 @@ namespace TwitchChatBot
                 //IrcCommand ic = await GetMessageFromQ();
                 IrcCommand ic = await tic;
                 //here we have a privmsg and have to check for a valid answer
-                //if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2) {
-                //    Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
-                //}
-                Console.WriteLine("after GetMessageFromQ:{0} ",ic.Name);
+                if (mCurrentQAPair != null && ic.Prefix != null)
+                {
+                    Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentQAPair.Item2);
+
+                    if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2)
+                    {
+                        Console.WriteLine("{0} is right, it is \"{1}\" !", ic.Prefix, mCurrentQAPair.Item2);
+                        mScore[ic.Prefix]++;
+                    }
+                    Console.WriteLine("after GetMessageFromQ:{0} ", ic.Name);
+                }
             }
         }
 
@@ -147,7 +160,8 @@ namespace TwitchChatBot
             mTimeToAskAQuestion.Enabled = true;
 
             mTimeToGiveAHint.Elapsed += OnTimeToGiveAHint;
-            
+
+            //OnTimeToAskAQuestion(null,null);
 
             await  ReadIncomingMessages(cts.Token);
         }
@@ -190,7 +204,8 @@ namespace TwitchChatBot
         System.Timers.Timer mTimeToGiveAHint;
 
         Tuple<string, string> mCurrentQAPair;
-        
+        Dictionary<string, int> mScore;
+
         CancellationTokenSource cts;
 
         int mTimeBetweenQuestions;
