@@ -3,8 +3,20 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
+using System.Web;
+using System.Web.Hosting;
+
 namespace TwitchChatBot
 {
+    class CustomHost : MarshalByRefObject
+    {
+        public void parse(string page, string query, ref StreamWriter sw)
+        {
+            SimpleWorkerRequest swr = new SimpleWorkerRequest(page, query, sw);
+            HttpRuntime.ProcessRequest(swr);
+        }
+    }
+
 	public class TwitchBot
 	{
 		public TwitchBot () 
@@ -17,6 +29,9 @@ namespace TwitchChatBot
 			//mQE = new QuizEngine(Quiz);
             //mQE.SendMessage = SendMessage;
             //mQE.StartQuiz();
+
+            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
+
             StartHttpListener();
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessage;
@@ -33,29 +48,28 @@ namespace TwitchChatBot
         void ListenerCallback(IAsyncResult result)
         {
             HttpListenerContext context = mListener.EndGetContext(result);
-            //HttpListenerRequest request = context.Request;
-            //Console.WriteLine(request.RawUrl);
             HttpListenerResponse response = context.Response;
-            string stringResponse = "<HTML>" +
-                                        "<BODY>" +
-                                            "QuizBot" +
-                                            //"<button type=\"button\" onclick=\"myFunction()\">Date</button>"+
-                                            "<p id=\"demo\"></p>" +
-                                            "<script>" +
-                                                "var x = location.hash;" +
-                                                "document.getElementById(\"demo\").innerHTML = x;" +
-                                            "</script>" +
-                                            //"<script>" +
-                                            //"function myFunction() {" +
-                                            //    "document.getElementById(\"demo\").innerHTML = Date();" +
-                                            //"}" +
-                                            //"</script>" +
-                                        "</BODY>" +
-                                    "</HTML>";
-            byte[] bufferResponse = Encoding.UTF8.GetBytes(stringResponse);
-            response.ContentLength64 = bufferResponse.Length;
-            response.OutputStream.Write(bufferResponse, 0, bufferResponse.Length);
-            response.OutputStream.Close();
+
+            StreamWriter sw = new StreamWriter(response.OutputStream);
+            string page = "Default.aspx";
+            host.parse(page, null, ref sw);
+            sw.Flush();
+            response.Close();
+
+            //string stringResponse = "<HTML>" +
+            //                            "<BODY>" +
+            //                                "QuizBot" +
+            //                                "<p id=\"demo\"></p>" +
+            //                                "<script>" +
+            //                                    "var x = location.hash;" +
+            //                                    "document.getElementById(\"demo\").innerHTML = x;" +
+            //                                "</script>" +
+            //                            "</BODY>" +
+            //                        "</HTML>";
+            //byte[] bufferResponse = Encoding.UTF8.GetBytes(stringResponse);
+            //response.ContentLength64 = bufferResponse.Length;
+            //response.OutputStream.Write(bufferResponse, 0, bufferResponse.Length);
+            //response.OutputStream.Close();
             mListener.BeginGetContext(ListenerCallback, mListener);
         }
 
@@ -141,7 +155,7 @@ namespace TwitchChatBot
 
         public void StartQuiz()
         {
-            string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
+            string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
             mQE.AddQuiz(Quiz);
             mQE.StartQuiz();
@@ -160,6 +174,7 @@ namespace TwitchChatBot
 		IrcCommandAnalyzer mIrcCommandAnalyzer;
 		QuizEngine mQE;
         HttpListener mListener;
+        CustomHost host;
 	}
 }
 
