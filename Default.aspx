@@ -6,7 +6,7 @@
   		<script type="text/javascript">
   		    function JustDoIt() {
   		        var x = location.hash;
-  		        PageMethods.Hash(onSucess, onError)
+  		        PageMethods.Hash(x,onSucess, onError)
   		        function onSucess(result) {
   		            alert('OK');
   		        }

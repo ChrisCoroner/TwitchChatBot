@@ -15,6 +15,8 @@ namespace TwitchChatBot
             SimpleWorkerRequest swr = new SimpleWorkerRequest(page, query, sw);
             HttpRuntime.ProcessRequest(swr);
         }
+        
+        
     }
 
 	public class TwitchBot
@@ -37,6 +39,12 @@ namespace TwitchChatBot
             mQE.SendMessage = SendMessage;
 		}
 
+        public static void TestMethod(string inStr)
+        {
+            Console.WriteLine("HASH:{0}",inStr);
+        }
+
+
         public void StartHttpListener()
         {
             mListener = new HttpListener();
@@ -49,13 +57,19 @@ namespace TwitchChatBot
         {
             HttpListenerContext context = mListener.EndGetContext(result);
             HttpListenerResponse response = context.Response;
+            byte[] Req = new byte[context.Request.InputStream.Length];
+            context.Request.InputStream.Read(Req, 0, Req.Length);
+            Console.WriteLine(Encoding.UTF8.GetString(Req));
 
+           
             StreamWriter sw = new StreamWriter(response.OutputStream);
-            string page = "Default.aspx";
-            host.parse(page, null, ref sw);
+            //string page = "Default.aspx";
+            //host.parse(page, null, ref sw);
+            string lp = context.Request.Url.LocalPath.Substring(1);
+            host.parse(lp, context.Request.Url.Query, ref sw);
             sw.Flush();
             response.Close();
-
+            
             //string stringResponse = "<HTML>" +
             //                            "<BODY>" +
             //                                "QuizBot" +
@@ -115,7 +129,7 @@ namespace TwitchChatBot
 			mMessagesBuffer.SetLength(0);
 			//Collecting finishes here.
 			//Parsing data...
-
+            
 		    int msgStart = 0;
 		    for (int i = 0; i < tempTotalData.Length - 1; i++)
 		    {
