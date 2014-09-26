@@ -98,10 +98,6 @@
       <Project>{4a1c34cd-09c6-4c1b-aded-12ca408e23af}</Project>
       <Name>TwitchChatBot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebApplication1\WebApplication1.csproj">
-      <Project>{ab30db32-84d7-48ff-b305-eb1fbae82d2a}</Project>
-      <Name>WebApplication1</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Quiz.txt" />

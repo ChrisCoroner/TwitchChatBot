@@ -66,7 +66,12 @@ namespace TwitchChatBot
             //string page = "Default.aspx";
             //host.parse(page, null, ref sw);
             string lp = context.Request.Url.LocalPath.Substring(1);
-            host.parse(lp, context.Request.Url.Query, ref sw);
+            string queryUrl = context.Request.Url.Query;
+            if (context.Request.Url.Query.Length > 0 && context.Request.Url.Query[0] == '?')
+            {
+                queryUrl = queryUrl.Substring(1);
+            }
+            host.parse(lp, queryUrl, ref sw);
             sw.Flush();
             response.Close();
             
