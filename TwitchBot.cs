@@ -32,7 +32,7 @@ namespace TwitchChatBot
             //mQE.SendMessage = SendMessage;
             //mQE.StartQuiz();
 
-            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\Yuri\Documents\GitHub\TwitchChatBot");
+            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
 
             StartHttpListener();
             mQE = new QuizEngine();
@@ -57,10 +57,12 @@ namespace TwitchChatBot
         {
             HttpListenerContext context = mListener.EndGetContext(result);
             HttpListenerResponse response = context.Response;
-            byte[] Req = new byte[context.Request.InputStream.Length];
-            context.Request.InputStream.Read(Req, 0, Req.Length);
-            Console.WriteLine(Encoding.UTF8.GetString(Req));
-
+            //if (context.Request.InputStream.CanSeek)
+            //{
+            //    byte[] Req = new byte[context.Request.InputStream.Length];
+            //    context.Request.InputStream.Read(Req, 0, Req.Length);
+            //    Console.WriteLine(Encoding.UTF8.GetString(Req));
+            //}
            
             StreamWriter sw = new StreamWriter(response.OutputStream);
             //string page = "Default.aspx";
@@ -174,7 +176,7 @@ namespace TwitchChatBot
 
         public void StartQuiz()
         {
-            string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
+            string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
             mQE.AddQuiz(Quiz);
             mQE.StartQuiz();

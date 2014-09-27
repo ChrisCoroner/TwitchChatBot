@@ -17,8 +17,9 @@ public partial class Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static void Hash(string inX)
+    public static void Hash()
     {
+        System.Diagnostics.Debug.WriteLine("HASH");
         Console.WriteLine("HASH");
     }
 

@@ -24,7 +24,14 @@
 
 	
 		<script type="text/javascript">
-			JustDoIt();
+			  	var x = location.hash;
+  		        PageMethods.Hash(onSucess, onError);
+  		        function onSucess(result) {
+  		            alert(x);
+  		        }
+  		        function onError(result) {
+  		            alert('Something wrong.');
+  		        }
 		</script>
       
 	</form>
