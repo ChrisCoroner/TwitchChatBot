@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.Web;
 using System.Web.Hosting;
-
+using System.Diagnostics;
 namespace TwitchChatBot
 {
     class CustomHost : MarshalByRefObject
@@ -38,15 +38,10 @@ namespace TwitchChatBot
             host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
 
             StartHttpListener();
+            Process.Start("http://localhost:6555/Default.aspx#testcall");
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessage;
 		}
-
-        public static void TestMethod(string inStr)
-        {
-            Console.WriteLine("HASH:{0}",inStr);
-        }
-
 
         public void StartHttpListener()
         {
