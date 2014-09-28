@@ -1,0 +1,36 @@
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::HttpListener()
+System.Net Information: 0 : [5280] Текущий тип установки операционной системы: Client.
+System.Net.HttpListener Verbose: 0 : [5280] Exiting HttpListener#46266773::HttpListener() 
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::Prefixes_get()
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::AddPrefix(uriPrefix:http://localhost:6555/)
+System.Net.Sockets Verbose: 0 : [5280] DNS::GetHostEntry(localhost)
+System.Net.Sockets Verbose: 0 : [5280] DNS::GetHostByName(localhost)
+System.Net.Sockets Verbose: 0 : [5280] Exiting DNS::GetHostByName() 	-> IPHostEntry#7524288
+System.Net.Sockets Verbose: 0 : [5280] Exiting DNS::GetHostEntry() 	-> IPHostEntry#7524288
+System.Net.HttpListener Information: 0 : [5280] ServiceNameStore#40060369::Add() Добавление имени службы по умолчанию "HTTP/localhost" из префикса "http://localhost:6555/".
+System.Net.HttpListener Information: 0 : [5280] ServiceNameStore#40060369::Add() Добавление имени службы по умолчанию "HTTP/ASUS" из префикса "http://localhost:6555/".
+System.Net.HttpListener Verbose: 0 : [5280] Exiting HttpListener#46266773::AddPrefix() 	-> prefix:http://localhost:6555/
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::Start()
+System.Net.HttpListener Verbose: 0 : [5280] Exiting HttpListener#46266773::Start() 
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::BeginGetContext()
+System.Net.HttpListener Verbose: 0 : [5280] HttpListener#46266773::BeginGetContext(IAsyncResult#31862432)
+System.Net.HttpListener Information: 0 : [6804] HttpListenerContext#36610825::.ctor(httpListener#46266773 requestBlob=31374644)
+System.Net.HttpListener Information: 0 : [6804] HttpListenerRequest#61325552::.ctor(httpContext#36610825 memoryBlob# 31374644)
+System.Net.HttpListener Information: 0 : [6804] Associating HttpListenerRequest#61325552 with HttpListenerContext#36610825
+System.Net.HttpListener Information: 0 : [6804] HttpListenerRequest#61325552::.ctor(httpContext#36610825 RequestUri:http://localhost:6555/Default.aspx Content-Length:0 HTTP Method:GET)
+System.Net.HttpListener Information: 0 : [6804] HttpListenerRequest#61325552::.ctor(HttpListenerRequest Headers:
+	Cache-Control : max-age=0
+	Connection : keep-alive
+	Accept : text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+	Accept-Encoding : gzip,deflate,sdch
+	Accept-Language : ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4
+	Host : localhost:6555
+	User-Agent : Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36
+)
+System.Net.HttpListener Warning: 0 : [6804] HttpListener#46266773::HandleAuthentication() - Получен запрос с несоответствующей или отсутствующей схемой аутентификации. AuthenticationSchemes:Anonymous, Authorization:<null>.
+System.Net.HttpListener Verbose: 0 : [6804] HttpListener#46266773::EndGetContext(IAsyncResult#31862432)
+System.Net.HttpListener Verbose: 0 : [6804] Exiting HttpListener#46266773::EndGetContext() 	-> HttpListenerContext#36610825 RequestTraceIdentifier#00000000-0000-0000-6b02-0080000000f6
+System.Net.HttpListener Verbose: 0 : [6804] HttpListenerContext#36610825::Response()
+System.Net.HttpListener Information: 0 : [6804] HttpListenerResponse#62130720::.ctor()
+System.Net.HttpListener Information: 0 : [6804] Associating HttpListenerResponse#62130720 with HttpListenerContext#36610825
+System.Net.HttpListener Verbose: 0 : [6804] Exiting HttpListenerContext#36610825::Response() 
