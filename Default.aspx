@@ -25,7 +25,7 @@
 	
 		<script type="text/javascript">
 			  	var x = location.hash;
-  		        PageMethods.Hash(onSucess, onError);
+  		        PageMethods.Hash(x,onSucess, onError);
   		        function onSucess(result) {
   		            alert(x);
   		        }

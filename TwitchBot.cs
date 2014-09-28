@@ -16,7 +16,10 @@ namespace TwitchChatBot
             HttpRuntime.ProcessRequest(swr);
         }
         
-        
+        ~CustomHost()
+        {
+            HttpRuntime.Close();
+        }
     }
 
 	public class TwitchBot
@@ -63,7 +66,10 @@ namespace TwitchChatBot
             //    context.Request.InputStream.Read(Req, 0, Req.Length);
             //    Console.WriteLine(Encoding.UTF8.GetString(Req));
             //}
-           
+            StreamReader reader = new StreamReader(context.Request.InputStream);
+            string s2 = reader.ReadToEnd();
+            Console.WriteLine("Data received:" + s2);
+
             StreamWriter sw = new StreamWriter(response.OutputStream);
             //string page = "Default.aspx";
             //host.parse(page, null, ref sw);
