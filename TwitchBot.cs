@@ -100,6 +100,7 @@ namespace TwitchChatBot
                 cutRequest = cutRequest.Substring(0, cutRequest.IndexOf('"'));
                 Console.WriteLine("Data received:" + cutRequest);
                 TA.AuthKey = cutRequest;
+                //get https://api.twitch.tv/kraken?oauth_token=[access token], parse,get name
             }
             
 
