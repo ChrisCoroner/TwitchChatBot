@@ -30,10 +30,17 @@ namespace TwitchChatBotGUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             bot = new TwitchBot();
+
             bot.Destination = new Endpoint();
             bot.Destination.EndpointAddress = "irc.twitch.tv";
             bot.Destination.EndpointPort = 6667;
+
+            AuthLableName.Content = bot.Auth.AuthKey;
+            if (bot.Auth.AuthKey != "") {
+                ConnectButton.IsEnabled = true;
+            }
         }
 
         private void ProxyAddressChanged(object sender, TextChangedEventArgs e)
@@ -48,8 +55,6 @@ namespace TwitchChatBotGUI
             
         }
 
-        TwitchBot bot;
-
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
             if(ProxyAddress.Text != "" && ProxyPort.Text != ""){
@@ -61,7 +66,9 @@ namespace TwitchChatBotGUI
 
             SendButton.IsEnabled = true;
             StartQuizButton.IsEnabled = true;
+
             //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
+            
             bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
             bot.SendMessage("NICK sovietmade\r\n");
             bot.SendMessage("JOIN #sovietmade\r\n");
@@ -116,9 +123,29 @@ namespace TwitchChatBotGUI
             TimerLabel.Content = "Quiz is running...";
         }
 
+        async Task GetAuth(CancellationToken ct)
+        { 
+            while(bot.Auth.AuthKey == ""){
+                await Task.Delay(100);
+            }
+        }
+
+        async private void Authorize_Click(object sender, RoutedEventArgs e)
+        {
+            AuthLableName.Content = "Authorization process in progress...";
+            bot.Auth.TwitchAuthorize();
+            StartAuthorize = new CancellationTokenSource();
+            await GetAuth(StartAuthorize.Token);
+            AuthLableName.Content = bot.Auth.AuthKey;
+        }
+
+        CancellationTokenSource StartAuthorize;
         CancellationTokenSource StartQuizCT;
         int timer;
         System.Timers.Timer t;
+        TwitchBot bot;
+
+
         
     }
 }

@@ -45,11 +45,16 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Default.aspx.cs">
+    <Compile Include="Auth.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TcpConnection.cs" />
     <Compile Include="TwitchBot.cs" />
     <Compile Include="IrcCommand.cs" />
@@ -59,15 +64,17 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Default.aspx">
+    <Content Include="Auth.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

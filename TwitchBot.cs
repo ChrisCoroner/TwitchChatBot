@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Hosting;
 using System.Diagnostics;
+
 namespace TwitchChatBot
 {
     class CustomHost : MarshalByRefObject
@@ -22,10 +23,46 @@ namespace TwitchChatBot
         }
     }
 
+
+
 	public class TwitchBot
 	{
+        public class TwitchAuthorization
+        {
+
+            public TwitchAuthorization()
+            {
+                AuthKey = Properties.Settings.Default.authKey;
+
+            }
+
+            public void TwitchAuthorize()
+            {
+                Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555/Auth.aspx");
+            }
+
+            public string AuthKey
+            {
+                set
+                {
+                    authKey = value;
+                    Properties.Settings.Default.authKey = value;
+                    Properties.Settings.Default.Save();
+                }
+                get
+                {
+                    return authKey;
+                }
+            }
+
+            String authKey;
+            String authName;
+
+        }
+
 		public TwitchBot () 
 		{
+            
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
@@ -35,10 +72,9 @@ namespace TwitchChatBot
             //mQE.SendMessage = SendMessage;
             //mQE.StartQuiz();
 
-            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
+            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\Yuri\Documents\GitHub\TwitchChatBot");
 
             StartHttpListener();
-            Process.Start("http://localhost:6555/Default.aspx#testcall");
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessage;
 		}
@@ -55,19 +91,20 @@ namespace TwitchChatBot
         {
             HttpListenerContext context = mListener.EndGetContext(result);
             HttpListenerResponse response = context.Response;
-            //if (context.Request.InputStream.CanSeek)
-            //{
-            //    byte[] Req = new byte[context.Request.InputStream.Length];
-            //    context.Request.InputStream.Read(Req, 0, Req.Length);
-            //    Console.WriteLine(Encoding.UTF8.GetString(Req));
-            //}
+ 
             StreamReader reader = new StreamReader(context.Request.InputStream);
-            string s2 = reader.ReadToEnd();
-            Console.WriteLine("Data received:" + s2);
+            string postRequest = reader.ReadToEnd();
+            if (postRequest.Contains("{\"x\":\"#access_token="))
+            {
+                string cutRequest = postRequest.Replace("{\"x\":\"#access_token=", "");
+                cutRequest = cutRequest.Substring(0, cutRequest.IndexOf('"'));
+                Console.WriteLine("Data received:" + cutRequest);
+                TA.AuthKey = cutRequest;
+            }
+            
 
             StreamWriter sw = new StreamWriter(response.OutputStream);
-            //string page = "Default.aspx";
-            //host.parse(page, null, ref sw);
+
             string lp = context.Request.Url.LocalPath.Substring(1);
             string queryUrl = context.Request.Url.Query;
             if (context.Request.Url.Query.Length > 0 && context.Request.Url.Query[0] == '?')
@@ -78,20 +115,6 @@ namespace TwitchChatBot
             sw.Flush();
             response.Close();
             
-            //string stringResponse = "<HTML>" +
-            //                            "<BODY>" +
-            //                                "QuizBot" +
-            //                                "<p id=\"demo\"></p>" +
-            //                                "<script>" +
-            //                                    "var x = location.hash;" +
-            //                                    "document.getElementById(\"demo\").innerHTML = x;" +
-            //                                "</script>" +
-            //                            "</BODY>" +
-            //                        "</HTML>";
-            //byte[] bufferResponse = Encoding.UTF8.GetBytes(stringResponse);
-            //response.ContentLength64 = bufferResponse.Length;
-            //response.OutputStream.Write(bufferResponse, 0, bufferResponse.Length);
-            //response.OutputStream.Close();
             mListener.BeginGetContext(ListenerCallback, mListener);
         }
 
@@ -177,7 +200,7 @@ namespace TwitchChatBot
 
         public void StartQuiz()
         {
-            string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
+            string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
             mQE.AddQuiz(Quiz);
             mQE.StartQuiz();
@@ -190,6 +213,16 @@ namespace TwitchChatBot
 			}
 		}
 
+        public TwitchAuthorization Auth
+        {
+            get {
+                return TA;
+            }
+            set {
+                TA = value;
+            }
+        }
+
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
 		MemoryStream mMessagesBuffer = new MemoryStream();
@@ -197,6 +230,7 @@ namespace TwitchChatBot
 		QuizEngine mQE;
         HttpListener mListener;
         CustomHost host;
+        TwitchAuthorization TA = new TwitchAuthorization();
 	}
 }
 
