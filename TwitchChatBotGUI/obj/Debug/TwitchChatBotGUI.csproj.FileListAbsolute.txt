@@ -26,6 +26,10 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Twit
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csproj.GenerateResource.Cache
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.pdb
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe.config
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.pdb
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csprojResolveAssemblyReference.cache
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MainWindow.baml
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MainWindow.g.cs
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\App.g.cs
@@ -33,9 +37,5 @@ C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchCh
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.g.resources
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.Properties.Resources.resources
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csproj.GenerateResource.Cache
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe.config
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.pdb
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csprojResolveAssemblyReference.cache
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.exe
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.pdb

@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Hosting;
 using System.Diagnostics;
+using System.Web.Script.Serialization;
 
 namespace TwitchChatBot
 {
@@ -27,18 +28,39 @@ namespace TwitchChatBot
 
 	public class TwitchBot
 	{
+        public class TwitchAuthorizationPart
+        {
+            public string[] scopes { get; set; }
+            public string created_at { get; set; }
+            public string updated_at { get; set; }
+        }
+
+        public class TwitchToken
+        {
+            public bool valid { get; set; }
+            public TwitchAuthorizationPart authorization { get; set; }
+            public string user_name { get; set; }
+        }
+
+        public class TwitchUserInfo
+        {
+            public Dictionary<string,string> _links {get;set;}
+            public TwitchToken token { get; set; }
+        }
+
         public class TwitchAuthorization
         {
 
             public TwitchAuthorization()
             {
                 AuthKey = Properties.Settings.Default.authKey;
+                AuthName = Properties.Settings.Default.authName;
 
             }
 
             public void TwitchAuthorize()
             {
-                Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555/Auth.aspx");
+                Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555/Auth.aspx&scope=chat_login+channel_editor+user_read");
             }
 
             public string AuthKey
@@ -54,6 +76,22 @@ namespace TwitchChatBot
                     return authKey;
                 }
             }
+
+            public string AuthName
+            {
+                set
+                {
+                    authName = value;
+                    Properties.Settings.Default.authName = value;
+                    Properties.Settings.Default.Save();
+                }
+                get
+                {
+                    return authName;
+                }
+            }
+
+            //public TwitchUserInfo UserInfo { get; set; }
 
             String authKey;
             String authName;
@@ -97,10 +135,19 @@ namespace TwitchChatBot
             if (postRequest.Contains("{\"x\":\"#access_token="))
             {
                 string cutRequest = postRequest.Replace("{\"x\":\"#access_token=", "");
-                cutRequest = cutRequest.Substring(0, cutRequest.IndexOf('"'));
+                cutRequest = cutRequest.Substring(0, cutRequest.IndexOf('&'));
                 Console.WriteLine("Data received:" + cutRequest);
                 TA.AuthKey = cutRequest;
-                //get https://api.twitch.tv/kraken?oauth_token=[access token], parse,get name
+                WebRequest request = WebRequest.Create ("https://api.twitch.tv/kraken?oauth_token=" + cutRequest);
+                HttpWebResponse httpWebResponse = (HttpWebResponse)request.GetResponse ();
+                Stream dataStream = httpWebResponse.GetResponseStream();
+                // Open the stream using a StreamReader for easy access.
+                StreamReader dataReader = new StreamReader(dataStream);
+                // Read the content. 
+                string responseFromServer = dataReader.ReadToEnd();
+                TwitchUserInfo twitchinfo = new JavaScriptSerializer().Deserialize<TwitchUserInfo>(responseFromServer);
+                TA.AuthName = twitchinfo.token.user_name;
+
             }
             
 

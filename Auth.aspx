@@ -3,19 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<title>QuizBot OAuth</title>
-  		<script type="text/javascript">
-  		    function JustDoIt() {
-  		        var x = location.hash;
-  		        PageMethods.Hash(x,onSucess, onError)
-  		        function onSucess(result) {
-  		            alert('OK');
-  		        }
-  		        function onError(result) {
-  		            alert('Something wrong.');
-  		        }
-  		    }
-
-		</script>
 	</head>
 	<body>
 	<form id="Form" runat="server">
@@ -27,7 +14,7 @@
 			  	var x = location.hash;
   		        PageMethods.Hash(x,onSucess, onError);
   		        function onSucess(result) {
-  		            alert(x);
+  		            alert('Quiz Bot was successfully authorized');
   		        }
   		        function onError(result) {
   		            alert('Something wrong.');

@@ -37,8 +37,8 @@ namespace TwitchChatBotGUI
             bot.Destination.EndpointAddress = "irc.twitch.tv";
             bot.Destination.EndpointPort = 6667;
 
-            AuthLableName.Content = bot.Auth.AuthKey;
-            if (bot.Auth.AuthKey != "") {
+            AuthLableName.Content = bot.Auth.AuthName;
+            if (bot.Auth.AuthName != "") {
                 ConnectButton.IsEnabled = true;
             }
         }
@@ -68,10 +68,10 @@ namespace TwitchChatBotGUI
             StartQuizButton.IsEnabled = true;
 
             //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
-            
-            bot.SendMessage("PASS oauth:lxubjjlsavkv1o3ih44d3csztfpw7vu\r\n");
-            bot.SendMessage("NICK sovietmade\r\n");
-            bot.SendMessage("JOIN #sovietmade\r\n");
+
+            bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
+            bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
+            bot.SendMessage("JOIN #" + bot.Auth.AuthName + "\r\n");
             //bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
         }
 
@@ -125,7 +125,7 @@ namespace TwitchChatBotGUI
 
         async Task GetAuth(CancellationToken ct)
         { 
-            while(bot.Auth.AuthKey == ""){
+            while(bot.Auth.AuthName == ""){
                 await Task.Delay(100);
             }
         }
@@ -136,7 +136,7 @@ namespace TwitchChatBotGUI
             bot.Auth.TwitchAuthorize();
             StartAuthorize = new CancellationTokenSource();
             await GetAuth(StartAuthorize.Token);
-            AuthLableName.Content = bot.Auth.AuthKey;
+            AuthLableName.Content = bot.Auth.AuthName;
         }
 
         CancellationTokenSource StartAuthorize;

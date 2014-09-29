@@ -34,5 +34,17 @@ namespace TwitchChatBot.Properties {
                 this["authKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string authName {
+            get {
+                return ((string)(this["authName"]));
+            }
+            set {
+                this["authName"] = value;
+            }
+        }
     }
 }
