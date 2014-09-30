@@ -74,7 +74,7 @@ namespace TwitchChatBotGUI
             bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
             bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
 
-            bot.JoinTwitchChannel("sovietmade");
+            //bot.JoinTwitchChannel("sovietmade");
 
             //bot.SendMessage("JOIN #" + bot.Auth.AuthName + "\r\n");
             //bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
@@ -151,6 +151,11 @@ namespace TwitchChatBotGUI
         int timer;
         System.Timers.Timer t;
         TwitchBot bot;
+
+        private void JoinChannel_Click(object sender, RoutedEventArgs e)
+        {
+            bot.JoinTwitchChannel(ChannelTextBox.Text);
+        }
 
 
         

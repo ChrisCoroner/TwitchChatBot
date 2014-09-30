@@ -8,9 +8,9 @@
         <Button Name="ConnectButton"  Content="Connect" IsEnabled="False"  HorizontalAlignment="Left" Margin="179,176,0,0" VerticalAlignment="Top" Width="74" Click="ConnectClick"/>
         <TextBlock HorizontalAlignment="Left" Margin="89,104,0,0" TextWrapping="Wrap" Text="Proxy Address:" VerticalAlignment="Top" Height="24" Width="78"/>
         <TextBlock HorizontalAlignment="Left" Margin="111,150,0,0" TextWrapping="Wrap" Text="Proxy Port:" VerticalAlignment="Top" Height="16" Width="62"/>
-        <TextBox Name="MessageBox" HorizontalAlignment="Left" Height="22" Margin="179,256,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBlock HorizontalAlignment="Left" Margin="121,256,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="52"><Run Language="ru-ru" Text="Message:"/></TextBlock>
-        <Button Name="SendButton" Content="Send" IsEnabled="False" HorizontalAlignment="Left" Margin="179,290,0,0" VerticalAlignment="Top" Width="74" Click="SendClick"/>
+        <TextBox Name="MessageBox" HorizontalAlignment="Left" Height="22" Margin="432,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="374,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="52"><Run Language="ru-ru" Text="Message:"/></TextBlock>
+        <Button Name="SendButton" Content="Send" IsEnabled="False" HorizontalAlignment="Left" Margin="432,246,0,0" VerticalAlignment="Top" Width="74" Click="SendClick"/>
         <Separator HorizontalAlignment="Left" Height="100" Margin="216,116,0,0" VerticalAlignment="Top" Width="288" RenderTransformOrigin="0.5,0.5">
             <Separator.RenderTransform>
                 <TransformGroup>
@@ -21,8 +21,8 @@
                 </TransformGroup>
             </Separator.RenderTransform>
         </Separator>
-        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="False" HorizontalAlignment="Left" Margin="448,96,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="428,42,0,0" VerticalAlignment="Top" Width="113" Height="30"/>
+        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="False" HorizontalAlignment="Left" Margin="432,176,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
+        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="414,136,0,0" VerticalAlignment="Top" Width="113" Height="30"/>
         <TextBlock HorizontalAlignment="Left" Margin="90,24,0,0" TextWrapping="Wrap" Text="Authorized as:" VerticalAlignment="Top" Height="16" Width="77"/>
         <GroupBox Header="Connection" HorizontalAlignment="Left" Margin="79,80,0,0" VerticalAlignment="Top" Height="128" Width="228"/>
         <Label Name="AuthLableName" Content="" HorizontalAlignment="Left" Margin="179,18,0,0" VerticalAlignment="Top"/>
@@ -34,9 +34,12 @@
             <Button Content="Button" Height="70" VerticalAlignment="Top" DockPanel.Dock="Top" Width="75"/>
             <Button Content="Button" Height="70" VerticalAlignment="Top" DockPanel.Dock="Top" Width="75"/>
         </DockPanel>
-        <Grid Name="newGrid" Margin="414,49,17,22">
+        <Grid Name="newGrid" Margin="414,302,17,10">
 
         </Grid>
+        <TextBox Name="ChannelTextBox"  HorizontalAlignment="Left" Height="23" Margin="432,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="374,24,0,0" TextWrapping="Wrap" Text="Channel:" VerticalAlignment="Top"/>
+        <Button Name ="JoinChannel" Content="Join" HorizontalAlignment="Left" Margin="431,52,0,0" VerticalAlignment="Top" Width="75" Click="JoinChannel_Click"/>
     </Grid>
 
 </Window>
