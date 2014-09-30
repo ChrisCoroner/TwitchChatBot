@@ -155,8 +155,8 @@ namespace TwitchChatBot
                         
                         //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentQAPair.Item2, mScore[name]);
-                        SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
-
+                        //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
+                        SendMessage(message);
                         OnTimeToAskAQuestion(null, null);
                     }
                     Console.WriteLine("after GetMessageFromQ:{0} ", ic.Name);
@@ -207,16 +207,18 @@ namespace TwitchChatBot
             mQuizHint = new QuizHint(mCurrentQAPair.Item2);
             mTimeToGiveAHint.Enabled = true;
 
-            SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
+            //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
+            SendMessage(mCurrentQAPair.Item1);
         }
 
         void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
         {
             string currentHint = mQuizHint.GiveAHint();
-            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString() + "\r\n");
+            //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString() + "\r\n");
+            SendMessage(currentHint);
         }
 
-        //delegate for communicating back to the outer world
+        //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
 		public Action<string> SendMessage;
 
         //Queue of PRIVMSGes - source of answers

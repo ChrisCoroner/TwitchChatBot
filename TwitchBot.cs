@@ -110,11 +110,12 @@ namespace TwitchChatBot
             //mQE.SendMessage = SendMessage;
             //mQE.StartQuiz();
 
-            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\Yuri\Documents\GitHub\TwitchChatBot");
+            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
 
             StartHttpListener();
             mQE = new QuizEngine();
-            mQE.SendMessage = SendMessage;
+            //mQE.SendMessage = SendMessage;
+            mQE.SendMessage = SendMessageToCurrentChannel;
 		}
 
         public void StartHttpListener()
@@ -248,7 +249,7 @@ namespace TwitchChatBot
 
         public void StartQuiz()
         {
-            string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
+            string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
             mQE.AddQuiz(Quiz);
             mQE.StartQuiz();
@@ -270,6 +271,19 @@ namespace TwitchChatBot
                 TA = value;
             }
         }
+
+        public void JoinTwitchChannel(String inTwitchChannel)
+        {
+            SendMessage("JOIN #" + inTwitchChannel + "\r\n");
+            TwitchChannel = inTwitchChannel;
+        }
+
+        public void SendMessageToCurrentChannel(String inMessage)
+        {
+            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
+        }
+
+        public String TwitchChannel { get; set; }
 
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
