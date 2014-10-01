@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\App.xaml
-3679031426
+4-669679361
 
-8955383163
+9-1156295410
 131322857740
-MainWindow.xaml;MenuItems\NetworkSettings.xaml;MenuItems\QuizSettings.xaml;
+MainWindow.xaml;MenuItems\ChannelSettings.xaml;MenuItems\NetworkSettings.xaml;MenuItems\QuizSettings.xaml;
 
 False
 

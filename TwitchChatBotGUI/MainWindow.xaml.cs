@@ -38,18 +38,16 @@ namespace TwitchChatBotGUI
             bot.Destination.EndpointAddress = "irc.twitch.tv";
             bot.Destination.EndpointPort = 6667;
 
-            AuthLableName.Content = bot.Auth.AuthName;
             if (bot.Auth.AuthName != "") {
                 ConnectButton.IsEnabled = true;
-            }    
+            }
+
+            MainWindowName.DataContext = bot;
         }
 
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
             bot.Connect();
-
-            SendButton.IsEnabled = true;
-            StartQuizButton.IsEnabled = true;
 
             //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
 
@@ -120,12 +118,10 @@ namespace TwitchChatBotGUI
         }
 
         async private void Authorize_Click(object sender, RoutedEventArgs e)
-        {
-            AuthLableName.Content = "Authorization process in progress...";
+        {        
             bot.Auth.TwitchAuthorize();
             StartAuthorize = new CancellationTokenSource();
-            await GetAuth(StartAuthorize.Token);
-            AuthLableName.Content = bot.Auth.AuthName;
+            await GetAuth(StartAuthorize.Token); 
         }
 
         CancellationTokenSource StartAuthorize;
@@ -134,10 +130,6 @@ namespace TwitchChatBotGUI
         System.Timers.Timer t;
         TwitchBot bot;
 
-        private void JoinChannel_Click(object sender, RoutedEventArgs e)
-        {
-            bot.JoinTwitchChannel(ChannelTextBox.Text);
-        }
 
 
 
@@ -155,6 +147,18 @@ namespace TwitchChatBotGUI
             ShowPopupWithUserControl(new QuizSettings(bot, Pop));
         }
 
+        private void OpenChannelSettings(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new ChannelSettings(bot, Pop));
+        }
+
+        private void ChannelButtonClick(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new ChannelSettings(bot, Pop));
+        }
+
         private void ShowPopupWithUserControl(ITwitchMenuItem inControl)
         {
             inControl.CurrentPopup.PlacementTarget = this;
@@ -164,7 +168,11 @@ namespace TwitchChatBotGUI
             inControl.CurrentPopup.StaysOpen = false;
         }
 
+
+
         #endregion
+
+
 
 
     }

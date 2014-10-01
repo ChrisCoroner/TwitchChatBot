@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Hosting;
 using System.Diagnostics;
 using System.Web.Script.Serialization;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TwitchChatBot
 {
@@ -26,8 +28,18 @@ namespace TwitchChatBot
 
 
 
-	public class TwitchBot
+    public class TwitchBot : INotifyPropertyChanged
 	{
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         public class TwitchAuthorizationPart
         {
             public string[] scopes { get; set; }
@@ -98,7 +110,7 @@ namespace TwitchChatBot
 
         }
 
-		public TwitchBot () 
+		public TwitchBot ()
 		{
             
 			mTcpConnection = new TcpConnection();
@@ -116,6 +128,8 @@ namespace TwitchChatBot
             mQE = new QuizEngine();
             //mQE.SendMessage = SendMessage;
             mQE.SendMessage = SendMessageToCurrentChannel;
+
+            TwitchChannel = "NONE";
 		}
 
         public void StartHttpListener()
@@ -148,7 +162,7 @@ namespace TwitchChatBot
                 string responseFromServer = dataReader.ReadToEnd();
                 TwitchUserInfo twitchinfo = new JavaScriptSerializer().Deserialize<TwitchUserInfo>(responseFromServer);
                 TA.AuthName = twitchinfo.token.user_name;
-
+                AuthorizedName = AuthorizedName;
             }
             
 
@@ -188,6 +202,7 @@ namespace TwitchChatBot
 		public void Connect ()
 		{
 			mTcpConnection.Connect();
+            Connected = Connected;
 		}
 
 
@@ -267,8 +282,18 @@ namespace TwitchChatBot
             get {
                 return TA;
             }
-            set {
+            private set {
                 TA = value;
+            }
+        }
+
+        public String AuthorizedName
+        {
+            get {
+                return TA.AuthName;
+            }
+            private set {
+                NotifyPropertyChanged();
             }
         }
 
@@ -317,7 +342,31 @@ namespace TwitchChatBot
             }
         }
 
-        public String TwitchChannel { get; set; }
+        public bool Connected 
+        {
+            get { 
+                return mTcpConnection.Connected;
+            }
+            private set {
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String TwitchChannel
+        {
+            get {
+                return twitchChannel;
+            }
+            set {
+                
+                twitchChannel = value;
+                NotifyPropertyChanged();
+            } 
+        }
+
+
+
+        string twitchChannel;
 
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
