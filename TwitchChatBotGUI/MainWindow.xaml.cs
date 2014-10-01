@@ -145,12 +145,23 @@ namespace TwitchChatBotGUI
 
         private void OpenNetworkSettings(object sender, RoutedEventArgs e)
         {
-            Popup NetworkSettingsPop = new Popup();
-            NetworkSettingsPop.PlacementTarget = this;
-            NetworkSettingsPop.Placement = PlacementMode.Center;
-            NetworkSettingsPop.Child = new NetworkSettings(bot,NetworkSettingsPop);
-            NetworkSettingsPop.IsOpen = true;
-            NetworkSettingsPop.StaysOpen = false;
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new NetworkSettings(bot, Pop));
+        }
+
+        private void OpenQuizSettings(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new QuizSettings(bot, Pop));
+        }
+
+        private void ShowPopupWithUserControl(ITwitchMenuItem inControl)
+        {
+            inControl.CurrentPopup.PlacementTarget = this;
+            inControl.CurrentPopup.Placement = PlacementMode.Center;
+            inControl.CurrentPopup.Child = (inControl as UserControl);
+            inControl.CurrentPopup.IsOpen = true;
+            inControl.CurrentPopup.StaysOpen = false;
         }
 
         #endregion

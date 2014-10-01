@@ -69,10 +69,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MenuItems\QuizSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuItems\TwitchMenuItem.cs" />
     <Compile Include="MenuItems\NetworkSettings.xaml.cs">
       <DependentUpon>NetworkSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuItems\QuizSettings.xaml.cs">
+      <DependentUpon>QuizSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

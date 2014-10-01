@@ -20,7 +20,7 @@ namespace TwitchChatBotGUI.MenuItems
     /// <summary>
     /// Interaction logic for NetworkSettings.xaml
     /// </summary>
-    public partial class NetworkSettings : UserControl
+    public partial class NetworkSettings : UserControl, ITwitchMenuItem
     {
         private void NetworkSettings_Loaded(object sender, RoutedEventArgs e)
         {
@@ -58,7 +58,7 @@ namespace TwitchChatBotGUI.MenuItems
             CurrentPopup.IsOpen = false;
         }
 
-        Popup CurrentPopup { get; set; }
-        TwitchBot Bot { get; set; } 
+        public Popup CurrentPopup { get; set; }
+        public TwitchBot Bot { get; set; }
     }
 }

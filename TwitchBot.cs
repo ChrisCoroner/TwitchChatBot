@@ -283,6 +283,40 @@ namespace TwitchChatBot
             SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
         }
 
+        public String QuizFile
+        { 
+            get{
+                return mQE.QuizFile;
+            }
+            set {
+                mQE.QuizFile = value;
+            }
+        }
+
+        public int TimeBetweenQuestions
+        {
+            get
+            {
+                return mQE.TimeBetweenQuestions;
+            }
+            set
+            {
+                mQE.TimeBetweenQuestions = value;
+            }
+        }
+
+        public int TimeBetweenHints
+        {
+            get
+            {
+                return mQE.TimeBetweenHints;
+            }
+            set
+            {
+                mQE.TimeBetweenHints = value;
+            }
+        }
+
         public String TwitchChannel { get; set; }
 
 		TcpConnection mTcpConnection;

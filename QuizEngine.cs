@@ -59,6 +59,7 @@ namespace TwitchChatBot
 
 		public QuizEngine (string inFileWithQuiz) : this()
 		{
+           
             AddQuiz(inFileWithQuiz);
 		}
 
@@ -67,8 +68,13 @@ namespace TwitchChatBot
 			ProcessStringsArrayAsQuiz(inQuiz);
 		}
 
+        public void AddQuiz() {
+            AddQuiz(QuizFile);
+        }
+
         public void AddQuiz(string inFileWithQuiz)
         {
+            QuizFile = inFileWithQuiz;
         	if (File.Exists (inFileWithQuiz)) {
 				using(FileStream fs = File.OpenRead(inFileWithQuiz)){
 					
@@ -196,6 +202,30 @@ namespace TwitchChatBot
             //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString() + "\r\n");
             SendMessage(currentHint);
         }
+
+        public int TimeBetweenQuestions 
+        {
+            get {
+                return mTimeBetweenQuestions;
+            }
+            set {
+                mTimeBetweenQuestions = value;
+            }
+        }
+
+        public int TimeBetweenHints
+        {
+            get
+            {
+                return mTimeBetweenHints;
+            }
+            set
+            {
+                mTimeBetweenHints = value;
+            }
+        }
+
+        public string QuizFile { get; set; }
 
         //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
 		public Action<string> SendMessage;
