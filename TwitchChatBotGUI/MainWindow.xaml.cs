@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -13,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using TwitchChatBotGUI.MenuItems;
 using TwitchChatBot;
 
 namespace TwitchChatBotGUI
@@ -40,30 +41,11 @@ namespace TwitchChatBotGUI
             AuthLableName.Content = bot.Auth.AuthName;
             if (bot.Auth.AuthName != "") {
                 ConnectButton.IsEnabled = true;
-            }
-
-            
-        }
-
-        private void ProxyAddressChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        
-
-        private void ProxyPortChanged(object sender, TextChangedEventArgs e)
-        {
-            
+            }    
         }
 
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
-            if(ProxyAddress.Text != "" && ProxyPort.Text != ""){
-                bot.Proxy = new Endpoint();
-                bot.Proxy.EndpointAddress = ProxyAddress.Text;
-                bot.Proxy.EndpointPort = Int32.Parse(ProxyPort.Text);
-            }
             bot.Connect();
 
             SendButton.IsEnabled = true;
@@ -158,6 +140,21 @@ namespace TwitchChatBotGUI
         }
 
 
-        
+
+        #region functionality for menu-driven UI
+
+        private void OpenNetworkSettings(object sender, RoutedEventArgs e)
+        {
+            Popup NetworkSettingsPop = new Popup();
+            NetworkSettingsPop.PlacementTarget = this;
+            NetworkSettingsPop.Placement = PlacementMode.Center;
+            NetworkSettingsPop.Child = new NetworkSettings(bot,NetworkSettingsPop);
+            NetworkSettingsPop.IsOpen = true;
+            NetworkSettingsPop.StaysOpen = false;
+        }
+
+        #endregion
+
+
     }
 }

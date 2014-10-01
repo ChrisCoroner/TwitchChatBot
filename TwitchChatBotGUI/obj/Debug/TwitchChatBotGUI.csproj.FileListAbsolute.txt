@@ -39,3 +39,5 @@ C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchCh
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csproj.GenerateResource.Cache
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.exe
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.pdb
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\NetworkSettings.baml
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\NetworkSettings.g.cs
