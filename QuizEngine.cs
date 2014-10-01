@@ -15,11 +15,6 @@ namespace TwitchChatBot
             mAnswer = inAnswer;
             mHint = new string('_', inAnswer.Length);
             HintNum = 0;
-            //for (int i = 0; i < inAnswer.Length; i++) {
-            //    if (inAnswer[i] == ' ') {
-                    
-            //    }
-            //}
         }
 
         public string GiveAHint()
@@ -65,7 +60,6 @@ namespace TwitchChatBot
 		public QuizEngine (string inFileWithQuiz) : this()
 		{
             AddQuiz(inFileWithQuiz);
-
 		}
 
 		public QuizEngine (string[] inQuiz) : this()
@@ -86,7 +80,7 @@ namespace TwitchChatBot
 			}
         }
 
-		void ProcessStringsArrayAsQuiz (string[] inStringsArray)
+		void ProcessStringsArrayAsQuiz(string[] inStringsArray)
 		{
 			string[] separators = new string[]{"{Question}","{Answer}"};
 
@@ -96,24 +90,14 @@ namespace TwitchChatBot
 				{
 					mQuizQueue.Enqueue(new Tuple<string, string>(result[0],result[1]));
 				}
-
-				//Console.WriteLine("Strings in result: {0}",result.Length);
-				//foreach(var str in result){
-				//	Console.WriteLine(str);
-				//}
 			}
 		}
-
-
 
 		public void Process (IrcCommand inCommand)
 		{
 			if (inCommand.Name == "PRIVMSG") {
-				//int intIndexOfLastParameter = inCommand.Parameters.Length - 1;
-				//mQueue.Enqueue(inCommand.Parameters[intIndexOfLastParameter]);
 				mIncomingMessagesQueue.Enqueue(inCommand);
 			}
-
 		}
 
         async Task<IrcCommand> GetMessageFromQ()
@@ -130,8 +114,8 @@ namespace TwitchChatBot
             while (true)
             {
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ,ct);
-                //IrcCommand ic = await GetMessageFromQ();
                 IrcCommand ic = await tic;
+
                 //here we have a privmsg and have to check for a valid answer
                 if (mCurrentQAPair != null && ic.Prefix != null)
                 {
@@ -152,7 +136,6 @@ namespace TwitchChatBot
                             mScore[name] = 1;
                         }
 
-                        
                         //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentQAPair.Item2, mScore[name]);
                         //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
@@ -188,11 +171,7 @@ namespace TwitchChatBot
             //OnTimeToAskAQuestion(null,null);
             OnTimeToAskAQuestion(null, null);
             await ReadIncomingMessages(cts.Token);
-            
-  
         }
-
-		//TODO: make an async read of incoming messages, read them if quiz is currently running, check for a valid answer.
 
         void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
         {

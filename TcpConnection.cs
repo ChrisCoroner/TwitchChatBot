@@ -59,11 +59,10 @@ namespace TwitchChatBot
 	}
 
 	/*
-	 * TcpConnection class should perform TCP connection to the endpoint;
-	 * Its should be able to connect *through* the proxy;
+	 * V 0.TcpConnection class should perform TCP connection to the endpoint;
+	 * V 1.Its should be able to connect *through* the proxy;
+     * V 2.Its should provide the means of communication with endpoint.
 	*/
-
-	//TODO: split the IRC and TCP parts
 
 	public class TcpConnection : ITcpConnection
 	{
@@ -89,14 +88,20 @@ namespace TwitchChatBot
 			if (mTcpClient == null) {
 				mTcpClient = new TcpClient();
 			}
-			if (Proxy == null) {
+
+            /*
+             * As it connects it begin to read from stream http://msdn.microsoft.com/en-us/library/system.net.sockets.networkstream.beginread(v=vs.110).aspx
+             * "When your application calls BeginRead, the system will wait until data is received or an error occurs, and then the system will use a separate thread to execute the specified callback method"
+            */
+
+            if (Proxy == null) {
 				mTcpClient.Connect(Destination.EndpointAddress, Destination.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
 			} else {
 				mTcpClient.Connect(Proxy.EndpointAddress, Proxy.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
-				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
+				mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
 				string tunnelRequest = String.Format ("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString ());
 				SendMessage (tunnelRequest);
 			}
@@ -107,7 +112,6 @@ namespace TwitchChatBot
 		/*
 		 *	SendMessage appends the message queue with an inMessage 
 		 */
-
 		public void SendMessage (string inMessage)
 		{
 			lock (MessageQ) {
@@ -119,7 +123,6 @@ namespace TwitchChatBot
 		/*
 		 *	SendMessageCallback transfer data to the destination through the NetworkStream 
 		 */
-
 		private void SendMessageCallback (IAsyncResult result)
 		{
 			//	result wont be null if current call to the SendMessageCallback is a continuation of BeginWrite execution
@@ -142,7 +145,6 @@ namespace TwitchChatBot
 				if (MessageQ.Count != 0) {
 					sending = true;
 					CurrentMessage = MessageQ.Dequeue();
-
 					//Console.WriteLine(CurrentMessage);
 				}
 			}
@@ -154,6 +156,10 @@ namespace TwitchChatBot
 				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
 			}
 		}
+
+        /*
+         *  Just passing received data to delegate and continue to read the stream
+        */
 		private void DataReceivedCallback( IAsyncResult result)
 		{
 			int receivedDataLength = mNetworkStream.EndRead(result);
@@ -164,7 +170,6 @@ namespace TwitchChatBot
 
 			OnDataReceived(new ReceivedDataArgs(ReceivedData));
 			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceivedCallback),null);
-
 		}
 
 		protected virtual void OnDataReceived (ReceivedDataArgs ea)
