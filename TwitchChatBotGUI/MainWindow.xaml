@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="363.5" Width="565.5" Loaded="Window_Loaded" Name="MainWindowName">
     <Grid Name="mainGrid">
-        <Button Name="ConnectButton"  Content="Connect" IsEnabled="False"  HorizontalAlignment="Left" Margin="57,119,0,0" VerticalAlignment="Top" Width="74" Click="ConnectClick"/>
+        <Button Name="ConnectButton"  Content="Connect" IsEnabled="True"  HorizontalAlignment="Left" Margin="304,10,0,0" VerticalAlignment="Top" Width="74" Click="ConnectClick"/>
         <TextBox Name="MessageBox" HorizontalAlignment="Left" Height="22" Margin="90,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="386"/>
-        <Button Name="SendButton" Content="Send" IsEnabled="{Binding Connected, Mode=OneWay}" HorizontalAlignment="Left" Margin="481,302,0,0" VerticalAlignment="Top" Width="67" Click="SendClick"/>
-        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding Connected, Mode=OneWay}" HorizontalAlignment="Left" Margin="434,62,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
-        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="416,22,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
-        <TextBlock HorizontalAlignment="Left" Margin="54,36,0,0" TextWrapping="Wrap" Text="Authorized as:" VerticalAlignment="Top" Height="16" Width="77"/>
-        <Button Name="Authorize" Content="{Binding AuthorizedName, Mode=OneWay}" HorizontalAlignment="Left" Margin="57,78,0,0" VerticalAlignment="Top" Width="75" Click="Authorize_Click"/>
+        <Button Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="481,302,0,0" VerticalAlignment="Top" Width="67" Click="SendClick"/>
+        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="54,215,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
+        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="36,175,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
+        <TextBlock HorizontalAlignment="Left" Margin="402,10,0,0" TextWrapping="Wrap" Text="Authorized as:" VerticalAlignment="Top" Height="16" Width="77"/>
+        <Button Name="Authorize" Content="{Binding AuthorizedName, Mode=OneWay}" HorizontalAlignment="Left" Margin="402,44,0,0" VerticalAlignment="Top" Width="74" Click="Authorize_Click"/>
         <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto">
             <MenuItem Header="Settings">
                 <MenuItem Header="Network"  Click="OpenNetworkSettings"/>
@@ -17,7 +17,8 @@
                 <MenuItem Header="Channel"  Click="OpenChannelSettings"/>
             </MenuItem>
         </Menu>
-        <Button Name="TwitchChannel" IsEnabled="{Binding Connected, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Left" Margin="10,302,0,0" VerticalAlignment="Top" Width="75" Click="ChannelButtonClick"/>
+        <Button Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Left" Margin="10,302,0,0" VerticalAlignment="Top" Width="75" Click="ChannelButtonClick"/>
+        <Button Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" Margin="417,80,0,0" VerticalAlignment="Top" Width="59" Click="LogOutButtonClick"/>
     </Grid>
 
 </Window>

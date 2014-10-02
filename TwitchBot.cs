@@ -75,6 +75,13 @@ namespace TwitchChatBot
                 Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555/Auth.aspx&scope=chat_login+channel_editor+user_read");
             }
 
+            public void TwitchLogOut()
+            {
+                Process.Start("http://www.twitch.tv/logout");
+                AuthName = "";
+                AuthKey = "";
+            }
+
             public string AuthKey
             {
                 set
@@ -111,22 +118,15 @@ namespace TwitchChatBot
         }
 
 		public TwitchBot ()
-		{
-            
+		{     
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
-			//string[] Quiz = new string[]{"{Question}hey?{Answer}hey there!"};
-            //string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\Quiz.txt";
-			//mQE = new QuizEngine(Quiz);
-            //mQE.SendMessage = SendMessage;
-            //mQE.StartQuiz();
 
             host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/",@"C:\Users\ёрий\Documents\GitHub\TwitchChatBot");
 
             StartHttpListener();
             mQE = new QuizEngine();
-            //mQE.SendMessage = SendMessage;
             mQE.SendMessage = SendMessageToCurrentChannel;
 
             TwitchChannel = "NONE";
@@ -161,8 +161,7 @@ namespace TwitchChatBot
                 // Read the content. 
                 string responseFromServer = dataReader.ReadToEnd();
                 TwitchUserInfo twitchinfo = new JavaScriptSerializer().Deserialize<TwitchUserInfo>(responseFromServer);
-                TA.AuthName = twitchinfo.token.user_name;
-                AuthorizedName = AuthorizedName;
+                AuthorizedName = twitchinfo.token.user_name;
             }
             
 
@@ -202,7 +201,7 @@ namespace TwitchChatBot
 		public void Connect ()
 		{
 			mTcpConnection.Connect();
-            Connected = Connected;
+            Connected = Connected; //  trigger NotifyPropertyChangeds
 		}
 
 
@@ -262,6 +261,17 @@ namespace TwitchChatBot
 
 		}
 
+        public void TwitchAuthorize()
+        {
+            TA.TwitchAuthorize();
+        }
+
+        public void TwitchLogOut()
+        {
+            TA.TwitchLogOut();
+            AuthorizedName = AuthorizedName;
+        }
+
         public void StartQuiz()
         {
             string Quiz = @"C:\Users\ёрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
@@ -276,26 +286,6 @@ namespace TwitchChatBot
 				Console.WriteLine(i);
 			}
 		}
-
-        public TwitchAuthorization Auth
-        {
-            get {
-                return TA;
-            }
-            private set {
-                TA = value;
-            }
-        }
-
-        public String AuthorizedName
-        {
-            get {
-                return TA.AuthName;
-            }
-            private set {
-                NotifyPropertyChanged();
-            }
-        }
 
         public void JoinTwitchChannel(String inTwitchChannel)
         {
@@ -342,12 +332,72 @@ namespace TwitchChatBot
             }
         }
 
+        public bool ConnectedAndAuthorized
+        {
+            get {
+                if (Connected && Authorized)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                NotifyPropertyChanged();
+            }
+        }
+
+        public TwitchAuthorization Auth
+        {
+            get
+            {
+                return TA;
+            }
+            private set
+            {
+                TA = value;
+            }
+        }
+
+        public String AuthorizedName
+        {
+            get
+            {
+                return TA.AuthName;
+            }
+            private set
+            {
+                TA.AuthName = value;
+                Authorized = Authorized; // trigger NotifyPropertyChanged
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool Authorized
+        {
+            get {
+                if (AuthorizedName != "")
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
+                NotifyPropertyChanged();
+            }
+        }
+
         public bool Connected 
         {
             get { 
                 return mTcpConnection.Connected;
             }
             private set {
+                ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
                 NotifyPropertyChanged();
             }
         }

@@ -38,10 +38,6 @@ namespace TwitchChatBotGUI
             bot.Destination.EndpointAddress = "irc.twitch.tv";
             bot.Destination.EndpointPort = 6667;
 
-            if (bot.Auth.AuthName != "") {
-                ConnectButton.IsEnabled = true;
-            }
-
             MainWindowName.DataContext = bot;
         }
 
@@ -111,15 +107,15 @@ namespace TwitchChatBotGUI
         }
 
         async Task GetAuth(CancellationToken ct)
-        { 
+        {
+            bot.TwitchAuthorize();
             while(bot.Auth.AuthName == ""){
                 await Task.Delay(100);
             }
         }
 
         async private void Authorize_Click(object sender, RoutedEventArgs e)
-        {        
-            bot.Auth.TwitchAuthorize();
+        {               
             StartAuthorize = new CancellationTokenSource();
             await GetAuth(StartAuthorize.Token); 
         }
@@ -168,9 +164,14 @@ namespace TwitchChatBotGUI
             inControl.CurrentPopup.StaysOpen = false;
         }
 
-
+        private void LogOutButtonClick(object sender, RoutedEventArgs e)
+        {
+            bot.TwitchLogOut();
+        }
 
         #endregion
+
+
 
 
 
