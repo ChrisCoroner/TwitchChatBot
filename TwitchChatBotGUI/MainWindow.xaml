@@ -12,13 +12,27 @@
     </Window.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Click="ConnectClick">
+            <Button Click="ConnectClick" Visibility="{Binding ConnectedVisibility, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill"
                          Visual="{StaticResource appbar_connect}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="Connect Twitch" />
+                </StackPanel>
+            </Button>
+            <Button Click="ConnectClick" Visibility="{Binding DisconnectedVisibility, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill"
+                         Visual="{StaticResource appbar_disconnect}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
@@ -52,12 +66,9 @@
     </Controls:MetroWindow.RightWindowCommands>
     <Grid Name="mainGrid">
 
-        
-        
         <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="54,215,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
         <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="36,175,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
         
-  
         <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">    
             <MenuItem Header="Settings">
                 <MenuItem Header="Network"  Click="OpenNetworkSettings"/>
@@ -72,8 +83,7 @@
             <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
             
         </DockPanel>
-
-        
+     
     </Grid>
 
 </Controls:MetroWindow>

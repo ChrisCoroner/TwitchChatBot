@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Web.Script.Serialization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace TwitchChatBot
 {
@@ -391,12 +392,50 @@ namespace TwitchChatBot
             }
         }
 
+        //omg i hate doing this , but here we go
+        public Visibility ConnectedVisibility
+        {
+            get {
+                if (Connected)
+                {
+                    return Visibility.Hidden;
+                }
+                else {
+                    return Visibility.Visible;
+                }
+            }
+            set {
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Visibility DisconnectedVisibility
+        {
+            get
+            {
+                if (Connected)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
+            }
+            set
+            {
+                NotifyPropertyChanged();
+            }
+        }
+
         public bool Connected 
         {
             get { 
                 return mTcpConnection.Connected;
             }
             private set {
+                ConnectedVisibility = ConnectedVisibility;
+                DisconnectedVisibility = DisconnectedVisibility;
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
                 NotifyPropertyChanged();
             }
