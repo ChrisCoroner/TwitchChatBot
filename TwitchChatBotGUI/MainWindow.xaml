@@ -66,10 +66,10 @@
     </Controls:MetroWindow.RightWindowCommands>
     <Grid Name="mainGrid">
 
-        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="54,215,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
-        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="36,175,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
-        
-        <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">    
+        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="598,40,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
+        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="580,0,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
+
+        <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">
             <MenuItem Header="Settings">
                 <MenuItem Header="Network"  Click="OpenNetworkSettings"/>
                 <MenuItem Header="Quiz"  Click="OpenQuizSettings"/>
@@ -81,9 +81,9 @@
             <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
             <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
             <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
-            
+
         </DockPanel>
-     
+
     </Grid>
 
 </Controls:MetroWindow>
