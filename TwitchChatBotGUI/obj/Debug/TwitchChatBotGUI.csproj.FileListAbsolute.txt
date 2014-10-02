@@ -45,3 +45,6 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Menu
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\QuizSettings.g.cs
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\ChannelSettings.baml
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\ChannelSettings.g.cs
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Resources\Icons.baml
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\App.baml
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Resources\Icons.g.cs

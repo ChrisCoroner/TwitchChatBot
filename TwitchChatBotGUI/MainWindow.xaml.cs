@@ -16,13 +16,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TwitchChatBotGUI.MenuItems;
 using TwitchChatBot;
+using MahApps.Metro.Controls;
 
 namespace TwitchChatBotGUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         public MainWindow()
         {
