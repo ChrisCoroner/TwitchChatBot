@@ -77,6 +77,16 @@ namespace TwitchChatBot
 			}
 		}
 
+        public void Disconnect()
+        {
+            if (Connected) {
+                mNetworkStream.Close();
+                mTcpClient.Close();
+                mTcpClient = null;
+                mNetworkStream = null;
+            }
+        }
+
 		public void Connect ()
 		{
 			if (Connected) {
@@ -127,7 +137,7 @@ namespace TwitchChatBot
 		{
 			//	result wont be null if current call to the SendMessageCallback is a continuation of BeginWrite execution
 			//	result will be null if current call to the SendMessageCallback is a continuation of SendMessage execution 
-			if (result != null) {
+			if (result != null && mNetworkStream!= null) {
 				mNetworkStream.EndWrite(result);
 				lock(MessageQ){
 					sending = false;
@@ -151,7 +161,7 @@ namespace TwitchChatBot
 
 			//CurrentMessage wont be null if the queue was not empty
 			//CurrentMessage will be null if the queue was empty
-			if (CurrentMessage != null) {
+			if (CurrentMessage != null && mNetworkStream != null) {
 
 				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
 			}
@@ -162,14 +172,17 @@ namespace TwitchChatBot
         */
 		private void DataReceivedCallback( IAsyncResult result)
 		{
-			int receivedDataLength = mNetworkStream.EndRead(result);
-			//Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+            if (mNetworkStream != null)
+            {
+                int receivedDataLength = mNetworkStream.EndRead(result);
+                //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
 
-			byte[] ReceivedData = new byte[receivedDataLength];
-			Array.Copy(Buffer,ReceivedData,receivedDataLength);
+                byte[] ReceivedData = new byte[receivedDataLength];
+                Array.Copy(Buffer, ReceivedData, receivedDataLength);
 
-			OnDataReceived(new ReceivedDataArgs(ReceivedData));
-			mNetworkStream.BeginRead(Buffer,0,Buffer.Length,new AsyncCallback(DataReceivedCallback),null);
+                OnDataReceived(new ReceivedDataArgs(ReceivedData));
+                mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+            }
 		}
 
 		protected virtual void OnDataReceived (ReceivedDataArgs ea)

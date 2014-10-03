@@ -199,6 +199,12 @@ namespace TwitchChatBot
 			}
 		}
 
+        public void Disconnect()
+        {
+            mTcpConnection.Disconnect();
+            Connected = Connected;
+        }
+
 		public void Connect ()
 		{
 			mTcpConnection.Connect();

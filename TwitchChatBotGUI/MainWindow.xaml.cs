@@ -57,6 +57,11 @@ namespace TwitchChatBotGUI
             //bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
         }
 
+        private void DisconnectClick(object sender, RoutedEventArgs e)
+        {
+            bot.Disconnect();
+        }
+
         private void SendClick(object sender, RoutedEventArgs e)
         {
             string messageToSend = MessageBox.Text;

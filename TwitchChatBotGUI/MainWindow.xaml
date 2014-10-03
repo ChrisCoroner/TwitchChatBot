@@ -12,7 +12,7 @@
     </Window.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Click="ConnectClick" Visibility="{Binding ConnectedVisibility, Mode=OneWay}">
+            <Button Click="ConnectClick" Visibility="{Binding ConnectedVisibility, Mode=OneWay}" ToolTip="Connects to twitch"> 
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
@@ -26,7 +26,7 @@
                    Text="Connect Twitch" />
                 </StackPanel>
             </Button>
-            <Button Click="ConnectClick" Visibility="{Binding DisconnectedVisibility, Mode=OneWay}">
+            <Button Click="DisconnectClick" Visibility="{Binding DisconnectedVisibility, Mode=OneWay}" ToolTip="Disconnects from twitch">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
