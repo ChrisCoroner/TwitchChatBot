@@ -64,11 +64,25 @@
             </Button>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Name="FlySettings" Header="Settings" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
+                
+            </Controls:Flyout>
+            <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
+                <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
+                    <DockPanel DockPanel.Dock="Left" Width="100">
+                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Name="StartQuizButton" HorizontalAlignment="Stretch" Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click"/>
+                        
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch">
+                    </DockPanel>
+                </DockPanel>
+                <!-- Your custom content here -->
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
     <Grid Name="mainGrid">
-
-        <Button Name="StartQuizButton"  Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Left" Margin="598,40,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
-        <Label Name="TimerLabel" Content="Quiz is not running" HorizontalAlignment="Left" Margin="580,0,0,0" VerticalAlignment="Top" Width="112" Height="30"/>
-
         <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">
             <MenuItem Header="Settings">
                 <MenuItem Header="Network"  Click="OpenNetworkSettings"/>
@@ -76,12 +90,53 @@
                 <MenuItem Header="Channel"  Click="OpenChannelSettings"/>
             </MenuItem>
         </Menu>
+        
+        <DockPanel  Margin="0,40,0,0" HorizontalAlignment="Stretch" LastChildFill="True">
+            <DockPanel Name="FlyOuts" DockPanel.Dock="Right"   HorizontalAlignment="Stretch" Width="50" Margin="0,0,0,31">
+ 
 
-        <DockPanel  Margin="0,302,0,0" HorizontalAlignment="Stretch" LastChildFill="True">
-            <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
-            <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
-            <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
+                <Button DockPanel.Dock="Bottom" Click="FlyoutSettings"  Name="SettingsCircleButton" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                    <Rectangle Width="20" Height="20" >
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+                
+                <Button DockPanel.Dock="Bottom" Click="FlyoutQuiz"  Name="QuizCircleButton" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                    <Rectangle Width="20" Height="20" >
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_chat}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
 
+                <Button Visibility="Hidden" DockPanel.Dock="Bottom" Click="FlyoutSettings"  Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                    <Rectangle Width="20" Height="20" >
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,0,-50,0">
+                <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
+                <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
+                <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="auto">
+              
+            </DockPanel>
+        </DockPanel>
+ 
+
+        <DockPanel Visibility="Collapsed" Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
+            <DockPanel DockPanel.Dock="Left" Width="100">
+                <Button DockPanel.Dock="Top" HorizontalAlignment="Stretch" Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch">
+            </DockPanel>
         </DockPanel>
 
     </Grid>

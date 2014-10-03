@@ -65,46 +65,19 @@ namespace TwitchChatBotGUI
             bot.SendMessageToCurrentChannel(messageToSend);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer--;
-        }
-        async Task CountDown(CancellationToken ct)
-        {
-            while (timer >= 0)
-            {
-                TimerLabel.Content = String.Format("Quiz starting in {0}",timer);
-                await Task.Delay(100);
-            }
-        }
 
-        async Task ShowTimer(CancellationToken ct) 
-        {
-            t = new System.Timers.Timer(1000);
-            t.Elapsed += timer1_Tick;
-            t.Start();
 
-            await CountDown(ct);
-        }
 
-        async private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (StartQuizCT != null) {
-                if (t != null)
-                {
-                    t.Stop();
-                }
                 StartQuizCT.Cancel();
             }
             StartQuizCT = new CancellationTokenSource();
             bot.SendMessageToCurrentChannel("Quiz is starting!");
-            //IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#" + bot.TwitchChannel, false), new IrcCommandParameter("Starting Quiz in 60 seconds!", true));
-            //bot.SendMessage(ic.ToString() + "\r\n");
-            bot.StartQuiz();
-            TimerLabel.Content = 60;
-            timer = 60;
-            await ShowTimer(StartQuizCT.Token);
-            TimerLabel.Content = "Quiz is running...";
+
+            bot.StartQuiz();        
         }
 
         async Task GetAuth(CancellationToken ct)
@@ -123,8 +96,7 @@ namespace TwitchChatBotGUI
 
         CancellationTokenSource StartAuthorize;
         CancellationTokenSource StartQuizCT;
-        int timer;
-        System.Timers.Timer t;
+
         TwitchBot bot;
 
 
@@ -172,7 +144,21 @@ namespace TwitchChatBotGUI
             bot.TwitchLogOut();
         }
 
+        private void FlyoutSettings(object sender, RoutedEventArgs e)
+        {
+            FlySettings.IsOpen = true;
+        }
+
+        private void FlyoutQuiz(object sender, RoutedEventArgs e)
+        {
+            FlyQuiz.IsOpen = true;
+        }
+
         #endregion
+
+
+
+
 
 
 
