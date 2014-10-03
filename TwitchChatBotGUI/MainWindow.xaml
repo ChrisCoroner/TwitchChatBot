@@ -92,9 +92,8 @@
         </Menu>
         
         <DockPanel  Margin="0,40,0,0" HorizontalAlignment="Stretch" LastChildFill="True">
-            <DockPanel Name="FlyOuts" DockPanel.Dock="Right"   HorizontalAlignment="Stretch" Width="50" Margin="0,0,0,31">
- 
-
+            <DockPanel Name="FlyOuts" DockPanel.Dock="Right"   HorizontalAlignment="Stretch" Width="67" Margin="0,0,0,31">
+               
                 <Button DockPanel.Dock="Bottom" Click="FlyoutSettings"  Name="SettingsCircleButton" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="20" Height="20" >
                         <Rectangle.Fill>
@@ -120,13 +119,19 @@
                 </Button>
 
             </DockPanel>
-            <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,0,-50,0">
+            
+            <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,0,-67,0">
                 <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
                 <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
                 <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
             </DockPanel>
-            <DockPanel DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="auto">
-              
+            <DockPanel Name="OffsetArea" DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="75">
+                
+            </DockPanel>
+            <DockPanel Name="ContentArea" DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="auto">
+                <ScrollViewer>
+                    <TextBlock Height="auto"  Width="auto" TextWrapping="Wrap"  Text="{Binding PrivMessages, Mode=OneWay}" VerticalAlignment="Stretch"/>
+                </ScrollViewer>
             </DockPanel>
         </DockPanel>
  

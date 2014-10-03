@@ -250,6 +250,10 @@ namespace TwitchChatBot
                         if (incCommand.Name == "PRIVMSG")
                         {
                             mQE.Process(incCommand);
+                            int indexOfExclamationSign = incCommand.Prefix.IndexOf('!');
+                            string name = incCommand.Prefix.Substring(0, indexOfExclamationSign);
+                            privMessages.Add(String.Format("{0}:{1}\n", name, incCommand.Parameters[incCommand.Parameters.Length - 1].Value));
+                            PrivMessages = PrivMessages;
                         }
 					}
 					msgStart = i = i + 2;
@@ -287,6 +291,8 @@ namespace TwitchChatBot
 				Console.WriteLine(i);
 			}
 		}
+
+
 
         public void JoinTwitchChannel(String inTwitchChannel)
         {
@@ -453,10 +459,19 @@ namespace TwitchChatBot
             } 
         }
 
-
+        public String PrivMessages 
+        {
+            get { 
+                return String.Join("",privMessages);
+            }
+            set {
+                NotifyPropertyChanged();
+            }
+        }
 
         string twitchChannel;
 
+        List<String> privMessages = new List<string>();
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();
 		MemoryStream mMessagesBuffer = new MemoryStream();
