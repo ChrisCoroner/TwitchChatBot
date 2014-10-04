@@ -67,8 +67,38 @@
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
             <Controls:Flyout Name="FlySettings" Header="Settings" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
+                <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
+                    <DockPanel DockPanel.Dock="Left" Width="100">
+
+                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_network}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Network" />
+                            </StackPanel>
+                        </Button>
+                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_chat}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Quiz" />
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                    
+                    <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch">
+                    </DockPanel>
+                    
+                </DockPanel>
                 
             </Controls:Flyout>
+            
             <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
                     <DockPanel DockPanel.Dock="Left" Width="100">
