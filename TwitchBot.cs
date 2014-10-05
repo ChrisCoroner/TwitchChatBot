@@ -124,8 +124,8 @@ namespace TwitchChatBot
 			mTcpConnection.DataReceived += ProccessMessageData;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 
-            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/", @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot");
-
+            host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/", Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
+            
             StartHttpListener();
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessageToCurrentChannel;
