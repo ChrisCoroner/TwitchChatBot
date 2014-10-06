@@ -76,13 +76,16 @@ namespace TwitchChatBotGUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (StartQuizCT != null) {
-                StartQuizCT.Cancel();
+            if (bot.QuizFile == null)
+            {
+                OpenErrorMessage("You should specify file containing a quiz!");
             }
-            StartQuizCT = new CancellationTokenSource();
-            bot.SendMessageToCurrentChannel("Quiz is starting!");
+            else
+            {
+                bot.SendMessageToCurrentChannel("Quiz is starting!");
 
-            bot.StartQuiz();        
+                bot.StartQuiz();
+            }
         }
 
         async Task GetAuth(CancellationToken ct)
@@ -100,7 +103,6 @@ namespace TwitchChatBotGUI
         }
 
         CancellationTokenSource StartAuthorize;
-        CancellationTokenSource StartQuizCT;
 
         TwitchBot bot;
 
@@ -108,6 +110,12 @@ namespace TwitchChatBotGUI
 
 
         #region functionality for menu-driven UI
+
+        private void OpenErrorMessage(String inErrorMessage)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new ErrorMessage(bot, Pop, inErrorMessage));
+        }
 
         private void OpenNetworkSettings(object sender, RoutedEventArgs e)
         {
@@ -135,7 +143,7 @@ namespace TwitchChatBotGUI
 
         private void ShowPopupWithUserControl(ITwitchMenuItem inControl)
         {
-            inControl.CurrentPopup.MinHeight = 300;
+            inControl.CurrentPopup.MinHeight = 200;
             inControl.CurrentPopup.MinWidth = 200;
             inControl.CurrentPopup.PlacementTarget = this;
             inControl.CurrentPopup.Placement = PlacementMode.Center;
