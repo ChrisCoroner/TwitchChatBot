@@ -13,21 +13,51 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
+using Microsoft.TeamFoundation.MVVM;
 using TwitchChatBot;
 
 namespace TwitchChatBotGUI.MenuItems
 {
+
+
+
+
     /// <summary>
     /// Interaction logic for QuizSettings.xaml
     /// </summary>
-    public partial class QuizSettings : UserControl, ITwitchMenuItem
+    public partial class QuizSettings : System.Windows.Controls.UserControl, ITwitchMenuItem
     {
+
+        private string selectedPath = string.Empty;
+
+        public string SelectedPath
+        {
+            get { return this.selectedPath; }
+            set { selectedPath = value; }
+        }
+
+        public ICommand BrowseFileCommand
+        {
+            get {return new RelayCommand(BrowseFileAction); }
+        }
+
+        public void BrowseFileAction()
+        {
+            var dialog = new OpenFileDialog();
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                this.SelectedPath = dialog.FileName;
+            }
+        }
 
         private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
         {
             TimeBetweenQuestions.Text = String.Format("{0}",Bot.TimeBetweenQuestions);
             TimeBetweenHints.Text = String.Format("{0}", Bot.TimeBetweenHints);
             QuizFile.Text = Bot.QuizFile;
+            QuizWindowName.DataContext = (QuizSettings)this;
         }
 
         public QuizSettings(TwitchBot inBot, Popup inCurrentPopup)
