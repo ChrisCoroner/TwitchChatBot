@@ -6,5 +6,6 @@ C:\Users\Yuri\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.pdb
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.dll.config
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.dll
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.pdb
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.csprojResolveAssemblyReference.cache
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.dll
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\x86\Debug\TwitchChatBot.pdb

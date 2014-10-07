@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="MenuItems\QuizSettings.xaml.cs">
       <DependentUpon>QuizSettings.xaml</DependentUpon>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

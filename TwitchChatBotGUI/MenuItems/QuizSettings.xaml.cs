@@ -52,8 +52,15 @@ namespace TwitchChatBotGUI.MenuItems
             }
         }
 
-        private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
+        public override void OnApplyTemplate()
         {
+           base.OnApplyTemplate();
+           DependencyObject t = GetTemplateChild("FuckingButton");
+           Console.WriteLine();
+        }
+
+        private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
+        {   
             TimeBetweenQuestions.Text = String.Format("{0}",Bot.TimeBetweenQuestions);
             TimeBetweenHints.Text = String.Format("{0}", Bot.TimeBetweenHints);
             QuizFile.Text = Bot.QuizFile;
