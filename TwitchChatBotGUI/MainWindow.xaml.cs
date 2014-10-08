@@ -143,7 +143,7 @@ namespace TwitchChatBotGUI
 
         private void ShowPopupWithUserControl(ITwitchMenuItem inControl)
         {
-            inControl.CurrentPopup.MinHeight = 250;
+            inControl.CurrentPopup.MinHeight = 200;
             inControl.CurrentPopup.MinWidth = 200;
             inControl.CurrentPopup.PlacementTarget = this;
             inControl.CurrentPopup.Placement = PlacementMode.Center;
