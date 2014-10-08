@@ -172,6 +172,7 @@ namespace TwitchChatBot
         */
 		private void DataReceivedCallback( IAsyncResult result)
 		{
+            
             if (mNetworkStream != null)
             {
                 int receivedDataLength = mNetworkStream.EndRead(result);
