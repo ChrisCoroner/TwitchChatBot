@@ -44,8 +44,15 @@ namespace TwitchChatBotGUI
 
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
-            bot.Connect();
-
+            try
+            {
+                bot.Connect();
+            }
+            catch (TimeoutException ex)
+            {
+                OpenErrorMessage("Something went wrong - connection is not established");
+                return;
+            }
             //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
 
             bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");

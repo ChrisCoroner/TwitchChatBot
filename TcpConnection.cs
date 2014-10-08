@@ -79,11 +79,15 @@ namespace TwitchChatBot
 
         public void Disconnect()
         {
-            if (Connected) {
-                mNetworkStream.Close();
-                mTcpClient.Close();
-                mTcpClient = null;
-                mNetworkStream = null;
+            lock (mNetworkStreamLock)
+            {
+                if (Connected)
+                {
+                    mNetworkStream.Close();
+                    mTcpClient.Close();
+                    mTcpClient = null;
+                    mNetworkStream = null;
+                }
             }
         }
 
@@ -105,7 +109,16 @@ namespace TwitchChatBot
             */
 
             if (Proxy == null) {
-				mTcpClient.Connect(Destination.EndpointAddress, Destination.EndpointPort);
+                var result = mTcpClient.BeginConnect(Destination.EndpointAddress, Destination.EndpointPort, null, null);
+                var isSuccessful = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+                if (!isSuccessful) {
+                    mTcpClient = null;
+                    mNetworkStream = null;
+                    throw new TimeoutException("Failed to connect");
+                    //throw new Exception("Failed to connect");
+                }
+                mTcpClient.EndConnect(result);
+				//mTcpClient.Connect(Destination.EndpointAddress, Destination.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
 			} else {
@@ -172,17 +185,19 @@ namespace TwitchChatBot
         */
 		private void DataReceivedCallback( IAsyncResult result)
 		{
-            
-            if (mNetworkStream != null)
+            lock (mNetworkStreamLock)
             {
-                int receivedDataLength = mNetworkStream.EndRead(result);
-                //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+                if (mNetworkStream != null)
+                {
+                    int receivedDataLength = mNetworkStream.EndRead(result);
+                    //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
 
-                byte[] ReceivedData = new byte[receivedDataLength];
-                Array.Copy(Buffer, ReceivedData, receivedDataLength);
+                    byte[] ReceivedData = new byte[receivedDataLength];
+                    Array.Copy(Buffer, ReceivedData, receivedDataLength);
 
-                OnDataReceived(new ReceivedDataArgs(ReceivedData));
-                mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                    OnDataReceived(new ReceivedDataArgs(ReceivedData));
+                    mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                }
             }
 		}
 
@@ -197,6 +212,7 @@ namespace TwitchChatBot
 
 		TcpClient mTcpClient;
 		NetworkStream mNetworkStream;
+        object mNetworkStreamLock = new object();
 
 		byte[] Buffer = new byte[2048];
 
