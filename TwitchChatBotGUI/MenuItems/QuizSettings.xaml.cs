@@ -29,35 +29,7 @@ namespace TwitchChatBotGUI.MenuItems
     public partial class QuizSettings : System.Windows.Controls.UserControl, ITwitchMenuItem
     {
 
-        private string selectedPath = string.Empty;
-
-        public string SelectedPath
-        {
-            get { return this.selectedPath; }
-            set { selectedPath = value; }
-        }
-
-        public ICommand BrowseFileCommand
-        {
-            get {return new RelayCommand(BrowseFileAction); }
-        }
-
-        public void BrowseFileAction()
-        {
-            var dialog = new OpenFileDialog();
-            DialogResult result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                this.SelectedPath = dialog.FileName;
-            }
-        }
-
-        public override void OnApplyTemplate()
-        {
-           base.OnApplyTemplate();
-           DependencyObject t = GetTemplateChild("FuckingButton");
-           Console.WriteLine();
-        }
+        
 
         private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
         {   
@@ -83,10 +55,30 @@ namespace TwitchChatBotGUI.MenuItems
             Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
             Bot.QuizFile = QuizFile.Text;
             CurrentPopup.IsOpen = false;
-        } 
+        }
+
+        private void OpenFileClick(object sender, RoutedEventArgs e)
+        {
+
+            CurrentPopup.IsOpen = false;
+
+            var dialog = new OpenFileDialog();
+            DialogResult result = dialog.ShowDialog();
+
+            Bot.QuizFile = dialog.FileName;
+            Console.WriteLine(dialog.FileName);
+          
+            CurrentPopup.IsOpen = true;
+            CurrentPopup.StaysOpen = true;
+           
+            
+            //CurrentPopup.IsOpen = true;
+        }
 
         public Popup CurrentPopup { get; set; }
         public TwitchBot Bot { get; set; }
+
+
 
 
     }

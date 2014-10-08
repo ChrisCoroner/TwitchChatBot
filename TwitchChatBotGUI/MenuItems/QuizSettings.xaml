@@ -61,22 +61,23 @@
             
         </TextBox>
 
-        <TextBox  Name="QuizFile"  HorizontalAlignment="Left" Height="22" Margin="105,117,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="77" Width="auto" >
-
-        </TextBox>
-        <Button Margin="78,117,95,57">
-            
-                <Rectangle Width="15" Height="15"  Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+ 
+        
+        <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="105,117,18,57">
+            <Button DockPanel.Dock="Left" Name="OpenFile" Click="OpenFileClick">
+                <Rectangle Width="16" Height="16"  Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                     <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_folder_open}" />
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_folder_open}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
-            
-        </Button>
+            </Button>
+            <TextBox  Name="QuizFile"  HorizontalAlignment="Stretch" Height="auto"  TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" Width="auto" >
 
+            </TextBox>
+        </DockPanel>
         <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Questions Delay:" VerticalAlignment="Top" Height="24" Width="90"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,82,0,0" TextWrapping="Wrap" Text="Hints Delay:" VerticalAlignment="Top" Height="16" Width="68"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,127,0,0" TextWrapping="Wrap" Text="Quiz File:" VerticalAlignment="Top" Height="16" Width="68"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,117,0,0" TextWrapping="Wrap" Text="Quiz File:" VerticalAlignment="Top" Height="26" Width="68"/>
         <Button Content="Accept" HorizontalAlignment="Left" Margin="107,165,0,0" VerticalAlignment="Top" Width="75" Click="AcceptClick"/>
     </Grid>
 </UserControl>
