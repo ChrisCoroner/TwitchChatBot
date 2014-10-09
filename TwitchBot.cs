@@ -1,5 +1,3 @@
-//https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=5B6C3GSJ32YD8&lc=RU&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
-
 using System;
 using System.IO;
 using System.Collections.Generic;

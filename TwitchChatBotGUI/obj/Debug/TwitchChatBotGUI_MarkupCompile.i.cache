@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\
 TwitchChatBotGUI
 none
 false
 DEBUG;TRACE
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\App.xaml
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\App.xaml
 6-1798578539
 
-141833635150
-171709017023
+14-1359568056
+17-480366954
 MainWindow.xaml;MenuItems\ChannelSettings.xaml;MenuItems\ErrorMessage.xaml;MenuItems\NetworkSettings.xaml;MenuItems\QuizSettings.xaml;Resources\Icons.xaml;
 
 False
