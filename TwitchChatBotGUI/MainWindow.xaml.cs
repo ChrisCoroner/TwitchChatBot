@@ -44,20 +44,26 @@ namespace TwitchChatBotGUI
 
         private void ConnectClick(object sender, RoutedEventArgs e)
         {
-            try
+            if (bot.Authorized)
             {
-                bot.Connect();
+                try
+                {
+                    bot.Connect();
+                }
+                catch (TimeoutException ex)
+                {
+                    OpenErrorMessage("Something went wrong - connection is not established");
+                    return;
+                }
+                //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
+
+                bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
+                bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
             }
-            catch (TimeoutException ex)
+            else 
             {
-                OpenErrorMessage("Something went wrong - connection is not established");
-                return;
+                OpenErrorMessage("You should authorize first");
             }
-            //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
-
-            bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
-            bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
-
             //bot.JoinTwitchChannel("sovietmade");
 
             //bot.SendMessage("JOIN #" + bot.Auth.AuthName + "\r\n");

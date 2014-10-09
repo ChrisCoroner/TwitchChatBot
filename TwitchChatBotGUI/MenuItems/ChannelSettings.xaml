@@ -6,11 +6,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200" Background="White">
     <Grid>
-        <Border  BorderBrush="DeepSkyBlue" BorderThickness="0,20,0,0">
+        <Border  BorderBrush="Black" BorderThickness="0,20,0,0">
 
         </Border>
         <TextBox Name="TwitchChannel"  HorizontalAlignment="Left" Height="24" Margin="105,27,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="77" Width="auto" />
         <TextBlock HorizontalAlignment="Left" Margin="10,29,0,0" TextWrapping="Wrap" Text="Twitch Channel:" VerticalAlignment="Top" Height="24" Width="90"/>
-        <Button Content="Accept" HorizontalAlignment="Left" Margin="102,155,23,20" VerticalAlignment="Top" Width="75" Click="AcceptClick"/>
+        <Button Content="Accept" Margin="107,165,18,0" Click="AcceptClick" Height="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="75"/>
     </Grid>
 </UserControl>

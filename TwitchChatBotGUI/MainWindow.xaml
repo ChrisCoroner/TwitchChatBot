@@ -71,7 +71,7 @@
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
                     <DockPanel DockPanel.Dock="Left" Width="100">
 
-                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
+                        <Button Click="OpenNetworkSettings" DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
                             <StackPanel Orientation="Horizontal">
                                 <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                                     <Rectangle.OpacityMask>
@@ -81,7 +81,7 @@
                                 <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Network" />
                             </StackPanel>
                         </Button>
-                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
+                        <Button Click="OpenQuizSettings" DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Width="auto" VerticalAlignment="Top">
                             <StackPanel Orientation="Horizontal">
                                 <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                                     <Rectangle.OpacityMask>
@@ -114,7 +114,7 @@
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
     <Grid Name="mainGrid">
-        <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">
+        <Menu Visibility="Collapsed" IsMainMenu="True" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="Auto">
             <MenuItem Header="Settings">
                 <MenuItem Header="Network"  Click="OpenNetworkSettings"/>
                 <MenuItem Header="Quiz"  Click="OpenQuizSettings"/>

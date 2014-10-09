@@ -20,7 +20,12 @@ namespace TwitchChatBot
             SimpleWorkerRequest swr = new SimpleWorkerRequest(page, query, sw);
             HttpRuntime.ProcessRequest(swr);
         }
-        
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         ~CustomHost()
         {
             HttpRuntime.Close();

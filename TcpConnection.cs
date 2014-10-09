@@ -122,7 +122,18 @@ namespace TwitchChatBot
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
 			} else {
-				mTcpClient.Connect(Proxy.EndpointAddress, Proxy.EndpointPort);
+                var result = mTcpClient.BeginConnect(Proxy.EndpointAddress, Proxy.EndpointPort, null, null);
+                var isSuccessful = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+                if (!isSuccessful)
+                {
+                    mTcpClient = null;
+                    mNetworkStream = null;
+                    throw new TimeoutException("Failed to connect");
+                    //throw new Exception("Failed to connect");
+                }
+                mTcpClient.EndConnect(result);
+
+				//mTcpClient.Connect(Proxy.EndpointAddress, Proxy.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
 				string tunnelRequest = String.Format ("CONNECT {0}  HTTP/1.1\r\nHost: {0}\r\n\r\n", Destination.ToString ());
