@@ -293,8 +293,18 @@ namespace TwitchChatBot
             //string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
             //mQE.AddQuiz(Quiz);
-            mQE.AddQuiz();
+            if (mQE.QuizList.Length == 0)
+            {
+                mQE.AddQuiz();
+            }
+            QuizList = QuizList;
+
             mQE.StartQuiz();
+        }
+
+        public void StopQuiz()
+        {
+            mQE.StopQuiz();
         }
 
 		public void DumpMessageQ ()
@@ -324,6 +334,8 @@ namespace TwitchChatBot
             }
             set {
                 mQE.QuizFile = value;
+                mQE.AddQuiz();
+                QuizList = QuizList;
             }
         }
 
@@ -469,6 +481,18 @@ namespace TwitchChatBot
                 twitchChannel = value;
                 NotifyPropertyChanged();
             } 
+        }
+
+        public QuizObject[] QuizList
+        {
+            get
+            {
+                return mQE.QuizList;
+            }
+            set
+            {
+                NotifyPropertyChanged();
+            }
         }
 
         public String PrivMessages 

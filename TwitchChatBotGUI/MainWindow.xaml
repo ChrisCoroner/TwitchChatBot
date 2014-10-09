@@ -100,16 +100,38 @@
                 
             </Controls:Flyout>
             
-            <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
+            <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">                
+                
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
-                    <DockPanel DockPanel.Dock="Left" Width="100">
-                        <Button DockPanel.Dock="Top" Style="{DynamicResource SquareButtonStyle}" Name="StartQuizButton" HorizontalAlignment="Stretch" Content="Start Quiz" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click"/>
-                        
+                    <DockPanel Margin="0 0 20 0" DockPanel.Dock="Top" Width="auto">
+                        <Button Name="StartQuizButton" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="12" Height="12" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Start Quiz" />
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="2 0 0 0" Name="StopQuizButton" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="12" Height="12" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Stop Quiz" />
+                            </StackPanel>
+                        </Button>
                     </DockPanel>
-                    <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch">
+                    <DockPanel DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+                        <DataGrid ItemsSource="{Binding QuizList, Mode=OneWay}" Margin="0 20 20 0">
+
+                        </DataGrid>
                     </DockPanel>
                 </DockPanel>
-                <!-- Your custom content here -->
+                
             </Controls:Flyout>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
@@ -162,14 +184,14 @@
             <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,0,-67,0">
                 <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
                 <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
-                <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto"/>
+                <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto" FontFamily="Segoe UI" FontWeight="SemiBold" />
             </DockPanel>
             <DockPanel Name="OffsetArea" DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="75">
     
             </DockPanel>
             <DockPanel Name="ContentArea" DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="auto">
                 <ScrollViewer>
-                    <TextBlock Height="auto"  Width="auto" TextWrapping="Wrap"  Text="{Binding PrivMessages, Mode=OneWay}" VerticalAlignment="Stretch"/>
+                    <TextBlock Height="auto"  Width="auto" TextWrapping="Wrap"  Text="{Binding PrivMessages, Mode=OneWay}" FontFamily="Segoe UI" FontWeight="SemiBold" VerticalAlignment="Stretch" />
                 </ScrollViewer>
             </DockPanel>
         </DockPanel>
@@ -183,6 +205,26 @@
             </DockPanel>
         </DockPanel>
 
+        <DockPanel Visibility="Collapsed" Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
+            <DockPanel Margin="0 0 50 0" DockPanel.Dock="Top" Width="auto">
+                <Button  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}"  VerticalAlignment="Top" Width="auto" Click="Button_Click" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Start Quiz" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+                <DataGrid ItemsSource="{Binding QuizList}" Margin="0 50 50 0">
+
+                </DataGrid>
+            </DockPanel>
+        </DockPanel>
+        
     </Grid>
 
 </Controls:MetroWindow>

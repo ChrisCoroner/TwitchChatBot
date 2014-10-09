@@ -8,6 +8,18 @@ using System.Linq;
 
 namespace TwitchChatBot
 {
+    public class QuizObject
+    {
+        public QuizObject(String inQuestion, String inAnswer)
+        {
+            Question = inQuestion;
+            Answer = inAnswer;
+        }
+
+        public String Question { get; set; }
+        public String Answer { get; set; }
+    }
+
     public class QuizHint
     {
         public QuizHint(string inAnswer)
@@ -51,6 +63,8 @@ namespace TwitchChatBot
 		public QuizEngine ()
 		{
 			mQuizQueue = new Queue<Tuple<string, string>>();
+            mQuizList = new List<QuizObject>();
+
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
             mTimeBetweenQuestions = 60000;
@@ -94,6 +108,7 @@ namespace TwitchChatBot
 				string[] result = inStringsArray[i].Split(separators,StringSplitOptions.RemoveEmptyEntries);
 				if(result.Length == 2)
 				{
+                    mQuizList.Add(new QuizObject(result[0], result[1]));
 					mQuizQueue.Enqueue(new Tuple<string, string>(result[0],result[1]));
 				}
 			}
@@ -150,6 +165,17 @@ namespace TwitchChatBot
                     }
                     Console.WriteLine("after GetMessageFromQ:{0} ", ic.Name);
                 }
+            }
+        }
+
+        public void StopQuiz()
+        {
+            if (cts != null)
+            {
+                mTimeToAskAQuestion.Enabled = false;
+                mTimeToGiveAHint.Enabled = false;
+                cts.Cancel();
+                cts = null;
             }
         }
 
@@ -225,6 +251,13 @@ namespace TwitchChatBot
             }
         }
 
+        public QuizObject[] QuizList
+        {
+            get {
+                return mQuizList.ToArray();
+            }
+        }
+
         public string QuizFile { get; set; }
 
         //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
@@ -235,6 +268,7 @@ namespace TwitchChatBot
 		
         //Queue of tuples, containing questions and answers
         Queue<Tuple<string,string>> mQuizQueue;
+        List<QuizObject> mQuizList;
 		
 
         System.Timers.Timer mTimeToAskAQuestion;
