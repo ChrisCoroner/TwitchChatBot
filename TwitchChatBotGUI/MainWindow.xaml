@@ -129,9 +129,9 @@
                             </StackPanel>
                         </Button>
                     </DockPanel>
-                    <ScrollViewer>
+                    <ScrollViewer Margin="0 20 0 0">
                     <DockPanel x:Name="QuizDataGrids"  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
-                        <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizList, Mode=OneWay}" Margin="0 20 20 0">
+                        <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizList, Mode=OneWay}" Margin="0 0 20 0">
                             
                         </DataGrid>
                         <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay}" MinHeight="50" DockPanel.Dock="Top" Name="QuizScoreGrid" ItemsSource="{Binding Score, Mode=OneWay}" Margin="0 10 20 0">
@@ -193,7 +193,7 @@
             <DockPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,0,-67,0">
                 <Button DockPanel.Dock="Left" Name="TwitchChannel" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Content="{Binding TwitchChannel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="75" Click="ChannelButtonClick"/>
                 <Button DockPanel.Dock="Right" x:Name="SendButton" Content="Send" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="67" Click="SendClick"/>
-                <TextBox Name="MessageBox"  TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto" FontFamily="Segoe UI" FontWeight="SemiBold" />
+                <TextBox Name="MessageBox" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="auto" FontFamily="Segoe UI" FontWeight="SemiBold" />
             </DockPanel>
             <DockPanel Name="OffsetArea" DockPanel.Dock="Left"   HorizontalAlignment="Stretch" LastChildFill="True" Width="75">
     

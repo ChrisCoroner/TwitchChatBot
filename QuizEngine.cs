@@ -169,7 +169,6 @@ namespace TwitchChatBot
 
 		public QuizEngine (string inFileWithQuiz) : this()
 		{
-           
             AddQuiz(inFileWithQuiz);
 		}
 
@@ -198,11 +197,6 @@ namespace TwitchChatBot
             QuizFile = inFileWithQuiz;
         	if (File.Exists (inFileWithQuiz)) {
                 await Task.Run((System.Action)Processing);
-                //using(FileStream fs = File.OpenRead(inFileWithQuiz)){
-                    
-                //    string[] linesOfFile = File.ReadAllLines(inFileWithQuiz);
-                //    ProcessStringsArrayAsQuiz(linesOfFile);
-                //}
 			} else {
 				throw new FileNotFoundException();
 			}
@@ -220,6 +214,8 @@ namespace TwitchChatBot
 					mQuizQueue.Enqueue(new Tuple<string, string>(result[0],result[1]));
 				}
 			}
+
+            QuizList = QuizList;
 		}
 
 		public void Process (IrcCommand inCommand)
@@ -377,6 +373,10 @@ namespace TwitchChatBot
         {
             get {
                 return mQuizList.ToArray();
+            }
+            set
+            {
+                NotifyPropertyChanged();
             }
         }
 

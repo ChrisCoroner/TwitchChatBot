@@ -56,11 +56,12 @@ namespace TwitchChatBotGUI.MenuItems
             InitializeComponent();
         }
 
-        private void AcceptClick(object sender, RoutedEventArgs e)
+        async private void AcceptClick(object sender, RoutedEventArgs e)
         {
             Bot.TimeBetweenQuestions = Int32.Parse(TimeBetweenQuestions.Text);
             Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
             Bot.QuizFile = QuizFile.Text;
+            await Bot.ProcessQuizFile();
             CurrentPopup.IsOpen = false;
         }
 

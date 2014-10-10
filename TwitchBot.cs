@@ -11,6 +11,8 @@ using System.Web.Script.Serialization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TwitchChatBot
 {
@@ -300,14 +302,10 @@ namespace TwitchChatBot
 
         async public void StartQuiz()
         {
-            //string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
-            //string Quiz = @"C:\Quiz.txt";
-            //mQE.AddQuiz(Quiz);
             if (mQE.QuizList.Length == 0)
             {
-                mQE.AddQuiz();
+                await ProcessQuizFile();
             }
-            //QuizList = QuizList;
 
             mQE.StartQuiz();
         }
@@ -344,9 +342,12 @@ namespace TwitchChatBot
             }
             set {
                 mQE.QuizFile = value;
-                mQE.AddQuiz();
-                QuizList = QuizList;
             }
+        }
+
+        async public Task ProcessQuizFile()
+        {
+            await mQE.AddQuiz();
         }
 
         public int TimeBetweenQuestions
@@ -498,10 +499,6 @@ namespace TwitchChatBot
             get
             {
                 return mQE.QuizList;
-            }
-            set
-            {
-                NotifyPropertyChanged();
             }
         }
 

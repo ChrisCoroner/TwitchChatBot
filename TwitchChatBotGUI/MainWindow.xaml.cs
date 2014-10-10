@@ -98,6 +98,7 @@ namespace TwitchChatBotGUI
             //IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+bot.TwitchChannel, false), new IrcCommandParameter(messageToSend, true));
             //bot.SendMessage(ic.ToString() + "\r\n");
             bot.SendMessageToCurrentChannel(messageToSend);
+            MessageBox.Text = "";
         }
 
 
