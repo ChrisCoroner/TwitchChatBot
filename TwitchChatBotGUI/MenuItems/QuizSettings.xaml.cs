@@ -35,7 +35,14 @@ namespace TwitchChatBotGUI.MenuItems
         {   
             TimeBetweenQuestions.Text = String.Format("{0}",Bot.TimeBetweenQuestions);
             TimeBetweenHints.Text = String.Format("{0}", Bot.TimeBetweenHints);
-            QuizFile.Text = Bot.QuizFile;
+            if (tempPath != null)
+            {
+                QuizFile.Text = tempPath;
+            }
+            else
+            {
+                QuizFile.Text = Bot.QuizFile;
+            }
             QuizWindowName.DataContext = (QuizSettings)this;
         }
 
@@ -65,7 +72,8 @@ namespace TwitchChatBotGUI.MenuItems
             var dialog = new OpenFileDialog();
             DialogResult result = dialog.ShowDialog();
 
-            Bot.QuizFile = dialog.FileName;
+            //Bot.QuizFile = dialog.FileName;
+            tempPath = dialog.FileName;
             Console.WriteLine(dialog.FileName);
           
             CurrentPopup.IsOpen = true;
@@ -78,7 +86,7 @@ namespace TwitchChatBotGUI.MenuItems
         public Popup CurrentPopup { get; set; }
         public TwitchBot Bot { get; set; }
 
-
+        String tempPath;
 
 
     }

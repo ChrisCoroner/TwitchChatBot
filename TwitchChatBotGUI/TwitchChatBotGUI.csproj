@@ -81,6 +81,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MenuItems\Info.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MenuItems\NetworkSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +104,9 @@
     </Compile>
     <Compile Include="MenuItems\ErrorMessage.xaml.cs">
       <DependentUpon>ErrorMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuItems\Info.xaml.cs">
+      <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
     <Compile Include="MenuItems\TwitchMenuItem.cs" />
     <Compile Include="MenuItems\NetworkSettings.xaml.cs">

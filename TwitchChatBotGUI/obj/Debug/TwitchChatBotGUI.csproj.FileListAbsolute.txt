@@ -39,7 +39,6 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe.config
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\TwitchChatBotGUI.pdb
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csprojResolveAssemblyReference.cache
-C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MainWindow.baml
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\ChannelSettings.baml
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\ErrorMessage.baml
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\NetworkSettings.baml
@@ -53,9 +52,14 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Menu
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\QuizSettings.g.cs
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Resources\Icons.g.cs
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\App.g.cs
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_MarkupCompile.cache
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_MarkupCompile.lref
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MainWindow.baml
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.g.resources
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.Properties.Resources.resources
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csproj.GenerateResource.Cache
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.pdb
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\Info.baml
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\Info.g.cs

@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TwitchChatBot
 {
@@ -18,6 +20,89 @@ namespace TwitchChatBot
 
         public String Question { get; set; }
         public String Answer { get; set; }
+    }
+
+    public class ScoreObject : IEquatable<ScoreObject>
+    {
+        public ScoreObject(String inName, int inScore)
+        {
+            Name = inName;
+            Score = inScore;
+        }
+
+        public ScoreObject(String inName) : this(inName, 0) { }
+
+        public bool Equals(ScoreObject other)
+        { 
+            if( other == null)
+            {
+                return false;
+            }
+            else if (this.Name == other.Name)
+            {
+                return true;
+            }
+            else 
+            {
+                return false;    
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            ScoreObject scoreObj = obj as ScoreObject;
+            if (scoreObj == null)
+            {
+                return false;
+            }
+            else {
+                return Equals(scoreObj);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        public static bool operator == (ScoreObject score1, ScoreObject score2)
+        {
+            if ((object)score1 == null || (object)score2 == null)
+            {
+                return Object.Equals(score1,score2);
+            }
+            else {
+                return score1.Equals(score2);
+            }
+        }
+
+        public static bool operator != (ScoreObject score1, ScoreObject score2)
+        {
+            if ((object)score1 == null || (object)score2 == null)
+            {
+                return ! Object.Equals(score1, score2);
+            }
+            else
+            {
+                return ! (score1.Equals(score2));
+            }
+        }
+
+        public String Name { get; set; }
+        public int Score { get; set; }
+    }
+
+    public static class ScoreObjectExtensions
+    {
+        public static ScoreObject AsScoreObject(this String inName)
+        {
+            return new ScoreObject(inName);
+        }
     }
 
     public class QuizHint
@@ -58,12 +143,23 @@ namespace TwitchChatBot
         string mAnswer;
     }
 
-	public class QuizEngine
+	public class QuizEngine : INotifyPropertyChanged
 	{
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
 		public QuizEngine ()
 		{
 			mQuizQueue = new Queue<Tuple<string, string>>();
             mQuizList = new List<QuizObject>();
+            mScoreList = new List<ScoreObject>();
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -82,19 +178,31 @@ namespace TwitchChatBot
 			ProcessStringsArrayAsQuiz(inQuiz);
 		}
 
-        public void AddQuiz() {
-            AddQuiz(QuizFile);
+        public async Task AddQuiz() {
+            await AddQuiz(QuizFile);
         }
 
-        public void AddQuiz(string inFileWithQuiz)
+        void Processing()
+        {
+            using (FileStream fs = File.OpenRead(QuizFile))
+            {
+
+                string[] linesOfFile = File.ReadAllLines(QuizFile);
+                ProcessStringsArrayAsQuiz(linesOfFile);
+            }
+           
+        }
+
+        async public Task  AddQuiz(string inFileWithQuiz)
         {
             QuizFile = inFileWithQuiz;
         	if (File.Exists (inFileWithQuiz)) {
-				using(FileStream fs = File.OpenRead(inFileWithQuiz)){
-					
-					string[] linesOfFile = File.ReadAllLines(inFileWithQuiz);
-					ProcessStringsArrayAsQuiz(linesOfFile);
-				}
+                await Task.Run((System.Action)Processing);
+                //using(FileStream fs = File.OpenRead(inFileWithQuiz)){
+                    
+                //    string[] linesOfFile = File.ReadAllLines(inFileWithQuiz);
+                //    ProcessStringsArrayAsQuiz(linesOfFile);
+                //}
 			} else {
 				throw new FileNotFoundException();
 			}
@@ -153,9 +261,23 @@ namespace TwitchChatBot
                         {
                             mScore[name]++;
                         }
-                        else {
+                        else 
+                        {
                             mScore[name] = 1;
                         }
+
+                        ScoreObject scoreObj = name.AsScoreObject();
+                        if (mScoreList.Contains(scoreObj))
+                        {
+                            mScoreList[mScoreList.IndexOf(scoreObj)].Score++;
+                        }
+                        else 
+                        {
+                            scoreObj.Score++;
+                            mScoreList.Add(scoreObj);
+                        }
+                        Score = Score; //Notifying
+
 
                         //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentQAPair.Item2, mScore[name]);
@@ -258,6 +380,16 @@ namespace TwitchChatBot
             }
         }
 
+        public ScoreObject[] Score
+        {
+            get {
+                return mScoreList.ToArray();
+            }
+            set {
+                NotifyPropertyChanged();
+            }
+        }
+
         public string QuizFile { get; set; }
 
         //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
@@ -269,7 +401,7 @@ namespace TwitchChatBot
         //Queue of tuples, containing questions and answers
         Queue<Tuple<string,string>> mQuizQueue;
         List<QuizObject> mQuizList;
-		
+        List<ScoreObject> mScoreList;
 
         System.Timers.Timer mTimeToAskAQuestion;
         System.Timers.Timer mTimeToGiveAHint;

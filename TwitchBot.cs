@@ -47,6 +47,14 @@ namespace TwitchChatBot
             }
         }
 
+        private void ProxyPassNotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, e);
+            }
+        }
+
         public class TwitchAuthorizationPart
         {
             public string[] scopes { get; set; }
@@ -135,6 +143,7 @@ namespace TwitchChatBot
             StartHttpListener();
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessageToCurrentChannel;
+            mQE.PropertyChanged += ProxyPassNotifyPropertyChanged; 
 
             TwitchChannel = "NONE";
 		}
@@ -289,7 +298,7 @@ namespace TwitchChatBot
             AuthorizedName = AuthorizedName;
         }
 
-        public void StartQuiz()
+        async public void StartQuiz()
         {
             //string Quiz = @"C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\Quiz.txt";
             //string Quiz = @"C:\Quiz.txt";
@@ -298,7 +307,7 @@ namespace TwitchChatBot
             {
                 mQE.AddQuiz();
             }
-            QuizList = QuizList;
+            //QuizList = QuizList;
 
             mQE.StartQuiz();
         }
@@ -496,15 +505,26 @@ namespace TwitchChatBot
             }
         }
 
+        public ScoreObject[] Score
+        {
+            get
+            {
+                return mQE.Score;
+            }
+        }
+
         public String PrivMessages 
         {
             get { 
                 return String.Join("",privMessages);
             }
             set {
+               
                 NotifyPropertyChanged();
             }
         }
+
+
 
         string twitchChannel;
 

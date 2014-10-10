@@ -17,14 +17,36 @@ using System.Windows.Shapes;
 using TwitchChatBotGUI.MenuItems;
 using TwitchChatBot;
 using MahApps.Metro.Controls;
+using System.Globalization;
 
 namespace TwitchChatBotGUI
 {
+
+    public class WidthToHalfWidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return ((double)value / 2);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return ((double)value * 2);
+        }
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        private void OnSourceUpdated(Object sender, DataTransferEventArgs args)
+        {
+
+
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,6 +60,7 @@ namespace TwitchChatBotGUI
             bot.Destination = new Endpoint();
             bot.Destination.EndpointAddress = "irc.twitch.tv";
             bot.Destination.EndpointPort = 6667;
+
 
             MainWindowName.DataContext = bot;
         }
@@ -55,8 +78,6 @@ namespace TwitchChatBotGUI
                     OpenErrorMessage("Something went wrong - connection is not established");
                     return;
                 }
-                //https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555
-
                 bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
                 bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
             }
@@ -64,10 +85,6 @@ namespace TwitchChatBotGUI
             {
                 OpenErrorMessage("You should authorize first");
             }
-            //bot.JoinTwitchChannel("sovietmade");
-
-            //bot.SendMessage("JOIN #" + bot.Auth.AuthName + "\r\n");
-            //bot.SendMessage("PRIVMSG #sovietmade :test\r\n");
         }
 
         private void DisconnectClick(object sender, RoutedEventArgs e)
@@ -87,7 +104,7 @@ namespace TwitchChatBotGUI
 
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void StartQuizButtonClick(object sender, RoutedEventArgs e)
         {
             if (bot.QuizFile == null)
             {
@@ -99,6 +116,11 @@ namespace TwitchChatBotGUI
 
                 bot.StartQuiz();
             }
+        }
+
+        private void StopQuizButtonClick(object sender, RoutedEventArgs e)
+        {
+            bot.StopQuiz();
         }
 
         async Task GetAuth(CancellationToken ct)
