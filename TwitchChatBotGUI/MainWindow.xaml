@@ -156,7 +156,7 @@
         <DockPanel  Margin="0,40,0,0" HorizontalAlignment="Stretch" LastChildFill="True">
             <DockPanel Name="FlyOuts" DockPanel.Dock="Right"   HorizontalAlignment="Stretch" Width="67" Margin="0,0,0,31">
 
-                <Button DockPanel.Dock="Bottom"   Name="HelpButton" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                <Button DockPanel.Dock="Bottom" Click="OpenInfo"  Name="HelpButton" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="8" Height="20" >
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information}" />

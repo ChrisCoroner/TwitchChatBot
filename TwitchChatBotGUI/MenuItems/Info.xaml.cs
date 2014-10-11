@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -12,17 +13,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
+using Microsoft.TeamFoundation.MVVM;
+using TwitchChatBot;
 
 namespace TwitchChatBotGUI.MenuItems
 {
     /// <summary>
     /// Interaction logic for Info.xaml
     /// </summary>
-    public partial class Info : UserControl
+    public partial class Info : System.Windows.Controls.UserControl, ITwitchMenuItem
     {
-        public Info()
+        public Info(TwitchBot inBot, Popup inCurrentPopup)
         {
+            Bot = inBot;
+            
+            CurrentPopup = inCurrentPopup;
             InitializeComponent();
         }
+
+        public Popup CurrentPopup { get; set; }
+        public TwitchBot Bot { get; set; }
     }
 }

@@ -171,6 +171,12 @@ namespace TwitchChatBotGUI
             ShowPopupWithUserControl(new ChannelSettings(bot, Pop));
         }
 
+        private void OpenInfo(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new Info(bot, Pop));
+        }
+
         private void ChannelButtonClick(object sender, RoutedEventArgs e)
         {
             Popup Pop = new Popup();
@@ -204,6 +210,8 @@ namespace TwitchChatBotGUI
         }
 
         #endregion
+
+
 
 
 
