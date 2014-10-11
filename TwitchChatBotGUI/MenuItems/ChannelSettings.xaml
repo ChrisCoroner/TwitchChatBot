@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200" Background="White">
     <Grid>
-        <Border  BorderBrush="Black" BorderThickness="0,20,0,0">
+        <Border  BorderBrush="DeepSkyBlue" BorderThickness="0,20,0,0">
 
         </Border>
         <TextBox Name="TwitchChannel"  HorizontalAlignment="Left" Height="24" Margin="105,27,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="77" Width="auto" />

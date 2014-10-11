@@ -69,5 +69,5 @@ C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItem
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\Info.g.cs
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_MarkupCompile.lref
-C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\Resources\Entypo.ttf
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_Content.g.cs
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\fonts\fontawesome-webfont.ttf
