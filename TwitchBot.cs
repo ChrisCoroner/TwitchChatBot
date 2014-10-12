@@ -1,4 +1,3 @@
-//http://www.donation-tracker.com/u/sovietmade
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -77,6 +76,16 @@ namespace TwitchChatBot
             public TwitchToken token { get; set; }
         }
 
+        public void PayPalSupport()
+        {
+            Process.Start("http://www.donation-tracker.com/u/sovietmade");
+        }
+
+        public void GitHubForkMe()
+        {
+            Process.Start("https://github.com/Sovietmade/TwitchChatBot");
+        }
+
         public class TwitchAuthorization
         {
 
@@ -91,6 +100,8 @@ namespace TwitchChatBot
             {
                 Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=amoyxo9a7agc0e1gjpcawa1rqb2ciy4&redirect_uri=http://localhost:6555/Auth.aspx&scope=chat_login+channel_editor+user_read");
             }
+
+
 
             public void TwitchLogOut()
             {

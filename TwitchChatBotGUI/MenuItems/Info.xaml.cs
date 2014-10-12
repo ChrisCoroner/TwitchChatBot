@@ -32,7 +32,21 @@ namespace TwitchChatBotGUI.MenuItems
             InitializeComponent();
         }
 
+        private void PayPalButtonClick(object sender, RoutedEventArgs e)
+        {
+            Bot.PayPalSupport();
+        }
+
+        private void GitHubButtonClick(object sender, RoutedEventArgs e)
+        {
+            Bot.GitHubForkMe();
+        }
+
         public Popup CurrentPopup { get; set; }
         public TwitchBot Bot { get; set; }
+
+
+
+
     }
 }
