@@ -71,3 +71,5 @@ C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Generate
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_MarkupCompile.lref
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_Content.g.cs
 C:\Users\Yuri\Documents\GitHub\TwitchChatBot\bin\fonts\fontawesome-webfont.ttf
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\fonts\fontawesome-webfont.ttf
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI_Content.g.cs

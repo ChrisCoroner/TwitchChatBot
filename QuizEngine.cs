@@ -10,13 +10,77 @@ using System.Runtime.CompilerServices;
 
 namespace TwitchChatBot
 {
-    public class QuizObject
+    public class QuizObject : IEquatable<QuizObject>
     {
         public QuizObject(String inQuestion, String inAnswer)
         {
             Question = inQuestion;
             Answer = inAnswer;
         }
+
+        public bool Equals(QuizObject other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            else if (this.Question == other.Question)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            QuizObject quizObj = obj as QuizObject;
+            if (quizObj == null)
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(quizObj);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Question.GetHashCode();
+        }
+
+        public static bool operator ==(QuizObject score1, QuizObject score2)
+        {
+            if ((object)score1 == null || (object)score2 == null)
+            {
+                return Object.Equals(score1, score2);
+            }
+            else
+            {
+                return score1.Equals(score2);
+            }
+        }
+
+        public static bool operator !=(QuizObject score1, QuizObject score2)
+        {
+            if ((object)score1 == null || (object)score2 == null)
+            {
+                return !Object.Equals(score1, score2);
+            }
+            else
+            {
+                return !(score1.Equals(score2));
+            }
+        }
+
 
         public String Question { get; set; }
         public String Answer { get; set; }
@@ -160,6 +224,7 @@ namespace TwitchChatBot
 			mQuizQueue = new Queue<Tuple<string, string>>();
             mQuizList = new List<QuizObject>();
             mScoreList = new List<ScoreObject>();
+
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -332,7 +397,7 @@ namespace TwitchChatBot
             }
             
             mCurrentQAPair = mQuizQueue.Dequeue();
-
+            CurrentQuizObject = new QuizObject(mCurrentQAPair.Item1, mCurrentQAPair.Item2);
             mQuizHint = new QuizHint(mCurrentQAPair.Item2);
             mTimeToGiveAHint.Enabled = true;
 
@@ -402,6 +467,19 @@ namespace TwitchChatBot
         Queue<Tuple<string,string>> mQuizQueue;
         List<QuizObject> mQuizList;
         List<ScoreObject> mScoreList;
+
+        public QuizObject CurrentQuizObject
+        {
+            get {
+                return mCurrentObject;
+            }
+            set {
+                mCurrentObject = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        QuizObject mCurrentObject;
 
         System.Timers.Timer mTimeToAskAQuestion;
         System.Timers.Timer mTimeToGiveAHint;

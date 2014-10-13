@@ -138,6 +138,18 @@ namespace TwitchChatBotGUI
             await GetAuth(StartAuthorize.Token); 
         }
 
+
+        private void PreviousQuizButtonClick(object sender, RoutedEventArgs e)
+        {
+            bot.StopQuiz();
+        }
+
+        private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
+        {
+            QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;
+            Console.WriteLine();
+        }
+
         CancellationTokenSource StartAuthorize;
 
         TwitchBot bot;

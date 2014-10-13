@@ -521,6 +521,14 @@ namespace TwitchChatBot
             }
         }
 
+        public QuizObject CurrentQuizObject
+        {
+            get
+            {
+                return mQE.CurrentQuizObject;
+            }
+        }
+
         public String PrivMessages 
         {
             get { 
