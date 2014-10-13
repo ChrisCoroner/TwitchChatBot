@@ -144,6 +144,11 @@ namespace TwitchChatBotGUI
             bot.StopQuiz();
         }
 
+        private void ForwardQuizButtonClick(object sender, RoutedEventArgs e)
+        {
+            bot.NextQuestion();
+        }
+
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
         {
             QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;

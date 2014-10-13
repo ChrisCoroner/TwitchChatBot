@@ -57,27 +57,27 @@ namespace TwitchChatBot
             return Question.GetHashCode();
         }
 
-        public static bool operator ==(QuizObject score1, QuizObject score2)
+        public static bool operator ==(QuizObject quest1, QuizObject quest2)
         {
-            if ((object)score1 == null || (object)score2 == null)
+            if ((object)quest1 == null || (object)quest2 == null)
             {
-                return Object.Equals(score1, score2);
+                return Object.Equals(quest1, quest2);
             }
             else
             {
-                return score1.Equals(score2);
+                return quest1.Equals(quest2);
             }
         }
 
-        public static bool operator !=(QuizObject score1, QuizObject score2)
+        public static bool operator !=(QuizObject quest1, QuizObject quest2)
         {
-            if ((object)score1 == null || (object)score2 == null)
+            if ((object)quest1 == null || (object)quest2 == null)
             {
-                return !Object.Equals(score1, score2);
+                return !Object.Equals(quest1, quest2);
             }
             else
             {
-                return !(score1.Equals(score2));
+                return !(quest1.Equals(quest2));
             }
         }
 
@@ -221,7 +221,7 @@ namespace TwitchChatBot
 
 		public QuizEngine ()
 		{
-			mQuizQueue = new Queue<Tuple<string, string>>();
+			
             mQuizList = new List<QuizObject>();
             mScoreList = new List<ScoreObject>();
 
@@ -276,7 +276,7 @@ namespace TwitchChatBot
 				if(result.Length == 2)
 				{
                     mQuizList.Add(new QuizObject(result[0], result[1]));
-					mQuizQueue.Enqueue(new Tuple<string, string>(result[0],result[1]));
+					
 				}
 			}
 
@@ -307,12 +307,12 @@ namespace TwitchChatBot
                 IrcCommand ic = await tic;
 
                 //here we have a privmsg and have to check for a valid answer
-                if (mCurrentQAPair != null && ic.Prefix != null)
+                if (mCurrentObject != null && ic.Prefix != null)
                 {
-                   
-                    Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentQAPair.Item2);
 
-                    if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentQAPair.Item2)
+                    Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
+
+                    if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentObject.Answer)
                     {
 
                         int indexOfExclamationSign = ic.Prefix.IndexOf('!');
@@ -341,7 +341,7 @@ namespace TwitchChatBot
 
 
                         //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
-                        string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentQAPair.Item2, mScore[name]);
+                        string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentObject.Answer, mScore[name]);
                         //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
                         SendMessage(message);
                         OnTimeToAskAQuestion(null, null);
@@ -364,8 +364,8 @@ namespace TwitchChatBot
 
         async public void StartQuiz()
         {
-            if (mQuizQueue.Count == 0) {
-                throw new InvalidDataException("mQuizQueue is empty!");
+            if (mQuizList.Count == 0) {
+                throw new InvalidDataException("mQuizList is empty!");
             }
 
             if (cts != null) {
@@ -391,18 +391,18 @@ namespace TwitchChatBot
         void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
         {
             //if there is no more items in Q, then the exception will be rised
-            if (mQuizQueue.Count == 0) {
+            if (mQuizList.Count == 0) {
                 return;
-                //throw new InvalidDataException("mQuizQueue is empty!");
+                
             }
-            
-            mCurrentQAPair = mQuizQueue.Dequeue();
-            CurrentQuizObject = new QuizObject(mCurrentQAPair.Item1, mCurrentQAPair.Item2);
-            mQuizHint = new QuizHint(mCurrentQAPair.Item2);
+
+
+            CurrentQuizObject = GetNextQuizObject();
+            mQuizHint = new QuizHint(CurrentQuizObject.Answer);
             mTimeToGiveAHint.Enabled = true;
 
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
-            SendMessage(mCurrentQAPair.Item1);
+            SendMessage(CurrentQuizObject.Question);
         }
 
         void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
@@ -455,6 +455,23 @@ namespace TwitchChatBot
             }
         }
 
+        public void NextQuestion()
+        {
+            OnTimeToAskAQuestion(null, null);
+        }
+
+        QuizObject GetNextQuizObject()
+        {
+            indexOfCurrentQuizObjext++;
+            return mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count - 1)];
+        }
+
+        QuizObject GetPreviousQuizObject()
+        {
+            indexOfCurrentQuizObjext--;
+            return mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count - 1)];
+        }
+
         public string QuizFile { get; set; }
 
         //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
@@ -463,9 +480,9 @@ namespace TwitchChatBot
         //Queue of PRIVMSGes - source of answers
 		Queue<IrcCommand> mIncomingMessagesQueue;
 		
-        //Queue of tuples, containing questions and answers
-        Queue<Tuple<string,string>> mQuizQueue;
+
         List<QuizObject> mQuizList;
+        int indexOfCurrentQuizObjext = -1;
         List<ScoreObject> mScoreList;
 
         public QuizObject CurrentQuizObject
@@ -484,7 +501,7 @@ namespace TwitchChatBot
         System.Timers.Timer mTimeToAskAQuestion;
         System.Timers.Timer mTimeToGiveAHint;
 
-        Tuple<string, string> mCurrentQAPair;
+ 
         Dictionary<string, int> mScore;
 
         CancellationTokenSource cts;

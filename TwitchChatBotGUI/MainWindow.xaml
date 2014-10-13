@@ -129,7 +129,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button Click="ForwardQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="12" Height="12" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_fastforward}" />

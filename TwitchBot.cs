@@ -529,6 +529,11 @@ namespace TwitchChatBot
             }
         }
 
+        public void NextQuestion()
+        {
+            mQE.NextQuestion();
+        }
+
         public String PrivMessages 
         {
             get { 
