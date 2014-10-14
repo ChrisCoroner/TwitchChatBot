@@ -285,6 +285,7 @@ namespace TwitchChatBot
             mScoreList = new List<ScoreObject>();
             mDispatchTable = new Dictionary<string, Action>();
             mDispatchTable["!ShowScore"] = ShowScore;
+            mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -640,6 +641,8 @@ namespace TwitchChatBot
 
         QuizHint mQuizHint;
 
+        #region Bot Commands Dispatching
+        
         void ProcessIncomingBotCommand(string inMessage)
         {
             if (mDispatchTable.ContainsKey(inMessage))
@@ -655,7 +658,16 @@ namespace TwitchChatBot
             SendMessage(score);
         }
 
+        void RepeatQuestion()
+        {
+            SendMessage(mCurrentObject.Question);
+        }
+
+
+
         Dictionary<string, Action> mDispatchTable;
-	}
+
+        #endregion
+    }
 }
 
