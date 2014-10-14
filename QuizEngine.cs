@@ -157,6 +157,11 @@ namespace TwitchChatBot
             }
         }
 
+        public override string ToString()
+        {
+            return String.Format("Name: {0} Score: {1}",Name,Score);
+        }
+
         public String Name { get; set; }
         public int Score { get; set; }
     }
@@ -259,6 +264,8 @@ namespace TwitchChatBot
         string mAnswer;
     }
 
+
+
 	public class QuizEngine : INotifyPropertyChanged
 	{
         public event PropertyChangedEventHandler PropertyChanged;
@@ -276,7 +283,8 @@ namespace TwitchChatBot
 			
             mQuizList = new List<QuizObject>();
             mScoreList = new List<ScoreObject>();
-
+            mDispatchTable = new Dictionary<string, Action>();
+            mDispatchTable["!ShowScore"] = ShowScore;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -359,6 +367,17 @@ namespace TwitchChatBot
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ,ct);
                 IrcCommand ic = await tic;
 
+                //check privmsg for being a command
+                if (ic.Prefix != null)
+                {
+                    string message = ic.Parameters[ic.Parameters.Length - 1].Value;
+                    if (message.Length > 0 && message[0] == '!')
+                    { 
+                        //then its a bot-command
+                    }
+                }
+
+
                 //here we have a privmsg and have to check for a valid answer
                 if (mCurrentObject != null && ic.Prefix != null)
                 {
@@ -404,12 +423,15 @@ namespace TwitchChatBot
             }
         }
 
+
+
         public void StopQuiz()
         {
             if (cts != null)
             {
                 mTimeToAskAQuestion.Enabled = false;
                 mTimeToGiveAHint.Enabled = false;
+                mTimeTillNextQuestion.Enabled = false;
                 cts.Cancel();
                 cts = null;
             }
@@ -430,15 +452,24 @@ namespace TwitchChatBot
 
             mTimeToAskAQuestion = new System.Timers.Timer(mTimeBetweenQuestions);
             mTimeToGiveAHint = new System.Timers.Timer(mTimeBetweenHints);
+            mTimeTillNextQuestion = new System.Timers.Timer(1000);
+
+            TimeTillNextQuestion = TimeBetweenQuestions;
 
             mTimeToAskAQuestion.Elapsed += OnTimeToAskAQuestion;
             mTimeToAskAQuestion.Enabled = true;
+            
 
             mTimeToGiveAHint.Elapsed += OnTimeToGiveAHint;
-
+            mTimeTillNextQuestion.Elapsed += ReduceTimeTillQuestion;
             //OnTimeToAskAQuestion(null,null);
             OnTimeToAskAQuestion(null, null);
             await ReadIncomingMessages(cts.Token);
+        }
+
+        void ReduceTimeTillQuestion(object source, ElapsedEventArgs e)
+        {
+            TimeTillNextQuestion--;
         }
 
         void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
@@ -453,6 +484,8 @@ namespace TwitchChatBot
             mQuizHint = new QuizHint(CurrentQuizObject.Answer);
             mTimeToGiveAHint.Enabled = true;
 
+            TimeTillNextQuestion = TimeBetweenQuestions / 1000;
+            mTimeTillNextQuestion.Enabled = true;
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
             SendMessage(CurrentQuizObject.Question);
         }
@@ -485,6 +518,22 @@ namespace TwitchChatBot
                 mTimeBetweenHints = value;
             }
         }
+
+        public int TimeTillNextQuestion
+        {
+            get 
+            {
+                return TillNextQuestion;
+            }
+            set 
+            {
+                TillNextQuestion = value;
+                NotifyPropertyChanged();
+            } 
+        }
+        int TillNextQuestion;
+
+        public int TimeTillNextHint { get; set; }
 
         public QuizObject[] QuizList
         {
@@ -571,7 +620,7 @@ namespace TwitchChatBot
 
         System.Timers.Timer mTimeToAskAQuestion;
         System.Timers.Timer mTimeToGiveAHint;
-
+        System.Timers.Timer mTimeTillNextQuestion;
  
         Dictionary<string, int> mScore;
 
@@ -581,6 +630,23 @@ namespace TwitchChatBot
         int mTimeBetweenHints;
 
         QuizHint mQuizHint;
+
+        void ProcessIncomingBotCommand(string inMessage)
+        {
+            if (mDispatchTable.ContainsKey(inMessage))
+            {
+                mDispatchTable[inMessage].Invoke();
+            }
+            
+        }
+
+        void ShowScore()
+        {
+            string score = String.Join("\r\n", mScoreList.Select(p => p.ToString()));
+            SendMessage(score);
+        }
+
+        Dictionary<string, Action> mDispatchTable;
 	}
 }
 

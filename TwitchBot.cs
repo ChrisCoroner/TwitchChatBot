@@ -561,7 +561,13 @@ namespace TwitchChatBot
             }
         }
 
-
+        public int TimeTillNextQuestion
+        {
+            get
+            {
+                return mQE.TimeTillNextQuestion;
+            }
+        }
 
         string twitchChannel;
 
