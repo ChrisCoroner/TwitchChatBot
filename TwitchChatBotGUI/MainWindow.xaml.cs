@@ -152,6 +152,10 @@ namespace TwitchChatBotGUI
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
         {
             QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;
+            if (qo != null)
+            {
+                QuizDataGrid.ScrollIntoView(qo);
+            }
             Console.WriteLine();
         }
 
