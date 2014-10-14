@@ -141,7 +141,7 @@ namespace TwitchChatBotGUI
 
         private void PreviousQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            bot.StopQuiz();
+            bot.PreviousQuestion();
         }
 
         private void ForwardQuizButtonClick(object sender, RoutedEventArgs e)

@@ -396,8 +396,7 @@ namespace TwitchChatBot
                 
             }
 
-
-            CurrentQuizObject = GetNextQuizObject();
+            CurrentQuizObject = GetQuizObject();
             mQuizHint = new QuizHint(CurrentQuizObject.Answer);
             mTimeToGiveAHint.Enabled = true;
 
@@ -455,21 +454,21 @@ namespace TwitchChatBot
             }
         }
 
+        public void PreviousQuestion()
+        {
+            indexOfCurrentQuizObjext -= 2;
+            OnTimeToAskAQuestion(null, null);
+        }
+
         public void NextQuestion()
         {
             OnTimeToAskAQuestion(null, null);
         }
 
-        QuizObject GetNextQuizObject()
+        QuizObject GetQuizObject()
         {
             indexOfCurrentQuizObjext++;
-            return mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count - 1)];
-        }
-
-        QuizObject GetPreviousQuizObject()
-        {
-            indexOfCurrentQuizObjext--;
-            return mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count - 1)];
+            return indexOfCurrentQuizObjext < 0 ? mQuizList[(indexOfCurrentQuizObjext + mQuizList.Count) % (mQuizList.Count)] : mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count)];
         }
 
         public string QuizFile { get; set; }
