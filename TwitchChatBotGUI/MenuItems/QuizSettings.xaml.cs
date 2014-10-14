@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +19,7 @@ using System.Windows.Forms;
 using Microsoft.TeamFoundation.MVVM;
 using TwitchChatBot;
 
+
 namespace TwitchChatBotGUI.MenuItems
 {
 
@@ -26,15 +29,77 @@ namespace TwitchChatBotGUI.MenuItems
     /// <summary>
     /// Interaction logic for QuizSettings.xaml
     /// </summary>
-    public partial class QuizSettings : System.Windows.Controls.UserControl, ITwitchMenuItem
+    public partial class QuizSettings : System.Windows.Controls.UserControl, ITwitchMenuItem, IDataErrorInfo
     {
+        public string Error
+        {
+            get
+            {
+                return null;
+            }
+        }
 
+        public string this[string name]
+        {
+            get
+            {
+                string result = null;
+
+                if (name == "mTimeBetweenQuestions")
+                {
+                    if (tempTimeBetweenQuestions < 0)
+                    {
+                        result = "The value cannot be negative!";
+                    }
+                }
+
+                if (name == "mTimeBetweenHints")
+                {
+                    if (tempTimeBetweenHints < 0)
+                    {
+                        result = "The value cannot be negative!";
+                    }
+                }
+                return result;
+            }
+        }
+
+        public int mTimeBetweenQuestions
+        {
+            get
+            {
+                return tempTimeBetweenQuestions;
+            }
+            set
+            {
+                tempTimeBetweenQuestions = value;
+            }
+        }
+
+        public int mTimeBetweenHints
+        {
+            get
+            {
+                return tempTimeBetweenHints;
+            }
+            set
+            {
+                tempTimeBetweenHints = value;
+            }
+        }
+
+        int tempTimeBetweenQuestions;
+        int tempTimeBetweenHints;
         
 
         private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
-        {   
-            TimeBetweenQuestions.Text = String.Format("{0}",Bot.TimeBetweenQuestions);
-            TimeBetweenHints.Text = String.Format("{0}", Bot.TimeBetweenHints);
+        {
+            tempTimeBetweenQuestions = Bot.TimeBetweenQuestions;
+            tempTimeBetweenHints = Bot.TimeBetweenHints;
+
+            TimeBetweenQuestions.Text = String.Format("{0}", tempTimeBetweenQuestions);
+            TimeBetweenHints.Text = String.Format("{0}", tempTimeBetweenHints);
+
             if (tempPath != null)
             {
                 QuizFile.Text = tempPath;
@@ -61,9 +126,14 @@ namespace TwitchChatBotGUI.MenuItems
         {
             Bot.TimeBetweenQuestions = Int32.Parse(TimeBetweenQuestions.Text);
             Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
-            Bot.QuizFile = QuizFile.Text;
+
+            if (QuizFile.Text != null && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
+            {
+                Bot.QuizFile = QuizFile.Text;
+                await Bot.ProcessQuizFile();
+            }
             Bot.IsRandom = (bool)RandomizeSwitch.IsChecked;
-            await Bot.ProcessQuizFile();
+            
             CurrentPopup.IsOpen = false;
         }
 

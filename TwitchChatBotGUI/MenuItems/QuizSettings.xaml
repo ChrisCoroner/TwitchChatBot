@@ -50,8 +50,8 @@
     </UserControl.Resources>
     <Grid>
         <Border  BorderBrush="Black" BorderThickness="0,20,0,0"/>
-        <TextBox Name="TimeBetweenQuestions"  HorizontalAlignment="Left" Height="24" Margin="105,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="77" Width="85" />
-        <TextBox Name="TimeBetweenHints"   HorizontalAlignment="Left" Height="22" Margin="105,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="77" Width="85" />
+        <TextBox Name="TimeBetweenQuestions"  HorizontalAlignment="Left" Height="24" Margin="105,29,0,0" TextWrapping="Wrap" Text="{Binding mTimeBetweenQuestions,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="77" Width="85" />
+        <TextBox Name="TimeBetweenHints"   HorizontalAlignment="Left" Height="22" Margin="105,72,0,0" TextWrapping="Wrap" Text="{Binding mTimeBetweenHints,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="77" Width="85" />
 
 
 

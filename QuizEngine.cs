@@ -505,6 +505,10 @@ namespace TwitchChatBot
             }
             set {
                 mTimeBetweenQuestions = value;
+                if(mTimeToAskAQuestion != null)
+                {
+                    mTimeToAskAQuestion.Interval = value;
+                }
             }
         }
 
@@ -517,6 +521,10 @@ namespace TwitchChatBot
             set
             {
                 mTimeBetweenHints = value;
+                if (mTimeToGiveAHint != null)
+                {
+                    mTimeToGiveAHint.Interval = value;
+                }
             }
         }
 
