@@ -43,6 +43,7 @@ namespace TwitchChatBotGUI.MenuItems
             {
                 QuizFile.Text = Bot.QuizFile;
             }
+            RandomizeSwitch.IsChecked = Bot.IsRandom;
             QuizWindowName.DataContext = (QuizSettings)this;
         }
 
@@ -61,6 +62,7 @@ namespace TwitchChatBotGUI.MenuItems
             Bot.TimeBetweenQuestions = Int32.Parse(TimeBetweenQuestions.Text);
             Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
             Bot.QuizFile = QuizFile.Text;
+            Bot.IsRandom = (bool)RandomizeSwitch.IsChecked;
             await Bot.ProcessQuizFile();
             CurrentPopup.IsOpen = false;
         }

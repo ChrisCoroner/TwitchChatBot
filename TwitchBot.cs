@@ -529,6 +529,17 @@ namespace TwitchChatBot
             }
         }
 
+
+        public bool IsRandom
+        {
+            get {
+                return mQE.IsRandom;
+            }
+            set {
+                mQE.IsRandom = value;
+            }
+        }
+
         public void PreviousQuestion()
         {
             mQE.PreviousQuestion();

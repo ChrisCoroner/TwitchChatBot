@@ -230,6 +230,7 @@ namespace TwitchChatBot
             mScore = new Dictionary<string, int>();
             mTimeBetweenQuestions = 60000;
             mTimeBetweenHints = 15000;
+            IsRandom = false;
 		}
 
 		public QuizEngine (string inFileWithQuiz) : this()
@@ -454,6 +455,17 @@ namespace TwitchChatBot
             }
         }
 
+        public bool IsRandom
+        {
+            get;
+            set;
+        }
+
+        public int GetRandomIndex()
+        {
+            return rnd.Next(mQuizList.Count);
+        }
+
         public void PreviousQuestion()
         {
             indexOfCurrentQuizObjext -= 2;
@@ -467,7 +479,14 @@ namespace TwitchChatBot
 
         QuizObject GetQuizObject()
         {
-            indexOfCurrentQuizObjext++;
+            if (IsRandom)
+            {
+                indexOfCurrentQuizObjext = GetRandomIndex();
+            }
+            else
+            {
+                indexOfCurrentQuizObjext++;
+            }
             return indexOfCurrentQuizObjext < 0 ? mQuizList[(indexOfCurrentQuizObjext + mQuizList.Count) % (mQuizList.Count)] : mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count)];
         }
 
@@ -482,6 +501,7 @@ namespace TwitchChatBot
 
         List<QuizObject> mQuizList;
         int indexOfCurrentQuizObjext = -1;
+        Random rnd = new Random();
         List<ScoreObject> mScoreList;
 
         public QuizObject CurrentQuizObject
