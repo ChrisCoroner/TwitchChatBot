@@ -169,12 +169,64 @@ namespace TwitchChatBot
         }
     }
 
+    public static partial class StringExtensions
+    {
+        public static string ReplaceCharAtIndex(this string inString, int inIndex, char inNewChar )
+        {
+            if (inString == null)
+            {
+                throw new ArgumentNullException("input");
+            }
+            char[] chars = inString.ToCharArray();
+            chars[inIndex] = inNewChar;
+            return new string(chars);
+        }
+
+        public static string ReplaceCharAtIndex(this string inString, int[] inIndexes, char inNewChar )
+        {
+            if (inString == null)
+            {
+                throw new ArgumentNullException("input");
+            }
+            char[] chars = inString.ToCharArray();
+            for(int i = 0; i < inIndexes.Length; i++)
+            {
+                chars[i] = inNewChar;
+            }
+            
+            return new string(chars);
+        }
+
+    }
+
     public class QuizHint
     {
         public QuizHint(string inAnswer)
         {
             mAnswer = inAnswer;
             mHint = new string('_', inAnswer.Length);
+            
+            if(inAnswer.Contains(' '))
+            {
+                List<int> indexesOfSpaces = new List<int>();
+                for(int indexOfSpace = 0; indexOfSpace < inAnswer.Length; indexOfSpace++)
+                {
+                   if(inAnswer[indexOfSpace] == ' ')
+                   {
+                        indexesOfSpaces.Add(indexOfSpace);
+                   }
+                }
+                mHint = mHint.ReplaceCharAtIndex(indexesOfSpaces.ToArray(),' ');
+            }
+
+            //for(int i = 0; i < mAnswer.Length; i++)
+            //{
+            //    if(mAnswer[i] == ' ')
+            //    {
+            //        mHint = mHint.ReplaceCharAtIndex(i,' ');    
+            //    }
+            //}
+
             HintNum = 0;
         }
 
