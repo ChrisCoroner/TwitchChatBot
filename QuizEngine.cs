@@ -196,7 +196,7 @@ namespace TwitchChatBot
             char[] chars = inString.ToCharArray();
             for(int i = 0; i < inIndexes.Length; i++)
             {
-                chars[i] = inNewChar;
+                chars[inIndexes[i]] = inNewChar;
             }
             
             return new string(chars);
@@ -374,6 +374,7 @@ namespace TwitchChatBot
                     if (message.Length > 0 && message[0] == '!')
                     { 
                         //then its a bot-command
+                        ProcessIncomingBotCommand(message);
                     }
                 }
 
