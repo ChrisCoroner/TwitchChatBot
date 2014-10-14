@@ -58,6 +58,29 @@ namespace TwitchChatBotGUI
             return ((double)value * 2);
         }
     }
+
+    public class IntToDoubleWidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            int tick = (int)value;
+            if (tick % 2 == 0)
+            {
+                return 55.0;
+            }
+            else
+            {
+                return 45.0;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return ((double)value * 2);
+        }
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

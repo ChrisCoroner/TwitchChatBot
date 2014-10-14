@@ -7,6 +7,7 @@
     <Window.Resources>
 
         <ResourceDictionary>
+            <l:IntToDoubleWidthConverter x:Key="widthConverter"/>
             <l:WidthToHalfWidthConverter x:Key="converter"/>
             <l:IntToDoubleOpacityConverter x:Key="opacityConverter"/>
             <ResourceDictionary.MergedDictionaries>
@@ -137,7 +138,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button DockPanel.Dock="Left" Opacity="{Binding TimeTillNextQuestion,Converter={StaticResource opacityConverter},Mode=OneWay}" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
+                        <Button DockPanel.Dock="Left" Opacity="{Binding TimeTillNextQuestion,Converter={StaticResource opacityConverter},Mode=OneWay}" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}" Height="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
 
                         </Button>
                     </DockPanel>
