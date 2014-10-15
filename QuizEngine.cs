@@ -359,6 +359,11 @@ namespace TwitchChatBot
             //QuizList = QuizList;
         }
 
+        public void DropTheQuizList()
+        {
+            mQuizList.Clear();
+        }
+
 		public void Process (IrcCommand inCommand)
 		{
 			if (inCommand.Name == "PRIVMSG") {

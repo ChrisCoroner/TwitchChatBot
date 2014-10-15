@@ -152,9 +152,9 @@ namespace TwitchChatBotGUI
 
         private void StartQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            if (bot.QuizFile == null)
+            if (bot.QuizList.Count() == 0)
             {
-                OpenErrorMessage("You should specify file containing a quiz!");
+                OpenErrorMessage("You should specify file containing a quiz or manually add some questions!");
             }
             else
             {
@@ -198,6 +198,16 @@ namespace TwitchChatBotGUI
         private void ForwardQuizButtonClick(object sender, RoutedEventArgs e)
         {
             bot.NextQuestion();
+        }
+
+        private void QuickAddQuestion(object sender, RoutedEventArgs e)
+        {
+            bot.AddNewQuizObject("", "");
+        }
+
+        private void DropTheList(object sender, RoutedEventArgs e)
+        {
+            bot.DropTheQuizList();
         }
 
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)

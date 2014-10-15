@@ -152,7 +152,28 @@
                     <ScrollViewer Margin="0 20 0 0">
                         <DockPanel x:Name="QuizDataGrids"  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
                             <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizListOrig, Mode=OneWay}" Margin="0 0 20 0" SelectionChanged="SelectionChangedOccured" SelectedItem="{Binding CurrentQuizObject,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
-
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Quick Add Question" Click="QuickAddQuestion">
+                                            <MenuItem.Icon>
+                                                <Rectangle Width="18" Height="18">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Drop the list" Click="DropTheList">
+                                            <MenuItem.Icon>
+                                                <Rectangle Fill="White" Width="18" Height="18">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_list_delete}" />
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
                             </DataGrid>
                             <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay}" MinHeight="50" DockPanel.Dock="Top" Name="QuizScoreGrid" ItemsSource="{Binding Score, Mode=OneWay}" Margin="0 10 20 0">
 

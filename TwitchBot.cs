@@ -510,6 +510,11 @@ namespace TwitchChatBot
             mQE.AddNewQuizObject(inQuestion, inAnswer);    
         }
 
+        public void DropTheQuizList()
+        {
+            mQE.DropTheQuizList();
+        }
+
         public QuizObject[] QuizList
         {
             get
