@@ -581,6 +581,8 @@ namespace TwitchChatBot
 
         public int TimeTillNextHint { get; set; }
 
+
+        bool quizIsRunning;
         public QuizObjectsList QuizListOrig
         {
             get

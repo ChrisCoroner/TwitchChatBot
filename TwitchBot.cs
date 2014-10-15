@@ -319,11 +319,13 @@ namespace TwitchChatBot
             }
 
             mQE.StartQuiz();
+            IsQuizRunning = true;
         }
 
         public void StopQuiz()
         {
             mQE.StopQuiz();
+            IsQuizRunning = false;
         }
 
 		public void DumpMessageQ ()
@@ -440,6 +442,7 @@ namespace TwitchChatBot
             }
             set {
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
+                IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
                 NotifyPropertyChanged();
             }
         }
@@ -489,6 +492,7 @@ namespace TwitchChatBot
                 ConnectedVisibility = ConnectedVisibility;
                 DisconnectedVisibility = DisconnectedVisibility;
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
+                IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
                 NotifyPropertyChanged();
             }
         }
@@ -596,6 +600,30 @@ namespace TwitchChatBot
                 return mQE.TimeTillNextQuestion;
             }
         }
+
+        public bool IsConnectedAuthorizedAndQuizRunning
+        {
+            get {
+                return (isQuizRunning && ConnectedAndAuthorized) ;
+            }
+            set {
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsQuizRunning
+        {
+            get {
+                return isQuizRunning;
+            }
+            set
+            {
+                isQuizRunning = value;
+                IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
+            }
+        }
+
+        bool isQuizRunning = false;
 
         string twitchChannel;
 
