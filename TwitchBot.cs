@@ -505,11 +505,24 @@ namespace TwitchChatBot
             } 
         }
 
+        public void AddNewQuizObject(string inQuestion, string inAnswer)
+        {
+            mQE.AddNewQuizObject(inQuestion, inAnswer);    
+        }
+
         public QuizObject[] QuizList
         {
             get
             {
                 return mQE.QuizList;
+            }
+        }
+
+        public QuizObjectsList QuizListOrig
+        {
+            get
+            {
+                return mQE.QuizListOrig;
             }
         }
 

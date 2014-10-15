@@ -183,6 +183,12 @@ namespace TwitchChatBotGUI
             await GetAuth(StartAuthorize.Token); 
         }
 
+        private void AddNewQuizObject(object sender, RoutedEventArgs e)
+        {
+            OpenAddNewQuizObjectPop(null, null);
+        }
+
+
 
         private void PreviousQuizButtonClick(object sender, RoutedEventArgs e)
         {
@@ -217,6 +223,12 @@ namespace TwitchChatBotGUI
         {
             Popup Pop = new Popup();
             ShowPopupWithUserControl(new ErrorMessage(bot, Pop, inErrorMessage));
+        }
+
+        private void OpenAddNewQuizObjectPop(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new AddNewQuizObjectPop(bot, Pop, QuizDataGrid));
         }
 
         private void OpenNetworkSettings(object sender, RoutedEventArgs e)

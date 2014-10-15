@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Timers;
 using System.Threading;
@@ -166,6 +167,11 @@ namespace TwitchChatBot
         public int Score { get; set; }
     }
 
+    public class QuizObjectsList : ObservableCollection<QuizObject>
+    { 
+        
+    }
+
     public static class ScoreObjectExtensions
     {
         public static ScoreObject AsScoreObject(this String inName)
@@ -281,7 +287,7 @@ namespace TwitchChatBot
 		public QuizEngine ()
 		{
 			
-            mQuizList = new List<QuizObject>();
+            mQuizList = new QuizObjectsList();
             mScoreList = new List<ScoreObject>();
             mDispatchTable = new Dictionary<string, Action>();
             mDispatchTable["!ShowScore"] = ShowScore;
@@ -323,7 +329,8 @@ namespace TwitchChatBot
         {
             QuizFile = inFileWithQuiz;
         	if (File.Exists (inFileWithQuiz)) {
-                await Task.Run((System.Action)Processing);
+                await Task.Factory.StartNew((System.Action)Processing, CancellationToken.None,TaskCreationOptions.None,TaskScheduler.FromCurrentSynchronizationContext());
+                //await Task.Run((System.Action)Processing);
 			} else {
 				throw new FileNotFoundException();
 			}
@@ -343,7 +350,14 @@ namespace TwitchChatBot
 			}
 
             QuizList = QuizList;
+            QuizListOrig = QuizListOrig;
 		}
+
+        public void AddNewQuizObject(string inQuestion, string inAnswer)
+        {
+            mQuizList.Add(new QuizObject(inQuestion, inAnswer));
+            //QuizList = QuizList;
+        }
 
 		public void Process (IrcCommand inCommand)
 		{
@@ -545,6 +559,19 @@ namespace TwitchChatBot
 
         public int TimeTillNextHint { get; set; }
 
+        public QuizObjectsList QuizListOrig
+        {
+            get
+            {
+                return mQuizList;
+            }
+            set
+            {
+                //mQuizList = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public QuizObject[] QuizList
         {
             get {
@@ -610,7 +637,7 @@ namespace TwitchChatBot
 		Queue<IrcCommand> mIncomingMessagesQueue;
 		
 
-        List<QuizObject> mQuizList;
+        QuizObjectsList mQuizList;
         int indexOfCurrentQuizObjext = -1;
         Random rnd = new Random();
         List<ScoreObject> mScoreList;

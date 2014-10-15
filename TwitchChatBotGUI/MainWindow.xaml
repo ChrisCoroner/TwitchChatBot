@@ -109,7 +109,14 @@
             <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
 
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
-                    <DockPanel DockPanel.Dock="Top" Width="235"  Margin="224,0,213,0" HorizontalAlignment="Center">
+                    <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Center">
+                        <Button Click="AddNewQuizObject"  DockPanel.Dock="Left" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                            <Rectangle Width="10" Height="10" >
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button>
                         <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="15" Height="12" >
                                 <Rectangle.Fill>
@@ -144,7 +151,7 @@
                     </DockPanel>
                     <ScrollViewer Margin="0 20 0 0">
                         <DockPanel x:Name="QuizDataGrids"  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
-                            <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizList, Mode=OneWay}" Margin="0 0 20 0" SelectionChanged="SelectionChangedOccured" SelectedItem="{Binding CurrentQuizObject,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizListOrig, Mode=OneWay}" Margin="0 0 20 0" SelectionChanged="SelectionChangedOccured" SelectedItem="{Binding CurrentQuizObject,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
 
                             </DataGrid>
                             <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay}" MinHeight="50" DockPanel.Dock="Top" Name="QuizScoreGrid" ItemsSource="{Binding Score, Mode=OneWay}" Margin="0 10 20 0">
@@ -248,7 +255,14 @@
         </DockPanel>
 
         <DockPanel Visibility="Collapsed"  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
-            <DockPanel DockPanel.Dock="Top" Width="235"  Margin="224,0,213,0" HorizontalAlignment="Center">
+            <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Center">
+                <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                    <Rectangle Width="10" Height="10" >
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
                 <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="15" Height="12" >
                         <Rectangle.Fill>
