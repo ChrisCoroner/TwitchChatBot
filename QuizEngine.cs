@@ -516,6 +516,18 @@ namespace TwitchChatBot
             SendMessage(CurrentQuizObject.Question);
         }
 
+        public void AskScpecifiedQuestion(QuizObject inQuizObject)
+        {
+            CurrentQuizObject = inQuizObject;
+            mQuizHint = new QuizHint(CurrentQuizObject.Answer);
+            mTimeToGiveAHint.Enabled = true;
+
+            TimeTillNextQuestion = TimeBetweenQuestions / 1000;
+            mTimeTillNextQuestion.Enabled = true;
+            //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
+            SendMessage(CurrentQuizObject.Question);
+        }
+
         void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
         {
             string currentHint = mQuizHint.GiveAHint();

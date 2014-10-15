@@ -181,6 +181,15 @@
                                                 </Rectangle>
                                             </MenuItem.Icon>
                                         </MenuItem>
+                                        <MenuItem Header="Ask selected question" Click="AskSelectedQuestion" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}">
+                                            <MenuItem.Icon>
+                                                <Rectangle Fill="White" Width="18" Height="18">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_control_play}" />
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>

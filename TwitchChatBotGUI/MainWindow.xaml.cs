@@ -219,6 +219,15 @@ namespace TwitchChatBotGUI
             }
         }
 
+        private void AskSelectedQuestion(object sender, RoutedEventArgs e)
+        {
+            QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+            if (qo != null)
+            {
+                bot.AskScpecifiedQuestion(qo);
+            }
+        }
+
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
         {
             QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;
