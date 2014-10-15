@@ -172,6 +172,15 @@
                                                 </Rectangle>
                                             </MenuItem.Icon>
                                         </MenuItem>
+                                        <MenuItem Header="Drop selected item from list" Click="DropTheItemFromList">
+                                            <MenuItem.Icon>
+                                                <Rectangle Fill="White" Width="18" Height="18">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_list_delete_inline}" />
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>

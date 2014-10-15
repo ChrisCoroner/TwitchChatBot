@@ -210,6 +210,15 @@ namespace TwitchChatBotGUI
             bot.DropTheQuizList();
         }
 
+        private void DropTheItemFromList(object sender, RoutedEventArgs e)
+        {
+            QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+            if (qo != null)
+            {
+                bot.DropTheItemFromList(qo);
+            }
+        }
+
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
         {
             QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;
