@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:TwitchChatBotGUI"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-        Title="Quiz Bot" Height="363.5" Width="700" Loaded="Window_Loaded" Name="MainWindowName" GlowBrush="{DynamicResource AccentColorBrush}" NonActiveGlowBrush="Red">
+        Title="Quiz Bot" Height="363.5" Width="700" Loaded="Window_Loaded" Name="MainWindowName" GlowBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" NonActiveGlowBrush="Red">
     <Window.Resources>
 
         <ResourceDictionary>

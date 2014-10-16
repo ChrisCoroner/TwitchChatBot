@@ -411,7 +411,7 @@ namespace TwitchChatBot
 
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
 
-                    if (ic.Parameters[ic.Parameters.Length - 1].Value == mCurrentObject.Answer)
+                    if (ic.Parameters[ic.Parameters.Length - 1].Value.ToLower() == mCurrentObject.Answer.ToLower())
                     {
 
                         int indexOfExclamationSign = ic.Prefix.IndexOf('!');

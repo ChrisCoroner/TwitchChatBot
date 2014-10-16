@@ -47,9 +47,11 @@ namespace TwitchChatBotGUI.MenuItems
 
                 if (name == "mTimeBetweenQuestions")
                 {
+
                     if (tempTimeBetweenQuestions < 0)
                     {
                         result = "The value cannot be negative!";
+                        tempTimeBetweenQuestions = Bot.TimeBetweenQuestions;
                     }
                 }
 
@@ -124,10 +126,24 @@ namespace TwitchChatBotGUI.MenuItems
 
         async private void AcceptClick(object sender, RoutedEventArgs e)
         {
-            Bot.TimeBetweenQuestions = Int32.Parse(TimeBetweenQuestions.Text);
-            Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
+            //int ParsedTimeBetweenQuestions;
+            //bool resultOfParseTimeBetweenQuestions = Int32.TryParse(TimeBetweenQuestions.Text, out ParsedTimeBetweenQuestions);
+            //if (resultOfParseTimeBetweenQuestions)
+            //{
+            //    Bot.TimeBetweenQuestions = ParsedTimeBetweenQuestions;
+            //}
 
-            if (QuizFile.Text != null && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
+            //int ParsedTimeBetweenHints;
+            //bool resultOfParseTimeBetweenHints = Int32.TryParse(TimeBetweenHints.Text, out ParsedTimeBetweenHints);
+            //if (resultOfParseTimeBetweenHints)
+            //{
+            //    Bot.TimeBetweenHints = Int32.Parse(TimeBetweenHints.Text);
+            //}
+
+            Bot.TimeBetweenQuestions = tempTimeBetweenQuestions;
+            Bot.TimeBetweenHints = tempTimeBetweenHints;
+
+            if ( !String.IsNullOrEmpty(QuizFile.Text) && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
             {
                 Bot.QuizFile = QuizFile.Text;
                 await Bot.ProcessQuizFile();
