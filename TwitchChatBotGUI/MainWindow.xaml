@@ -73,6 +73,36 @@
     </Controls:MetroWindow.RightWindowCommands>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
+            <Controls:Flyout Name="FlySettingsNew"   Position="Right" Width="67">
+                <DockPanel Name="SettingsNew" DockPanel.Dock="Right"   HorizontalAlignment="Stretch" Width="67" Margin="0,0,0,31">
+
+
+                    <Button ToolTip="Network settings"  DockPanel.Dock="Bottom" Click="OpenNetworkSettings"  Name="NetworkSettingsNew" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Rectangle Width="20" Height="20" >
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_network}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+
+                    <Button ToolTip="Quiz settings"  DockPanel.Dock="Bottom" Click="OpenQuizSettings"  Name="QuizSettingsNew" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_chat}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <Button Visibility="Hidden" DockPanel.Dock="Bottom" Click="FlyoutSettings"  Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Rectangle Width="20" Height="20" >
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+
+                </DockPanel>
+            </Controls:Flyout>
             <Controls:Flyout Name="FlySettings" Header="Settings" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
                     <DockPanel DockPanel.Dock="Left" Width="100">

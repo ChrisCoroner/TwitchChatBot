@@ -307,7 +307,7 @@ namespace TwitchChatBotGUI
 
         private void FlyoutSettings(object sender, RoutedEventArgs e)
         {
-            FlySettings.IsOpen = true;
+            FlySettingsNew.IsOpen = true;
         }
 
         private void FlyoutQuiz(object sender, RoutedEventArgs e)
