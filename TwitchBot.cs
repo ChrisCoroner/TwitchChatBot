@@ -286,6 +286,9 @@ namespace TwitchChatBot
                             mQE.Process(incCommand);
                             int indexOfExclamationSign = incCommand.Prefix.IndexOf('!');
                             string name = incCommand.Prefix.Substring(0, indexOfExclamationSign);
+
+                            //Text addition to the chat window
+
                             privMessages.Add(String.Format("{0}:{1}\n", name, incCommand.Parameters[incCommand.Parameters.Length - 1].Value));
                             PrivMessages = PrivMessages;
                         }
@@ -588,9 +591,18 @@ namespace TwitchChatBot
                 return String.Join("",privMessages);
             }
             set {
-               
+                
                 NotifyPropertyChanged();
             }
+        }
+
+        public void AddMessageToPrivMessages(string inString)
+        {
+            if (privMessages.Count >= MaxMessagesInChat)
+            {
+                privMessages.RemoveRange(0, 5);
+            }
+            privMessages.Add(inString);
         }
 
         public int TimeTillNextQuestion
@@ -626,6 +638,20 @@ namespace TwitchChatBot
         bool isQuizRunning = false;
 
         string twitchChannel;
+
+        public int MaxMessagesInChat
+        {
+            get {
+                return maxMessagesInChat;
+            }
+            set {
+                maxMessagesInChat = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        int maxMessagesInChat = 50;
+        
 
         List<String> privMessages = new List<string>();
 		TcpConnection mTcpConnection;

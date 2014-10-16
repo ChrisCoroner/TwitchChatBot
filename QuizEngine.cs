@@ -292,6 +292,7 @@ namespace TwitchChatBot
             mDispatchTable = new Dictionary<string, Action>();
             mDispatchTable["!ShowScore"] = ShowScore;
             mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
+            mDispatchTable["!Commands"] = Commands;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -714,7 +715,11 @@ namespace TwitchChatBot
             SendMessage(mCurrentObject.Question);
         }
 
-
+        void Commands()
+        {
+            string availableCommands = "Available commands: " + String.Join(" ",mDispatchTable.Select(p=>p.Key));
+            SendMessage(availableCommands);
+        }
 
         Dictionary<string, Action> mDispatchTable;
 
