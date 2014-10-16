@@ -250,7 +250,7 @@ namespace TwitchChatBot
 
         void OpenChar()
         {
-            if ( (HintNum - 2) >= 0 && (HintNum - 1) < mHint.Length ) {
+            if ( (HintNum - 2) >= 0 && (HintNum - 1) < mHint.Length && (mHint.Where(p=>p=='_').Count() > 1) ) {
                 //mHint[HintNum - 1] = mAnswer[HintNum - 1];
                 char[] temp = new char[mHint.Length];
                 mHint.CopyTo(0, temp, 0, mHint.Length);
@@ -301,7 +301,7 @@ namespace TwitchChatBot
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
-            mTimeBetweenQuestions = 60000;
+            mTimeBetweenQuestions = 120000;
             mTimeBetweenHints = 15000;
             IsRandom = false;
 		}
