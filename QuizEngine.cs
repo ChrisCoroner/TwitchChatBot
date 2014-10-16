@@ -254,10 +254,15 @@ namespace TwitchChatBot
                 //mHint[HintNum - 1] = mAnswer[HintNum - 1];
                 char[] temp = new char[mHint.Length];
                 mHint.CopyTo(0, temp, 0, mHint.Length);
-                temp[HintNum - 2] = mAnswer[HintNum - 2];
+
+                int rndIndex = rnd.Next(mHint.Length);
+                temp[rndIndex] = mAnswer[rndIndex];
+                //temp[HintNum - 2] = mAnswer[HintNum - 2];
                 mHint = new string(temp);
             }
         }
+
+        static Random rnd = new Random();
 
         static int HintNum
         {
