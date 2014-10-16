@@ -42,6 +42,11 @@ namespace TwitchChatBotGUI.MenuItems
             Bot.GitHubForkMe();
         }
 
+        private void RateItButtonClick(object sender, RoutedEventArgs e)
+        {
+            Bot.RateIt();
+        }
+
         public Popup CurrentPopup { get; set; }
         public TwitchBot Bot { get; set; }
 

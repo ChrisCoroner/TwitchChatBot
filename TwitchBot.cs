@@ -86,6 +86,11 @@ namespace TwitchChatBot
             Process.Start("https://github.com/Sovietmade/TwitchChatBot");
         }
 
+        public void RateIt()
+        {
+            Process.Start("https://sourceforge.net/projects/twitchquizbot/reviews/new");
+        }
+
         public class TwitchAuthorization
         {
 
