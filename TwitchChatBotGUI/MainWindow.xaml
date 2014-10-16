@@ -110,43 +110,43 @@
             <Controls:Flyout Name="FlyQuiz" Header="Quiz" Position="Right" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:MetroWindow}, Path=ActualWidth}">
 
                 <DockPanel  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
-                    <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Center">
-                        <Button Click="AddNewQuizObject"  DockPanel.Dock="Left" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                    <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Stretch">
+                        <Button HorizontalAlignment="Stretch" Click="AddNewQuizObject"  DockPanel.Dock="Left" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="10" Height="10" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button HorizontalAlignment="Stretch" Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="15" Height="12" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_rewind}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button HorizontalAlignment="Stretch" Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="17" Height="17" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button HorizontalAlignment="Stretch" Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="12" Height="12" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button Click="ForwardQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button HorizontalAlignment="Stretch" Click="ForwardQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="15" Height="12" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_fastforward}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button DockPanel.Dock="Left" Opacity="{Binding TimeTillNextQuestion,Converter={StaticResource opacityConverter},Mode=OneWay}" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}" Height="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
+                        <Button HorizontalAlignment="Stretch" DockPanel.Dock="Left" Opacity="{Binding TimeTillNextQuestion,Converter={StaticResource opacityConverter},Mode=OneWay}" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}" Height="{Binding TimeTillNextQuestion,Converter={StaticResource widthConverter},Mode=OneWay}"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
 
                         </Button>
                     </DockPanel>
@@ -303,43 +303,43 @@
         </DockPanel>
 
         <DockPanel Visibility="Collapsed"  Margin="20,40,0,32" HorizontalAlignment="Stretch" LastChildFill="True">
-            <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Center">
-                <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
+            <DockPanel DockPanel.Dock="Top" Width="263"  Margin="196,0,213,0" HorizontalAlignment="Stretch">
+                <Button HorizontalAlignment="Stretch" Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="10" Height="10" >
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                <Button HorizontalAlignment="Stretch" Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="15" Height="12" >
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_rewind}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                <Button HorizontalAlignment="Stretch" Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="17" Height="17" >
                         <Rectangle.Fill>
                             <VisualBrush  Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                <Button HorizontalAlignment="Stretch" Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="12" Height="12" >
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                <Button HorizontalAlignment="Stretch" Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="15" Height="12" >
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_fastforward}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
+                <Button HorizontalAlignment="Stretch" Click="StopQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55"  FontFamily="Segoe UI Symbol" FontSize="16" Content="{Binding TimeTillNextQuestion}" >
 
                 </Button>
             </DockPanel>
