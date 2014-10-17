@@ -1,0 +1,5 @@
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.dll.config
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.dll
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\bin\Debug\TwitchChatBot.pdb
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\Debug\TwitchChatBot.dll
+C:\Users\Юрий\Documents\GitHub\TwitchChatBot\obj\Debug\TwitchChatBot.pdb
