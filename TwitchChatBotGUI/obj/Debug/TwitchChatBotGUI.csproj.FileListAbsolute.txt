@@ -75,3 +75,5 @@ C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\Twit
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.csproj.GenerateResource.Cache
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.exe
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\TwitchChatBotGUI.pdb
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\AddNewQuizObjectPop.baml
+C:\Users\Yuri\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\obj\Debug\MenuItems\AddNewQuizObjectPop.g.cs

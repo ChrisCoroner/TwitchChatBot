@@ -293,9 +293,11 @@ namespace TwitchChatBot
                             string name = incCommand.Prefix.Substring(0, indexOfExclamationSign);
 
                             //Text addition to the chat window
-
-                            privMessages.Add(String.Format("{0}:{1}\n", name, incCommand.Parameters[incCommand.Parameters.Length - 1].Value));
-                            PrivMessages = PrivMessages;
+                            if(name != "jtv")
+                            {
+                                privMessages.Add(String.Format("{0}:{1}\n", name, incCommand.Parameters[incCommand.Parameters.Length - 1].Value));
+                                PrivMessages = PrivMessages;
+                            }
                         }
 					}
 					msgStart = i = i + 2;

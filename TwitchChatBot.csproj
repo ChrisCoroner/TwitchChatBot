@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth.aspx" />
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
