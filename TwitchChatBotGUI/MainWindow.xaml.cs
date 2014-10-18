@@ -123,8 +123,9 @@ namespace TwitchChatBotGUI
                     OpenErrorMessage("Something went wrong - connection is not established");
                     return;
                 }
-                bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n");
-                bot.SendMessage("NICK " + bot.Auth.AuthName + "\r\n");
+                bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
+                bot.TwitchChannel = bot.Auth.AuthName;
+                //bot.SendMessage( );
             }
             else 
             {
