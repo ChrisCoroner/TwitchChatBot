@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using TwitchChatBotGUI.MenuItems;
 using TwitchChatBot;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System.Globalization;
 
 namespace TwitchChatBotGUI
@@ -284,8 +285,20 @@ namespace TwitchChatBotGUI
             ShowPopupWithUserControl(new Info(bot, Pop));
         }
 
-        private void ChannelButtonClick(object sender, RoutedEventArgs e)
+        private async void ChannelButtonClick(object sender, RoutedEventArgs e)
         {
+            double progress = 0;
+            var controller = await this.ShowProgressAsync("Please wait...", "Quiz bot is preparing to switch location,stay tuned!");
+            controller.SetCancelable(false);
+            progress += 0.1;
+            controller.SetProgress(progress);
+            while (progress < 1)
+            {
+                await Task.Delay(10000);
+                progress += 0.3;
+                controller.SetProgress(progress);
+            }
+            await controller.CloseAsync();
             Popup Pop = new Popup();
             ShowPopupWithUserControl(new ChannelSettings(bot, Pop));
         }

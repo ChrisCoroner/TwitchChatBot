@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TwitchChatBot;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using System.Globalization;
 
 namespace TwitchChatBotGUI.MenuItems
 {
@@ -38,8 +42,28 @@ namespace TwitchChatBotGUI.MenuItems
             InitializeComponent();
         }
 
-        private void AcceptClick(object sender, RoutedEventArgs e)
+        public ChannelSettings(TwitchBot inBot, Popup inCurrentPopup, MetroWindow inWindow)
         {
+            
+            this.Loaded += ChannelSettings_Loaded;
+
+            Bot = inBot;
+            CurrentPopup = inCurrentPopup;
+            mWindow = inWindow;
+
+            InitializeComponent();
+        }
+
+        async Task WaitABit()
+        {
+            await Task.Delay(30000);
+        }
+
+        private async void AcceptClick(object sender, RoutedEventArgs e)
+        {
+
+
+
             Bot.TwitchChannel = TwitchChannel.Text;
             if (Bot.Connected)
             {
@@ -48,6 +72,7 @@ namespace TwitchChatBotGUI.MenuItems
             CurrentPopup.IsOpen = false;
         }
 
+        MetroWindow mWindow;
         public Popup CurrentPopup { get; set; }
         public TwitchBot Bot { get; set; }
     }
