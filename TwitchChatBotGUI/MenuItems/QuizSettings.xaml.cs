@@ -142,11 +142,18 @@ namespace TwitchChatBotGUI.MenuItems
 
             Bot.TimeBetweenQuestions = tempTimeBetweenQuestions;
             Bot.TimeBetweenHints = tempTimeBetweenHints;
-
-            if ( !String.IsNullOrEmpty(QuizFile.Text) && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
+            try
             {
-                Bot.QuizFile = QuizFile.Text;
-                await Bot.ProcessQuizFile();
+                if (!String.IsNullOrEmpty(QuizFile.Text) && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
+                {
+                    Bot.QuizFile = QuizFile.Text;
+                    await Bot.ProcessQuizFile();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExLogger.ExLog(ex.ToString());
+                throw;
             }
             Bot.IsRandom = (bool)RandomizeSwitch.IsChecked;
             

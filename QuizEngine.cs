@@ -322,20 +322,15 @@ namespace TwitchChatBot
 
         void Processing()
         {
-            try
-            {
-                using (FileStream fs = File.OpenRead(QuizFile))
-                {
 
-                    string[] linesOfFile = File.ReadAllLines(QuizFile);
-                    ProcessStringsArrayAsQuiz(linesOfFile);
-                }
-            }
-            catch (Exception ex)
+            using (FileStream fs = File.OpenRead(QuizFile))
             {
-                ExLogger.ExLog(ex.ToString());
-                throw;
+
+                string[] linesOfFile = File.ReadAllLines(QuizFile);
+                ProcessStringsArrayAsQuiz(linesOfFile);
             }
+          
+
            
         }
 
