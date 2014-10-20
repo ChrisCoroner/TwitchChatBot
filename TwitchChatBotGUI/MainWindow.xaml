@@ -155,7 +155,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button ToolTip="Start quiz"  HorizontalAlignment="Stretch" Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding ConnectedAndAuthorized, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button ToolTip="Start quiz"  HorizontalAlignment="Stretch" Click="StartQuizButtonClick" DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizNotRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="17" Height="17" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />

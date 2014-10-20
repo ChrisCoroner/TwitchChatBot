@@ -87,27 +87,63 @@ namespace TwitchChatBotGUI
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        void LogError(string inString)
+        {
+            string proxy = "";
+            if (bot.Proxy != null)
+            {
+                proxy = "http://" + bot.Proxy.ToString();
+            }
+            GoogleFormLogger gfl = new GoogleFormLogger(proxy);
+            gfl.PostToGoogleForm(inString);
+
+        }
+
         private void OnSourceUpdated(Object sender, DataTransferEventArgs args)
         {
 
 
         }
 
+        void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            string errorMessage = "[UnhandledExceptionsHandler]" + e.ToString();
+            LogError(errorMessage);
+        }
+
+        void UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            string errorMessage = "[UnobservedTaskException]" + e.ToString();
+            LogError(errorMessage);
+        }
+
+
         public MainWindow()
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += UnhandledExceptionsHandler;
+            TaskScheduler.UnobservedTaskException += UnobservedTaskException;
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            bot = new TwitchBot();
+            try
+            {
+                bot = new TwitchBot();
 
-            bot.Destination = new Endpoint();
-            bot.Destination.EndpointAddress = "irc.twitch.tv";
-            bot.Destination.EndpointPort = 6667;
-
-
+                bot.Destination = new Endpoint();
+                bot.Destination.EndpointAddress = "irc.twitch.tv";
+                bot.Destination.EndpointPort = 6667;
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
             MainWindowName.DataContext = bot;
         }
 
@@ -121,8 +157,24 @@ namespace TwitchChatBotGUI
                 }
                 catch (TimeoutException ex)
                 {
+                    string proxy = "";
+                    if (bot.Proxy != null)
+                    {
+                        proxy = "http://" + bot.Proxy.ToString();
+                    }
+                    GoogleFormLogger gfl = new GoogleFormLogger(proxy);
+                    gfl.PostToGoogleForm(ex.ToString());
                     OpenErrorMessage("Something went wrong - connection is not established");
                     return;
+                }
+                catch (Exception ex) 
+                {
+                    string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                    LogError(ex.ToString());
+                    
+                    
+                    OpenErrorMessage(errorMessage);
+                    throw;
                 }
                 bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
                 bot.TwitchChannel = bot.Auth.AuthName;
@@ -136,16 +188,36 @@ namespace TwitchChatBotGUI
 
         private void DisconnectClick(object sender, RoutedEventArgs e)
         {
-            bot.Disconnect();
+            try
+            {
+                bot.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         private void SendClick(object sender, RoutedEventArgs e)
         {
-            string messageToSend = MessageBox.Text;
-            //IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+bot.TwitchChannel, false), new IrcCommandParameter(messageToSend, true));
-            //bot.SendMessage(ic.ToString() + "\r\n");
-            bot.SendMessageToCurrentChannel(messageToSend);
-            MessageBox.Text = "";
+            try
+            {
+                string messageToSend = MessageBox.Text;
+                //IrcCommand ic = new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+bot.TwitchChannel, false), new IrcCommandParameter(messageToSend, true));
+                //bot.SendMessage(ic.ToString() + "\r\n");
+                bot.SendMessageToCurrentChannel(messageToSend);
+                MessageBox.Text = "";
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
 
@@ -154,21 +226,41 @@ namespace TwitchChatBotGUI
 
         private void StartQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            if (bot.QuizList.Count() == 0)
+            try
             {
-                OpenErrorMessage("You should specify file containing a quiz or manually add some questions!");
-            }
-            else
-            {
-                bot.SendMessageToCurrentChannel("Quiz is starting!");
+                if (bot.QuizList.Count() == 0)
+                {
+                    OpenErrorMessage("You should specify file containing a quiz or manually add some questions!");
+                }
+                else
+                {
+                    bot.SendMessageToCurrentChannel("Quiz is starting!");
 
-                bot.StartQuiz();
+                    bot.StartQuiz();
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
             }
         }
 
         private void StopQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            bot.StopQuiz();
+            try
+            {
+                bot.StopQuiz();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         async Task GetAuth(CancellationToken ct)
@@ -194,50 +286,120 @@ namespace TwitchChatBotGUI
 
         private void PreviousQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            bot.PreviousQuestion();
+            try
+            {
+                bot.PreviousQuestion();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         private void ForwardQuizButtonClick(object sender, RoutedEventArgs e)
         {
-            bot.NextQuestion();
+            try
+            {
+                bot.NextQuestion();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         private void QuickAddQuestion(object sender, RoutedEventArgs e)
         {
-            bot.AddNewQuizObject("", "");
+            try
+            {
+                bot.AddNewQuizObject("", "");
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         private void DropTheList(object sender, RoutedEventArgs e)
         {
-            bot.DropTheQuizList();
+            try
+            {
+                bot.DropTheQuizList();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         private void DropTheItemFromList(object sender, RoutedEventArgs e)
         {
-            QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
-            if (qo != null)
+            try
             {
-                bot.DropTheItemFromList(qo);
+                QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+                if (qo != null)
+                {
+                    bot.DropTheItemFromList(qo);
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
             }
         }
 
         private void AskSelectedQuestion(object sender, RoutedEventArgs e)
         {
-            QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
-            if (qo != null)
+            try
             {
-                bot.AskScpecifiedQuestion(qo);
+                QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+                if (qo != null)
+                {
+                    bot.AskScpecifiedQuestion(qo);
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
             }
         }
 
         private void SelectionChangedOccured(object sender, SelectionChangedEventArgs e)
         {
-            QuizObject qo =  (QuizObject)QuizDataGrid.SelectedItem;
-            if (qo != null)
+            try
             {
-                QuizDataGrid.ScrollIntoView(qo);
+                QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+                if (qo != null)
+                {
+                    QuizDataGrid.ScrollIntoView(qo);
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                LogError(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
         }
 
         CancellationTokenSource StartAuthorize;

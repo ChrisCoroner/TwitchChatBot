@@ -1,9 +1,13 @@
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
+using System.Web.UI;
 using System.Web.Hosting;
 using System.Diagnostics;
 using System.Web.Script.Serialization;
@@ -13,8 +17,43 @@ using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace TwitchChatBot
 {
+
+    public class GoogleFormLogger
+    {
+        public GoogleFormLogger(string inProxy)
+        {
+
+            if (!(String.IsNullOrEmpty(inProxy)))
+            {
+                HttpClientHandler handler = new HttpClientHandler();
+                //CookieContainer cc = new CookieContainer();
+                WebProxy proxy = new WebProxy();
+                proxy.Address = new Uri(inProxy);
+                handler.Proxy = proxy;
+                formLoggerClient = new HttpClient(handler);
+            }
+            else {
+                formLoggerClient = new HttpClient();
+            }
+        }
+
+        public async void PostToGoogleForm(string inData)
+        { 
+            HttpContent content = new FormUrlEncodedContent(new List<KeyValuePair<string,string>>{new KeyValuePair<string,string>("entry_1083813362",inData)});
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+            content.Headers.ContentType.CharSet = "UTF-8";
+            var response = await formLoggerClient.PostAsync(new Uri("https://docs.google.com/forms/d/14Tpdr7_JJbWBIpVqyBUXvo9scDORk84AYOgczc12sFo/formResponse"), content);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(responseBody);
+        }
+
+        HttpClient formLoggerClient;
+    }
+
+
     class CustomHost : MarshalByRefObject
     {
         public void parse(string page, string query, ref StreamWriter sw)
@@ -234,7 +273,12 @@ namespace TwitchChatBot
 
         public void Disconnect()
         {
+            if (IsQuizRunning)
+            {
+                StopQuiz();
+            }
             mTcpConnection.Disconnect();
+            
             Connected = Connected;
         }
 
@@ -413,6 +457,8 @@ namespace TwitchChatBot
             }
         }
 
+
+
         public TwitchAuthorization Auth
         {
             get
@@ -453,6 +499,7 @@ namespace TwitchChatBot
             set {
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
                 IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
+                IsConnectedAuthorizedAndQuizNotRunning = IsConnectedAuthorizedAndQuizNotRunning;
                 NotifyPropertyChanged();
             }
         }
@@ -503,6 +550,7 @@ namespace TwitchChatBot
                 DisconnectedVisibility = DisconnectedVisibility;
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
                 IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
+                IsConnectedAuthorizedAndQuizNotRunning = IsConnectedAuthorizedAndQuizNotRunning;
                 NotifyPropertyChanged();
             }
         }
@@ -630,6 +678,19 @@ namespace TwitchChatBot
             }
         }
 
+        public bool IsConnectedAuthorizedAndQuizNotRunning
+        {
+            get
+            {
+                return (Connected && Authorized && !IsQuizRunning);
+
+            }
+            set
+            {
+                NotifyPropertyChanged();
+            }
+        }
+
         public bool IsQuizRunning
         {
             get {
@@ -639,6 +700,7 @@ namespace TwitchChatBot
             {
                 isQuizRunning = value;
                 IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
+                IsConnectedAuthorizedAndQuizNotRunning = IsConnectedAuthorizedAndQuizNotRunning;
             }
         }
 

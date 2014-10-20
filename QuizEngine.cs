@@ -384,6 +384,7 @@ namespace TwitchChatBot
 
         async Task<IrcCommand> GetMessageFromQ()
         { 
+            
             while(mIncomingMessagesQueue.Count == 0)
             {
                 await Task.Delay(100);
@@ -393,7 +394,7 @@ namespace TwitchChatBot
 
         async Task ReadIncomingMessages(CancellationToken ct)
         {
-            while (true)
+            while (!ct.IsCancellationRequested)
             {
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ,ct);
                 IrcCommand ic = await tic;
