@@ -109,13 +109,13 @@ namespace TwitchChatBotGUI
         {
             Exception e = (Exception)args.ExceptionObject;
             string errorMessage = "[UnhandledExceptionsHandler]" + e.ToString();
-            LogError(errorMessage);
+            ExLogger.ExLog(errorMessage);
         }
 
         void UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             string errorMessage = "[UnobservedTaskException]" + e.ToString();
-            LogError(errorMessage);
+            ExLogger.ExLog(errorMessage);
         }
 
 
@@ -140,7 +140,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -157,20 +157,14 @@ namespace TwitchChatBotGUI
                 }
                 catch (TimeoutException ex)
                 {
-                    string proxy = "";
-                    if (bot.Proxy != null)
-                    {
-                        proxy = "http://" + bot.Proxy.ToString();
-                    }
-                    GoogleFormLogger gfl = new GoogleFormLogger(proxy);
-                    gfl.PostToGoogleForm(ex.ToString());
+                    ExLogger.ExLog(ex.ToString());
                     OpenErrorMessage("Something went wrong - connection is not established");
                     return;
                 }
                 catch (Exception ex) 
                 {
                     string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                    LogError(ex.ToString());
+                    ExLogger.ExLog(ex.ToString());
                     
                     
                     OpenErrorMessage(errorMessage);
@@ -195,7 +189,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -214,7 +208,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -242,7 +236,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -257,7 +251,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -293,7 +287,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -308,7 +302,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -323,7 +317,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -338,7 +332,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -357,7 +351,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -376,7 +370,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
@@ -396,7 +390,7 @@ namespace TwitchChatBotGUI
             catch (Exception ex)
             {
                 string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                LogError(ex.ToString());
+                ExLogger.ExLog(ex.ToString());
                 OpenErrorMessage(errorMessage);
                 throw;
             }
