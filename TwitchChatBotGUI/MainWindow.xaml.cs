@@ -118,17 +118,23 @@ namespace TwitchChatBotGUI
             ExLogger.ExLog(errorMessage);
         }
 
+        void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            // Process unhandled exception
+            ExLogger.ExLog(e.ToString());
+        }
 
         public MainWindow()
-        {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += UnhandledExceptionsHandler;
-            TaskScheduler.UnobservedTaskException += UnobservedTaskException;
+        {  
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += UnhandledExceptionsHandler;
+            TaskScheduler.UnobservedTaskException += UnobservedTaskException;
+            Application.Current.DispatcherUnhandledException += App_DispatcherUnhandledException;
             try
             {
                 bot = new TwitchBot();
@@ -161,15 +167,16 @@ namespace TwitchChatBotGUI
                     OpenErrorMessage("Something went wrong - connection is not established");
                     return;
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
                     ExLogger.ExLog(ex.ToString());
-                    
-                    
+
+
                     OpenErrorMessage(errorMessage);
                     throw;
                 }
+                //bot.Connect();
                 bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
                 bot.TwitchChannel = bot.Auth.AuthName;
                 //bot.SendMessage( );
