@@ -118,10 +118,10 @@ namespace TwitchChatBotGUI
             ExLogger.ExLog(errorMessage);
         }
 
-        void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        void DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            // Process unhandled exception
-            ExLogger.ExLog(e.ToString());
+            string errorMessage = "[DispatcherUnhandledException]" + e.ToString();
+            ExLogger.ExLog(errorMessage);
         }
 
         public MainWindow()
@@ -134,7 +134,7 @@ namespace TwitchChatBotGUI
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += UnhandledExceptionsHandler;
             TaskScheduler.UnobservedTaskException += UnobservedTaskException;
-            Application.Current.DispatcherUnhandledException += App_DispatcherUnhandledException;
+            Application.Current.DispatcherUnhandledException += DispatcherUnhandledException;
             try
             {
                 bot = new TwitchBot();

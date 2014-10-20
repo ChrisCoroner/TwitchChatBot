@@ -56,9 +56,12 @@ namespace TwitchChatBot
             HttpContent content = new FormUrlEncodedContent(new List<KeyValuePair<string,string>>{new KeyValuePair<string,string>("entry_1083813362",inData)});
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             content.Headers.ContentType.CharSet = "UTF-8";
-            await formLoggerClient.PostAsync(new Uri("https://docs.google.com/forms/d/14Tpdr7_JJbWBIpVqyBUXvo9scDORk84AYOgczc12sFo/formResponse"), content);
+            formLoggerClient.PostAsync(new Uri("https://docs.google.com/forms/d/14Tpdr7_JJbWBIpVqyBUXvo9scDORk84AYOgczc12sFo/formResponse"), content).Wait();
+            //await formLoggerClient.PostAsync(new Uri("https://docs.google.com/forms/d/14Tpdr7_JJbWBIpVqyBUXvo9scDORk84AYOgczc12sFo/formResponse"), content);
             //var response = await formLoggerClient.PostAsync(new Uri("https://docs.google.com/forms/d/14Tpdr7_JJbWBIpVqyBUXvo9scDORk84AYOgczc12sFo/formResponse"), content);
+            
             //string responseBody = await response.Content.ReadAsStringAsync();
+            
             //Console.WriteLine(responseBody);
         }
 

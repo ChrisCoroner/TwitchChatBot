@@ -62,8 +62,6 @@ namespace TwitchChatBotGUI.MenuItems
         private async void AcceptClick(object sender, RoutedEventArgs e)
         {
 
-
-
             Bot.TwitchChannel = TwitchChannel.Text;
             if (Bot.Connected)
             {

@@ -322,7 +322,6 @@ namespace TwitchChatBot
 
         void Processing()
         {
-
             using (FileStream fs = File.OpenRead(QuizFile))
             {
 
