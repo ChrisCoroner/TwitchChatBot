@@ -208,7 +208,14 @@ namespace TwitchChatBot
                     Array.Copy(Buffer, ReceivedData, receivedDataLength);
 
                     OnDataReceived(new ReceivedDataArgs(ReceivedData));
-                    mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                    try
+                    {
+                        mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                    }
+                    catch(NullReferenceException ex)
+                    {
+                        return;
+                    }
                 }
             }
 		}

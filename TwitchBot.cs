@@ -401,6 +401,9 @@ namespace TwitchChatBot
                                 //throw new InvalidOperationException("Seems like you should re-authorize and re-connect");
                             }
                             else {
+                                Disconnect();
+                                AuthorizedName = "";
+                                Auth.AuthKey = "";
                                 OnNotice(incCommand.Parameters[incCommand.Parameters.Length - 1].Value);
                             }
 
