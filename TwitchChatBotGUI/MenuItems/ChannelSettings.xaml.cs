@@ -66,8 +66,27 @@ namespace TwitchChatBotGUI.MenuItems
             if (Bot.Connected)
             {
                 Bot.JoinTwitchChannel(TwitchChannel.Text);
+                //try
+                //{
+                //    Bot.JoinTwitchChannel(TwitchChannel.Text);
+                //    CurrentPopup.IsOpen = false;
+                //}
+                //catch (TwitchChatBotException ex)
+                //{
+                    
+                //    Popup Pop = new Popup();
+                //    Pop.MinHeight = 200;
+                //    Pop.MinWidth = 200;
+                //    Pop.PlacementTarget = this;
+                //    Pop.Placement = PlacementMode.Center;
+                   
+                //    Pop.StaysOpen = true;
+                //    Pop.Child = new ErrorMessage(Bot, Pop, ex.ToString());
+                //    Pop.IsOpen = true;
+                //}
             }
             CurrentPopup.IsOpen = false;
+            
         }
 
         MetroWindow mWindow;

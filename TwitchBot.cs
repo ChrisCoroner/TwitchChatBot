@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Web.Script.Serialization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,35 @@ using System.Threading.Tasks;
 
 namespace TwitchChatBot
 {
+
+    public class TwitchChatBotException : Exception
+    { 
+        public TwitchChatBotException()
+        {
+            // Add any type-specific logic, and supply the default message.
+        }
+
+        public TwitchChatBotException(string message): base(message) 
+        {
+            ErrorInfo = message;
+            // Add any type-specific logic.
+        }
+        public TwitchChatBotException(string message, Exception innerException): base (message, innerException)
+        {
+            ErrorInfo = message;
+            // Add any type-specific logic for inner exceptions.
+        }
+        protected TwitchChatBotException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            // Implement type-specific serialization constructor logic.
+        }
+        public override string ToString()
+        {
+            return ErrorInfo;
+        }
+
+        string ErrorInfo = "";
+    }
 
     public static class ExLogger
     {
@@ -333,6 +363,7 @@ namespace TwitchChatBot
 					//Console.WriteLine("Command Received: {0}",Encoding.UTF8.GetString(message));
 					string inMessage = Encoding.UTF8.GetString(message);
 					if(inMessage.Length > 0){
+                        //OnNotice("test");
 						mMessageQ.Enqueue(inMessage);
 						Console.WriteLine("COMMAND NAME: {0}",IrcCommand.Parse(inMessage).Name);
                         Console.WriteLine("PARAMETER: ");
@@ -365,8 +396,14 @@ namespace TwitchChatBot
                                 Disconnect();
                                 AuthorizedName = "";
                                 Auth.AuthKey = "";
-                                throw new InvalidOperationException("Seems like you should re-authorize and re-connect");
+                                OnNotice("Seems like you should re-authorize and re-connect");
+                                //throw new TwitchChatBotException("Seems like you should re-authorize and re-connect");
+                                //throw new InvalidOperationException("Seems like you should re-authorize and re-connect");
                             }
+                            else {
+                                OnNotice(incCommand.Parameters[incCommand.Parameters.Length - 1].Value);
+                            }
+
                             Console.WriteLine(incCommand.Parameters[incCommand.Parameters.Length - 1].Value);
                         }
 					}
@@ -419,6 +456,7 @@ namespace TwitchChatBot
 
         public void JoinTwitchChannel(String inTwitchChannel)
         {
+            //throw new TwitchChatBotException("Test");
             SendMessage("JOIN #" + inTwitchChannel + "\r\n");
             TwitchChannel = inTwitchChannel;
         }
@@ -746,8 +784,16 @@ namespace TwitchChatBot
         }
 
         int maxMessagesInChat = 50;
-        
 
+        void OnNotice(string inString)
+        {
+            if (NotifyAboutNotices != null)
+            {
+                NotifyAboutNotices(inString);
+            }
+        }
+
+        public event Action<String> NotifyAboutNotices; 
         List<String> privMessages = new List<string>();
 		TcpConnection mTcpConnection;
 		Queue<string> mMessageQ = new Queue<string>();

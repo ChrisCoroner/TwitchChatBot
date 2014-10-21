@@ -108,6 +108,7 @@ namespace TwitchChatBotGUI
         void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
+            
             string errorMessage = "[UnhandledExceptionsHandler]" + e.ToString();
             ExLogger.ExLog(errorMessage);
         }
@@ -138,7 +139,7 @@ namespace TwitchChatBotGUI
             try
             {
                 bot = new TwitchBot();
-
+                bot.NotifyAboutNotices += OpenErrorMessageFromDifThread;
                 bot.Destination = new Endpoint();
                 bot.Destination.EndpointAddress = "irc.twitch.tv";
                 bot.Destination.EndpointPort = 6667;
@@ -165,20 +166,6 @@ namespace TwitchChatBotGUI
                 {
                     OpenErrorMessage("Something went wrong - connection is not established (check your internet connection/server availability)");
                     return;
-                }
-                catch(InvalidOperationException ex)
-                {
-                    OpenErrorMessage("Seems like you should to re-authorize and re-connect");
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
-                    ExLogger.ExLog(ex.ToString());
-
-
-                    OpenErrorMessage(errorMessage);
-                    throw;
                 }
                 //bot.Connect();
                 bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
@@ -416,6 +403,13 @@ namespace TwitchChatBotGUI
 
         #region functionality for menu-driven UI
 
+        private void OpenErrorMessageFromDifThread(String inErrorMessage)
+        {
+            this.Dispatcher.Invoke((Action<string>)OpenErrorMessage, inErrorMessage);
+        }
+
+
+
         private void OpenErrorMessage(String inErrorMessage)
         {
             Popup Pop = new Popup();
@@ -466,6 +460,7 @@ namespace TwitchChatBotGUI
                 controller.SetProgress(progress);
             }
             await controller.CloseAsync();
+
             Popup Pop = new Popup();
             ShowPopupWithUserControl(new ChannelSettings(bot, Pop));
         }
