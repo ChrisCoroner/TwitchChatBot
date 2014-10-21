@@ -294,7 +294,7 @@ namespace TwitchChatBot
 			
             mQuizList = new QuizObjectsList();
             mScoreList = new List<ScoreObject>();
-            mDispatchTable = new Dictionary<string, Action>();
+            mDispatchTable = new Dictionary<string, Action<string>>();
             mDispatchTable["!ShowScore"] = ShowScore;
             mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
             mDispatchTable["!Commands"] = Commands;
@@ -406,9 +406,11 @@ namespace TwitchChatBot
                 {
                     string message = ic.Parameters[ic.Parameters.Length - 1].Value;
                     if (message.Length > 0 && message[0] == '!')
-                    { 
+                    {
+                        int indexOfExclamationSign = ic.Prefix.IndexOf('!');
+                        string name = ic.Prefix.Substring(0, indexOfExclamationSign);
                         //then its a bot-command
-                        ProcessIncomingBotCommand(message);
+                        ProcessIncomingBotCommand(message,name);
                     }
                 }
 
@@ -702,34 +704,46 @@ namespace TwitchChatBot
         QuizHint mQuizHint;
 
         #region Bot Commands Dispatching
-        
-        void ProcessIncomingBotCommand(string inMessage)
+
+
+
+        void ProcessIncomingBotCommand(string inMessage, string inSender)
         {
             if (mDispatchTable.ContainsKey(inMessage))
             {
-                mDispatchTable[inMessage].Invoke();
+                mDispatchTable[inMessage].Invoke(inSender);
             }
             
         }
 
-        void ShowScore()
+        void ShowScore(string inSender)
         {
-            string score = String.Join("\r\n", mScoreList.Select(p => p.ToString()));
+            string score;
+            if (mScoreList.Contains(new ScoreObject(inSender)))
+            {
+                int indexOfSenderScore = mScoreList.IndexOf(new ScoreObject(inSender));
+                score = inSender + ", your score is " + mScoreList[indexOfSenderScore].Score;
+                //String.Join(" ", mScoreList.Where(p => (p.Name == inSender)).Select(p => p.Score));
+            }
+            else 
+            {
+                score = inSender + ", your score is 0";
+            }
             SendMessage(score);
         }
 
-        void RepeatQuestion()
+        void RepeatQuestion(string inSender)
         {
             SendMessage(mCurrentObject.Question);
         }
 
-        void Commands()
+        void Commands(string inSender)
         {
             string availableCommands = "Available commands: " + String.Join(" ",mDispatchTable.Select(p=>p.Key));
             SendMessage(availableCommands);
         }
 
-        Dictionary<string, Action> mDispatchTable;
+        Dictionary<string, Action<string> > mDispatchTable;
 
         #endregion
     }
