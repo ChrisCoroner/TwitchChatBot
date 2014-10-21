@@ -82,6 +82,16 @@ namespace TwitchChatBot
             }
         }
 
+        public bool IsAnswered()
+        {
+            return isAnswered;
+        }
+        public void SetAnswered(bool inAnswered)
+        {
+            isAnswered = inAnswered;
+        }
+
+        bool isAnswered = false;
 
         public String Question { get; set; }
         public String Answer { get; set; }
@@ -416,7 +426,7 @@ namespace TwitchChatBot
 
 
                 //here we have a privmsg and have to check for a valid answer
-                if (mCurrentObject != null && ic.Prefix != null)
+                if (mCurrentObject != null && !(mCurrentObject.IsAnswered()) && ic.Prefix != null)
                 {
 
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
@@ -453,6 +463,7 @@ namespace TwitchChatBot
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentObject.Answer, mScore[name]);
                         //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
                         SendMessage(message);
+                        mCurrentObject.SetAnswered(true);
                         OnTimeToAskAQuestion(null, null);
                     }
                     Console.WriteLine("after GetMessageFromQ:{0} ", ic.Name);
@@ -515,6 +526,11 @@ namespace TwitchChatBot
             if (mQuizList.Count == 0) {
                 return;
                 
+            }
+
+            if ( mCurrentObject != null && mCurrentObject.IsAnswered() == false) {
+                string message = String.Format("The answer was: {0}!", mCurrentObject.Answer); 
+                SendMessage(message);
             }
 
             CurrentQuizObject = GetQuizObject();

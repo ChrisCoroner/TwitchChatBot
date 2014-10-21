@@ -118,6 +118,7 @@ namespace TwitchChatBot
                     //throw new Exception("Failed to connect");
                 }
                 mTcpClient.EndConnect(result);
+                mTcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
 				//mTcpClient.Connect(Destination.EndpointAddress, Destination.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead (Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
@@ -132,7 +133,7 @@ namespace TwitchChatBot
                     //throw new Exception("Failed to connect");
                 }
                 mTcpClient.EndConnect(result);
-
+                mTcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
 				//mTcpClient.Connect(Proxy.EndpointAddress, Proxy.EndpointPort);
 				mNetworkStream = mTcpClient.GetStream ();
 				mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback (DataReceivedCallback), null);
