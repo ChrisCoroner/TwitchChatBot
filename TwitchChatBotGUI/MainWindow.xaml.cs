@@ -163,8 +163,12 @@ namespace TwitchChatBotGUI
                 }
                 catch (TimeoutException ex)
                 {
-                    ExLogger.ExLog(ex.ToString());
-                    OpenErrorMessage("Something went wrong - connection is not established");
+                    OpenErrorMessage("Something went wrong - connection is not established (check your internet connection/server availability)");
+                    return;
+                }
+                catch(InvalidOperationException ex)
+                {
+                    OpenErrorMessage("Seems like you should to re-authorize and re-connect");
                     return;
                 }
                 catch (Exception ex)

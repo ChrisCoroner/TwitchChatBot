@@ -358,6 +358,17 @@ namespace TwitchChatBot
                                 PrivMessages = PrivMessages;
                             }
                         }
+                        if (incCommand.Name == "NOTICE")
+                        {
+                            if (incCommand.Parameters[incCommand.Parameters.Length - 1].Value == "Login unsuccessful")
+                            {
+                                Disconnect();
+                                AuthorizedName = "";
+                                Auth.AuthKey = "";
+                                throw new InvalidOperationException("Seems like you should re-authorize and re-connect");
+                            }
+                            Console.WriteLine(incCommand.Parameters[incCommand.Parameters.Length - 1].Value);
+                        }
 					}
 					msgStart = i = i + 2;
 		        }
