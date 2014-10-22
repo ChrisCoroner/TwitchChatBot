@@ -448,18 +448,18 @@ namespace TwitchChatBotGUI
 
         private async void ChannelButtonClick(object sender, RoutedEventArgs e)
         {
-            double progress = 0;
-            var controller = await this.ShowProgressAsync("Please wait...", "Quiz bot is preparing to switch location,stay tuned!");
-            controller.SetCancelable(false);
-            progress += 0.1;
-            controller.SetProgress(progress);
-            while (progress < 1)
-            {
-                await Task.Delay(10000);
-                progress += 0.3;
-                controller.SetProgress(progress);
-            }
-            await controller.CloseAsync();
+            //double progress = 0;
+            //var controller = await this.ShowProgressAsync("Please wait...", "Quiz bot is preparing to switch location,stay tuned!");
+            //controller.SetCancelable(false);
+            //progress += 0.1;
+            //controller.SetProgress(progress);
+            //while (progress < 1)
+            //{
+            //    await Task.Delay(10000);
+            //    progress += 0.3;
+            //    controller.SetProgress(progress);
+            //}
+            //await controller.CloseAsync();
 
             Popup Pop = new Popup();
             ShowPopupWithUserControl(new ChannelSettings(bot, Pop));

@@ -378,16 +378,32 @@ namespace TwitchChatBot
                         }
                         if (incCommand.Name == "PRIVMSG")
                         {
-                            mQE.Process(incCommand);
                             int indexOfExclamationSign = incCommand.Prefix.IndexOf('!');
                             string name = incCommand.Prefix.Substring(0, indexOfExclamationSign);
 
-                            //Text addition to the chat window
-                            if(name != "jtv")
+                            if (name != "jtv")
                             {
                                 privMessages.Add(String.Format("{0}:{1}\n", name, incCommand.Parameters[incCommand.Parameters.Length - 1].Value));
                                 PrivMessages = PrivMessages;
+                                mQE.Process(incCommand);
                             }
+                            else {
+                                if (incCommand.Parameters != null && incCommand.Parameters.Length > 0)
+                                {
+                                    if (incCommand.Parameters[incCommand.Parameters.Length - 1].Value == "Your message was not sent because you are sending messages too quickly.")
+                                    {
+                                        OnNotice("Your message was not sent because you are sending messages too quickly. Possible solution: grant mod priveleges to bot");
+                                    }
+                                    else if (incCommand.Parameters[incCommand.Parameters.Length - 1].Value == "Your message was not sent because it is identical to the previous one you sent, less than 30 seconds ago.")
+                                    {
+                                        OnNotice("Your message was not sent because it is identical to the previous one you sent, less than 30 seconds ago.");
+                                    }
+                                }
+                            }
+                            
+                            
+                            //Text addition to the chat window
+    
                         }
                         if (incCommand.Name == "NOTICE")
                         {
@@ -549,19 +565,18 @@ namespace TwitchChatBot
                 TA.AuthName = value;
                 Authorized = Authorized; // trigger NotifyPropertyChanged
                 NotifyPropertyChanged();
+                if (value == null) {
+                    Disconnect();
+                    TA.AuthKey = "";
+                    OnNotice("Authorization went wrong.");
+                }
             }
         }
 
         public bool Authorized
         {
             get {
-                if (AuthorizedName != "")
-                {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return !(String.IsNullOrEmpty(AuthorizedName));
             }
             set {
                 ConnectedAndAuthorized = ConnectedAndAuthorized; // trigger NotifyPropertyChanged
