@@ -308,6 +308,7 @@ namespace TwitchChatBot
             mDispatchTable["!ShowScore"] = ShowScore;
             mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
             mDispatchTable["!Commands"] = Commands;
+            mDispatchTable["!Top5"] = Top5;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -790,6 +791,15 @@ namespace TwitchChatBot
             {
                 score = inSender + ", your score is 0";
             }
+            SendMessage(score);
+        }
+
+        void Top5(string inSender)
+        {
+            string score;
+            var result = mScoreList.OrderBy(p=>p.Score).Where((p,i)=>i<5).Select(p=>p.ToString());
+            score = String.Join(" ",result);
+
             SendMessage(score);
         }
 
