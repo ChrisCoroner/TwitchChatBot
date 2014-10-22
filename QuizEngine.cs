@@ -480,6 +480,16 @@ namespace TwitchChatBot
                 mTimeToAskAQuestion.Enabled = false;
                 mTimeToGiveAHint.Enabled = false;
                 mTimeTillNextQuestion.Enabled = false;
+
+                string message = "Quiz is about to stop.";
+
+                if (!(mCurrentObject.IsAnswered()))
+                {
+                    mCurrentObject.SetAnswered(true);
+                    string messageAppend = String.Format("The answer was: {0}!", mCurrentObject.Answer);
+                    message = message + messageAppend;
+                }
+                SendMessage(message);
                 cts.Cancel();
                 cts = null;
             }
@@ -505,12 +515,12 @@ namespace TwitchChatBot
             TimeTillNextQuestion = TimeBetweenQuestions;
 
             mTimeToAskAQuestion.Elapsed += OnTimeToAskAQuestion;
-            mTimeToAskAQuestion.Enabled = true;
-            
-
             mTimeToGiveAHint.Elapsed += OnTimeToGiveAHint;
+
             mTimeTillNextQuestion.Elapsed += ReduceTimeTillQuestion;
-            //OnTimeToAskAQuestion(null,null);
+            
+            
+            
             OnTimeToAskAQuestion(null, null);
             await ReadIncomingMessages(cts.Token);
         }
@@ -520,25 +530,52 @@ namespace TwitchChatBot
             TimeTillNextQuestion--;
         }
 
-        void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
+        async Task DelayExecution(CancellationToken ct)
         {
+            while (!(ct.IsCancellationRequested))
+            {
+                await Task.Delay(10000);
+                ctsDelay.Cancel();
+            }
+        }
+
+        async void OnTimeToAskAQuestion(object source, ElapsedEventArgs e)
+        {
+            mTimeToGiveAHint.Stop();
+            mTimeToAskAQuestion.Stop();
+            mTimeTillNextQuestion.Stop();
+
             //if there is no more items in Q, then the exception will be rised
             if (mQuizList.Count == 0) {
                 return;
                 
             }
 
+            if (ctsDelay != null)
+            {
+                ctsDelay.Cancel();
+            }
+            ctsDelay = new CancellationTokenSource();
+
+
             if ( mCurrentObject != null && mCurrentObject.IsAnswered() == false) {
-                string message = String.Format("The answer was: {0}!", mCurrentObject.Answer); 
+                string message = String.Format("The answer was: {0}!", mCurrentObject.Answer);
+                mCurrentObject.SetAnswered(true);
                 SendMessage(message);
             }
+            
+
 
             CurrentQuizObject = GetQuizObject();
             mQuizHint = new QuizHint(CurrentQuizObject.Answer);
-            mTimeToGiveAHint.Enabled = true;
+
+            await DelayExecution(ctsDelay.Token);
+
+            mTimeToGiveAHint.Start();
+            mTimeToAskAQuestion.Start();
 
             TimeTillNextQuestion = TimeBetweenQuestions / 1000;
-            mTimeTillNextQuestion.Enabled = true;
+            mTimeTillNextQuestion.Start();
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
             SendMessage(CurrentQuizObject.Question);
         }
@@ -713,7 +750,8 @@ namespace TwitchChatBot
         Dictionary<string, int> mScore;
 
         CancellationTokenSource cts;
-        
+        CancellationTokenSource ctsDelay;
+
         int mTimeBetweenQuestions;
         int mTimeBetweenHints;
 
