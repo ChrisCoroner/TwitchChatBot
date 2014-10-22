@@ -62,6 +62,15 @@ namespace TwitchChatBotGUI.MenuItems
                         result = "The value cannot be negative!";
                     }
                 }
+
+                if (name == "mDelayBetweenQuestions")
+                {
+                    if (mDelayBetweenQuestions < 0)
+                    {
+                        result = "The value cannot be negative!";
+                    }
+                }
+
                 return result;
             }
         }
@@ -90,17 +99,31 @@ namespace TwitchChatBotGUI.MenuItems
             }
         }
 
+        public int mDelayBetweenQuestions
+        {
+            get
+            {
+                return tempDelayBetweenQuestions;
+            }
+            set
+            {
+                tempDelayBetweenQuestions = value;
+            }
+        }
+
         int tempTimeBetweenQuestions;
         int tempTimeBetweenHints;
-        
+        int tempDelayBetweenQuestions;
 
         private void QuizSettings_Loaded(object sender, RoutedEventArgs e)
         {
+            tempDelayBetweenQuestions = Bot.DelayBetweenQuestions;
             tempTimeBetweenQuestions = Bot.TimeBetweenQuestions;
             tempTimeBetweenHints = Bot.TimeBetweenHints;
 
             TimeBetweenQuestions.Text = String.Format("{0}", tempTimeBetweenQuestions);
             TimeBetweenHints.Text = String.Format("{0}", tempTimeBetweenHints);
+            DelayBetweenQuestions.Text = String.Format("{0}", tempDelayBetweenQuestions);
 
             if (tempPath != null)
             {
@@ -142,6 +165,7 @@ namespace TwitchChatBotGUI.MenuItems
 
             Bot.TimeBetweenQuestions = tempTimeBetweenQuestions;
             Bot.TimeBetweenHints = tempTimeBetweenHints;
+            Bot.DelayBetweenQuestions = tempDelayBetweenQuestions;
 
             if (!String.IsNullOrEmpty(QuizFile.Text) && (Bot.QuizFile != QuizFile.Text) && File.Exists(QuizFile.Text))
             {

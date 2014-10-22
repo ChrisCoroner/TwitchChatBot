@@ -313,6 +313,7 @@ namespace TwitchChatBot
             mScore = new Dictionary<string, int>();
             mTimeBetweenQuestions = 120000;
             mTimeBetweenHints = 15000;
+            DelayBetweenQuestions = 10000;
             IsRandom = false;
 		}
 
@@ -534,7 +535,7 @@ namespace TwitchChatBot
         {
             while (!(ct.IsCancellationRequested))
             {
-                await Task.Delay(10000);
+                await Task.Delay(DelayBetweenQuestions);
                 ctsDelay.Cancel();
             }
         }
@@ -563,18 +564,18 @@ namespace TwitchChatBot
                 mCurrentObject.SetAnswered(true);
                 SendMessage(message);
             }
-            
-
 
             CurrentQuizObject = GetQuizObject();
             mQuizHint = new QuizHint(CurrentQuizObject.Answer);
 
+            TimeTillNextQuestion = TimeBetweenQuestions / 1000;
+            
             await DelayExecution(ctsDelay.Token);
 
             mTimeToGiveAHint.Start();
             mTimeToAskAQuestion.Start();
 
-            TimeTillNextQuestion = TimeBetweenQuestions / 1000;
+            
             mTimeTillNextQuestion.Start();
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
             SendMessage(CurrentQuizObject.Question);
@@ -627,6 +628,12 @@ namespace TwitchChatBot
                     mTimeToGiveAHint.Interval = value;
                 }
             }
+        }
+
+        public int DelayBetweenQuestions
+        {
+            get;
+            set;
         }
 
         public int TimeTillNextQuestion

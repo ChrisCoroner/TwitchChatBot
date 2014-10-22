@@ -500,6 +500,18 @@ namespace TwitchChatBot
             await mQE.AddQuiz();
         }
 
+        public int DelayBetweenQuestions
+        {
+            get
+            {
+                return mQE.DelayBetweenQuestions;
+            }
+            set
+            {
+                mQE.DelayBetweenQuestions = value;
+            }
+        }
+
         public int TimeBetweenQuestions
         {
             get
