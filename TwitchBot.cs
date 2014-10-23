@@ -739,6 +739,19 @@ namespace TwitchChatBot
             }
         }
 
+
+        public bool ForgiveSmallMisspelling
+        {
+            get
+            {
+                return mQE.ForgiveSmallMisspelling;
+            }
+            set
+            {
+                mQE.ForgiveSmallMisspelling = value;
+            }
+        }
+
         public void PreviousQuestion()
         {
             mQE.PreviousQuestion();

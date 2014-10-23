@@ -357,6 +357,7 @@ namespace TwitchChatBot
             mTimeBetweenHints = 15000;
             DelayBetweenQuestions = 10000;
             IsRandom = false;
+            ForgiveSmallMisspelling = false;
 		}
 
 		public QuizEngine (string inFileWithQuiz) : this()
@@ -474,7 +475,27 @@ namespace TwitchChatBot
 
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
 
-                    if (ic.Parameters[ic.Parameters.Length - 1].Value.ToLower() == mCurrentObject.Answer.ToLower())
+                    bool IsRightAnswer = false;
+
+                    if (ForgiveSmallMisspelling)
+                    {
+                        int distance = LevenshteinDistance.Compute(mCurrentObject.Answer.ToLower(), ic.Parameters[ic.Parameters.Length - 1].Value.ToLower());
+                        double percentage = ((double)distance / (double)mCurrentObject.Answer.Length) * 100;
+                        if (percentage < 25)
+                        {
+                            IsRightAnswer = true;
+                        }
+                    }
+                    else
+                    {
+                        if (ic.Parameters[ic.Parameters.Length - 1].Value.ToLower() == mCurrentObject.Answer.ToLower())
+                        {
+                            IsRightAnswer = true;
+                        }
+                    }
+
+
+                    if (IsRightAnswer)
                     {
 
                         int indexOfExclamationSign = ic.Prefix.IndexOf('!');
@@ -484,7 +505,7 @@ namespace TwitchChatBot
                         {
                             mScore[name]++;
                         }
-                        else 
+                        else
                         {
                             mScore[name] = 1;
                         }
@@ -494,7 +515,7 @@ namespace TwitchChatBot
                         {
                             mScoreList[mScoreList.IndexOf(scoreObj)].Score++;
                         }
-                        else 
+                        else
                         {
                             scoreObj.Score++;
                             mScoreList.Add(scoreObj);
@@ -749,6 +770,12 @@ namespace TwitchChatBot
         }
 
         public bool IsRandom
+        {
+            get;
+            set;
+        }
+
+        public bool ForgiveSmallMisspelling
         {
             get;
             set;

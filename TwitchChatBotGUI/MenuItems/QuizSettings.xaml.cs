@@ -134,6 +134,7 @@ namespace TwitchChatBotGUI.MenuItems
                 QuizFile.Text = Bot.QuizFile;
             }
             RandomizeSwitch.IsChecked = Bot.IsRandom;
+            ForgiveSmallMissplelling.IsChecked = Bot.ForgiveSmallMisspelling;
             QuizWindowName.DataContext = (QuizSettings)this;
         }
 
@@ -174,7 +175,7 @@ namespace TwitchChatBotGUI.MenuItems
             }
 
             Bot.IsRandom = (bool)RandomizeSwitch.IsChecked;
-            
+            Bot.ForgiveSmallMisspelling = (bool)ForgiveSmallMissplelling.IsChecked;
             CurrentPopup.IsOpen = false;
         }
 
