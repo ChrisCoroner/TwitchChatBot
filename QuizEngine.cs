@@ -527,7 +527,11 @@ namespace TwitchChatBot
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentObject.Answer, mScore[name]);
                         //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
                         SendMessage(message);
-                        SendMessage(ProcessLoyalityCommand(name));
+                        string commandL = ProcessLoyalityCommand(name);
+                        if (commandL != null)
+                        {
+                            SendMessage(commandL);
+                        }
                         mCurrentObject.SetAnswered(true);
                         OnTimeToAskAQuestion(null, null);
                     }
@@ -538,14 +542,15 @@ namespace TwitchChatBot
 
         public string ProcessLoyalityCommand(string inName)
         {
-            string command = null;
-            if (!(String.IsNullOrEmpty(LoyalityCommand)))
+            string command = LoyalityCommand;
+            if (!(String.IsNullOrEmpty(LoyalityCommand)) && inName != null)
             {
                 if (!(LoyalityCommand.Contains("*UserName*")))
                 {
-                    return command;
+                    return null;
                 }
                 command = command.Replace("*UserName*", inName);
+                
             }
             return command;
         }
