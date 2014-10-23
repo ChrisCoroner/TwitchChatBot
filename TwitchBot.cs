@@ -536,6 +536,18 @@ namespace TwitchChatBot
             }
         }
 
+        public string LoyalityCommand
+        {
+            get
+            {
+                return mQE.LoyalityCommand;
+            }
+            set
+            {
+                mQE.LoyalityCommand = value;
+            }
+        }
+
         public bool ConnectedAndAuthorized
         {
             get {

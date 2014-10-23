@@ -416,6 +416,12 @@ namespace TwitchChatBotGUI
             ShowPopupWithUserControl(new ErrorMessage(bot, Pop, inErrorMessage));
         }
 
+        private void OpenLoyalitySettings(object sender, RoutedEventArgs e)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new LoyalityPointsRewards(bot, Pop));
+        }
+
         private void OpenAddNewQuizObjectPop(object sender, RoutedEventArgs e)
         {
             Popup Pop = new Popup();

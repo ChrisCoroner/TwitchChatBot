@@ -653,6 +653,11 @@ namespace TwitchChatBot
 
         public int TimeTillNextHint { get; set; }
 
+        public string LoyalityCommand
+        {
+            get;
+            set;
+        }
 
         bool quizIsRunning;
         public QuizObjectsList QuizListOrig

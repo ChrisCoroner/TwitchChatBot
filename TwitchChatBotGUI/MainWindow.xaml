@@ -93,6 +93,14 @@
                         </Rectangle>
                     </Button>
 
+                    <Button ToolTip="Loyality rewards"  DockPanel.Dock="Bottom" Click="OpenLoyalitySettings"  Name="LoyalityRewards" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_trophy}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
                     <Button Visibility="Hidden" DockPanel.Dock="Bottom" Click="FlyoutSettings"  Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                         <Rectangle Width="20" Height="20" >
                             <Rectangle.Fill>
@@ -277,6 +285,8 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
+
+
 
                 <Button Visibility="Hidden" DockPanel.Dock="Bottom" Click="FlyoutSettings"  Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                     <Rectangle Width="20" Height="20" >
