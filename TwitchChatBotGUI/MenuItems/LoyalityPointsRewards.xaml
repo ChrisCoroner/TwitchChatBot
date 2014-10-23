@@ -23,7 +23,7 @@
     </UserControl.Resources>
     <Grid>
         <Border  BorderBrush="DeepSkyBlue" BorderThickness="0,20,0,0"/>
-        <TextBox Name="LoyalityCommand"  Width="Auto" HorizontalAlignment="Stretch" Height="24" Margin="110,29,10,0" TextWrapping="Wrap" Text="{Binding mLoyalityCommand,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="75" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="500" ToolTipService.BetweenShowDelay="500" ToolTipService.ShowDuration="15000" ToolTipService.Placement="Right">
+        <TextBox Name="LoyalityCommand"  Width="Auto" HorizontalAlignment="Stretch" Height="24" Margin="110,29,10,0" TextWrapping="Wrap" Text="{Binding mLoyalityCommand,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="75" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="500" ToolTipService.BetweenShowDelay="500" ToolTipService.ShowDuration="30000" ToolTipService.Placement="Right">
             <TextBox.ToolTip>
                 <StackPanel>
                     <TextBlock FontSize="29" FontFamily="/fonts/#FontAwesome" Text="&#xf19d;HowTo:" TextAlignment="Center" VerticalAlignment="Top" Height="Auto" Width="Auto" HorizontalAlignment="Stretch"/>

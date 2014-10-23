@@ -50,11 +50,13 @@ namespace TwitchChatBotGUI.MenuItems
                     if (!(String.IsNullOrEmpty(tempLoyalityCommand)) && tempLoyalityCommand[0] != '!')
                     {
                         result = "Command should start with exclamation sign (!)";
+                        tempLoyalityCommand = Bot.LoyalityCommand;
                         return result;
                     }
                     if (!(tempLoyalityCommand.Contains("*UserName*")))
                     {
                         result = "Command should contain *UserName* keyword";
+                        tempLoyalityCommand = Bot.LoyalityCommand;
                         return result;
                     }
                 }
