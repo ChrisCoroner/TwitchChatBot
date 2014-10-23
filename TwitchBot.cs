@@ -482,7 +482,10 @@ namespace TwitchChatBot
 
         public void SendMessageToCurrentChannel(String inMessage)
         {
-            SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#"+TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
+            if (inMessage != null)
+            {
+                SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#" + TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
+            }
         }
 
         public String QuizFile
