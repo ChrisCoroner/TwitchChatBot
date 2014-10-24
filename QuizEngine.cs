@@ -350,6 +350,7 @@ namespace TwitchChatBot
             mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
             mDispatchTable["!Commands"] = Commands;
             mDispatchTable["!Top5"] = Top5;
+            mDispatchTable["!Top<X>"] = Top5;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -858,10 +859,38 @@ namespace TwitchChatBot
 
         #region Bot Commands Dispatching
 
+        void TopX(int inX)
+        {
+            string score;
+            var result = mScoreList.OrderBy(p => p.Score).Where((p, i) => i < inX).Select(p => p.ToString());
+            score = String.Join(" ", result);
 
+            SendMessage(score);
+        }
 
         void ProcessIncomingBotCommand(string inMessage, string inSender)
         {
+            if (inMessage.StartsWith("!Top"))
+            {
+                if (inMessage.Length > 4)
+                {
+                    string sReminder = inMessage.Substring(4);
+                    int X = 0;
+                    if (Int32.TryParse(sReminder, out X))
+                    {
+                        TopX(X);
+                        return;
+                    }
+                    else {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             if (mDispatchTable.ContainsKey(inMessage))
             {
                 mDispatchTable[inMessage].Invoke(inSender);
