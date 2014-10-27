@@ -212,9 +212,13 @@ namespace TwitchChatBot
                     {
                         mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
                     }
-                    catch(NullReferenceException ex)
+                    catch (NullReferenceException ex)
                     {
                         return;
+                    }
+                    catch (IOException ex)
+                    {
+                        EmergencyDisc();
                     }
                 }
             }
@@ -228,6 +232,8 @@ namespace TwitchChatBot
 		}
 
 		public event EventHandler<ReceivedDataArgs> DataReceived;
+
+        public Action EmergencyDisc;
 
 		TcpClient mTcpClient;
 		NetworkStream mNetworkStream;

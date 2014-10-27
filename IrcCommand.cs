@@ -154,6 +154,7 @@ namespace TwitchChatBot
 
         IrcCommand Ping(IrcCommand inCommand) 
         {
+            Console.WriteLine("Ping-Pong");
             return new IrcCommand(null, "PONG", inCommand.Parameters);
         }
 

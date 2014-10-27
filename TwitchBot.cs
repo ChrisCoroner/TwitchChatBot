@@ -238,6 +238,7 @@ namespace TwitchChatBot
 		{     
 			mTcpConnection = new TcpConnection();
 			mTcpConnection.DataReceived += ProccessMessageData;
+            mTcpConnection.EmergencyDisc = EmergencyReset;
 			mIrcCommandAnalyzer = new SimpleTwitchBotIrcCommandAnalyzer();
 
             host = (CustomHost)ApplicationHost.CreateApplicationHost(typeof(CustomHost), "/", Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
@@ -448,6 +449,13 @@ namespace TwitchChatBot
             AuthorizedName = AuthorizedName;
         }
 
+        public void EmergencyReset()
+        {
+            StopQuiz();
+            Disconnect();
+            OnNotice("Woops!Seems like connection was lost,try to reconnect please");
+        }
+
         async public void StartQuiz()
         {
             if (mQE.QuizList.Length == 0)
@@ -458,6 +466,8 @@ namespace TwitchChatBot
             mQE.StartQuiz();
             
         }
+
+
 
         public void StopQuiz()
         {
