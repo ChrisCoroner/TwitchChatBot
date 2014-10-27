@@ -123,6 +123,11 @@ namespace TwitchChatBot
             }
         }
 
+        public override string ToString()
+        {
+            return "{Question}" + Question + "{Answer}" + Answer;
+        }
+
         public bool IsAnswered()
         {
             return isAnswered;
@@ -379,13 +384,9 @@ namespace TwitchChatBot
         {
             using (FileStream fs = File.OpenRead(QuizFile))
             {
-
                 string[] linesOfFile = File.ReadAllLines(QuizFile);
                 ProcessStringsArrayAsQuiz(linesOfFile);
             }
-          
-
-           
         }
 
         async public Task  AddQuiz(string inFileWithQuiz)
@@ -399,16 +400,27 @@ namespace TwitchChatBot
 			}
         }
 
+        public void AppendQuizObjectToTheQuizFile(QuizObject qo)
+        {
+            string[] quizObjectLine = new string[] { qo.ToString() };
+            if (File.Exists(QuizFile))
+            {
+                File.AppendAllLines(QuizFile, quizObjectLine);
+            }
+        }
+
 		void ProcessStringsArrayAsQuiz(string[] inStringsArray)
 		{
 			string[] separators = new string[]{"{Question}","{Answer}"};
 
 			for(int i = 0; i < inStringsArray.Length; i++ ){
 				string[] result = inStringsArray[i].Split(separators,StringSplitOptions.RemoveEmptyEntries);
-				if(result.Length == 2)
+				if(result.Length % 2 == 0)
 				{
-                    mQuizList.Add(new QuizObject(result[0], result[1]));
-					
+                    for (int j = 0; j < result.Length; j = j + 2)
+                    {
+                        mQuizList.Add(new QuizObject(result[j], result[j+1]));
+                    }
 				}
 			}
 
@@ -560,13 +572,17 @@ namespace TwitchChatBot
         {
             if (cts != null)
             {
+                if (ctsDelay != null) {
+                    ctsDelay.Cancel();
+                }
+
                 mTimeToAskAQuestion.Enabled = false;
                 mTimeToGiveAHint.Enabled = false;
                 mTimeTillNextQuestion.Enabled = false;
 
                 string message = "Quiz is about to stop.";
 
-                if (!(mCurrentObject.IsAnswered()))
+                if ( mCurrentObject != null && !(mCurrentObject.IsAnswered()))
                 {
                     mCurrentObject.SetAnswered(true);
                     string messageAppend = String.Format("The answer was: {0}!", mCurrentObject.Answer);
@@ -574,6 +590,7 @@ namespace TwitchChatBot
                 }
                 SendMessage(message);
                 cts.Cancel();
+                
                 cts = null;
             }
         }
@@ -605,7 +622,11 @@ namespace TwitchChatBot
             
             
             OnTimeToAskAQuestion(null, null);
-            await ReadIncomingMessages(cts.Token);
+            if (cts != null) // will be set to null in StopQuiz,so have to check again after OnTimeToAskAQuestion 
+            {
+                await ReadIncomingMessages(cts.Token);
+            }
+
         }
 
         void ReduceTimeTillQuestion(object source, ElapsedEventArgs e)
@@ -648,12 +669,21 @@ namespace TwitchChatBot
             }
 
             CurrentQuizObject = GetQuizObject();
+            
+            if (CurrentQuizObject == null)
+            {
+                InternalInitiationQuizStop();
+                return;
+            }
+
             mQuizHint = new QuizHint(CurrentQuizObject.Answer);
 
             TimeTillNextQuestion = TimeBetweenQuestions / 1000;
             
             await DelayExecution(ctsDelay.Token);
-
+            if (mCurrentObject == null || cts == null) {
+                return;
+            }
             mTimeToGiveAHint.Start();
             mTimeToAskAQuestion.Start();
 
@@ -792,34 +822,76 @@ namespace TwitchChatBot
             return rnd.Next(mQuizList.Count);
         }
 
+        public int GetRandomIndex(int Limit)
+        {
+            return rnd.Next(Limit);
+        }
+
         public void PreviousQuestion()
         {
-            indexOfCurrentQuizObjext -= 2;
-            OnTimeToAskAQuestion(null, null);
+            
+            if (mCurrentObject != null && mCurrentObject.IsAnswered() == false)
+            {
+                string message = String.Format("The answer was: {0}!", mCurrentObject.Answer);
+                mCurrentObject.SetAnswered(true);
+                SendMessage(message);
+            }
+
+            if (mCurrentObject != null && (indexOfCurrentQuizObjext - 1) >= 0)
+            {
+                indexOfCurrentQuizObjext = indexOfCurrentQuizObjext - 1;
+                mQuizList[indexOfCurrentQuizObjext].SetAnswered(false);
+                OnTimeToAskAQuestion(null, null);
+            }
+            
+            
         }
 
         public void NextQuestion()
         {
+            if (mCurrentObject != null && mCurrentObject.IsAnswered() == false)
+            {
+                string message = String.Format("The answer was: {0}!", mCurrentObject.Answer);
+                mCurrentObject.SetAnswered(true);
+                SendMessage(message);
+            }
             OnTimeToAskAQuestion(null, null);
         }
 
         QuizObject GetQuizObject()
         {
+            QuizObject[] isNotAnsweredQuestions = mQuizList.Where(p=> p.IsAnswered() != true).ToArray();
+            if (isNotAnsweredQuestions.Count() == 0)
+            {
+                return null;
+            }
             if (IsRandom)
             {
-                indexOfCurrentQuizObjext = GetRandomIndex();
+                int temp = GetRandomIndex(isNotAnsweredQuestions.Count());
+                indexOfCurrentQuizObjext = mQuizList.IndexOf(isNotAnsweredQuestions[temp]);
+                return isNotAnsweredQuestions[temp];
             }
-            else
-            {
-                indexOfCurrentQuizObjext++;
+            else {
+                indexOfCurrentQuizObjext = mQuizList.IndexOf(isNotAnsweredQuestions.ElementAt(0));
+                return isNotAnsweredQuestions.ElementAt(0);
             }
-            return indexOfCurrentQuizObjext < 0 ? mQuizList[(indexOfCurrentQuizObjext + mQuizList.Count) % (mQuizList.Count)] : mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count)];
+            //if (IsRandom)
+            //{
+            //    indexOfCurrentQuizObjext = GetRandomIndex();
+            //}
+            //else
+            //{
+            //    indexOfCurrentQuizObjext++;
+            //}
+            //return indexOfCurrentQuizObjext < 0 ? mQuizList[(indexOfCurrentQuizObjext + mQuizList.Count) % (mQuizList.Count)] : mQuizList[indexOfCurrentQuizObjext % (mQuizList.Count)];
         }
 
         public string QuizFile { get; set; }
 
         //delegate for communicating back to the outer world (assigned to SendMessageToCurrentChannel in TwitchBot contructor)
 		public Action<string> SendMessage;
+
+        public Action InternalInitiationQuizStop;
 
         //Queue of PRIVMSGes - source of answers
 		Queue<IrcCommand> mIncomingMessagesQueue;

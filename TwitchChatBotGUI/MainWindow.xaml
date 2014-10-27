@@ -156,7 +156,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <Button ToolTip="Previous question"  HorizontalAlignment="Stretch" Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
+                        <Button  ToolTip="Previous question"  HorizontalAlignment="Stretch" Click="PreviousQuizButtonClick"  DockPanel.Dock="Left" IsEnabled="{Binding IsConnectedAuthorizedAndQuizRunning, Mode=OneWay}" Style="{DynamicResource MetroCircleButtonStyle}" Width="40" Height="40"  FontFamily="Segoe UI Symbol" FontSize="16" >
                             <Rectangle Width="15" Height="12" >
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_rewind}" />
@@ -199,6 +199,15 @@
                                                     <Rectangle.Fill>
                                                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
                                                     </Rectangle.Fill>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Append question to the file" Click="AppendQuestionToTheFile">
+                                            <MenuItem.Icon>
+                                                <Rectangle Fill="White" Width="18" Height="18">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_page_edit}" />
+                                                    </Rectangle.OpacityMask>
                                                 </Rectangle>
                                             </MenuItem.Icon>
                                         </MenuItem>

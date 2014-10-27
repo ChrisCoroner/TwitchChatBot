@@ -306,6 +306,31 @@ namespace TwitchChatBotGUI
             }
         }
 
+        private void AppendQuestionToTheFile(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(bot.QuizFile) || String.IsNullOrWhiteSpace(bot.QuizFile))
+            {
+                OpenErrorMessage("You should specify a quiz file first");
+                return;
+            }
+
+            try
+            {
+                QuizObject qo = (QuizObject)QuizDataGrid.SelectedItem;
+                if (qo != null)
+                {
+                    bot.AppendQuizObjectToTheQuizFile(qo);
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = String.Format("[FatalError]{0}", ex.ToString());
+                ExLogger.ExLog(ex.ToString());
+                OpenErrorMessage(errorMessage);
+                throw;
+            }
+        }
+
         private void QuickAddQuestion(object sender, RoutedEventArgs e)
         {
             try

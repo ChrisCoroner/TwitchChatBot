@@ -245,7 +245,8 @@ namespace TwitchChatBot
             StartHttpListener();
             mQE = new QuizEngine();
             mQE.SendMessage = SendMessageToCurrentChannel;
-            mQE.PropertyChanged += ProxyPassNotifyPropertyChanged; 
+            mQE.PropertyChanged += ProxyPassNotifyPropertyChanged;
+            mQE.InternalInitiationQuizStop = StopQuiz;
 
             TwitchChannel = "NONE";
 		}
@@ -453,15 +454,16 @@ namespace TwitchChatBot
             {
                 await ProcessQuizFile();
             }
-
-            mQE.StartQuiz();
             IsQuizRunning = true;
+            mQE.StartQuiz();
+            
         }
 
         public void StopQuiz()
         {
-            mQE.StopQuiz();
             IsQuizRunning = false;
+            mQE.StopQuiz();
+            
         }
 
 		public void DumpMessageQ ()
@@ -496,6 +498,11 @@ namespace TwitchChatBot
             set {
                 mQE.QuizFile = value;
             }
+        }
+
+        public void AppendQuizObjectToTheQuizFile(QuizObject qo)
+        {
+            mQE.AppendQuizObjectToTheQuizFile(qo);
         }
 
         async public Task ProcessQuizFile()
