@@ -164,9 +164,9 @@ namespace TwitchChatBot
 			//	result will be null if current call to the SendMessageCallback is a continuation of SendMessage execution 
 			if (result != null && mNetworkStream!= null) {
 				mNetworkStream.EndWrite(result);
-				lock(MessageQ){
-					sending = false;
-				}
+				
+				sending = false;
+			
 			}
 
 			string CurrentMessage = null;
@@ -221,36 +221,35 @@ namespace TwitchChatBot
         */
 		private void DataReceivedCallback( IAsyncResult result)
 		{
-            lock (mNetworkStreamLock)
+
+            if (mNetworkStream != null)
             {
-                if (mNetworkStream != null)
+                int receivedDataLength = mNetworkStream.EndRead(result);
+                //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+
+                byte[] ReceivedData = new byte[receivedDataLength];
+                Array.Copy(Buffer, ReceivedData, receivedDataLength);
+
+                OnDataReceived(new ReceivedDataArgs(ReceivedData));
+                try
                 {
-                    int receivedDataLength = mNetworkStream.EndRead(result);
-                    //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
-
-                    byte[] ReceivedData = new byte[receivedDataLength];
-                    Array.Copy(Buffer, ReceivedData, receivedDataLength);
-
-                    OnDataReceived(new ReceivedDataArgs(ReceivedData));
-                    try
+                    if (mTcpClient.Connected)
                     {
-                        if (mTcpClient.Connected)
-                        {
-                            mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
-                        }
-                        else
-                        {
-                            EmergencyDisc();
-                            return;
-                        }
-                        
+                        mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
                     }
-                    catch (NullReferenceException ex)
+                    else
                     {
+                        EmergencyDisc();
                         return;
                     }
+                        
+                }
+                catch (NullReferenceException ex)
+                {
+                    return;
                 }
             }
+            
 		}
 
 		protected virtual void OnDataReceived (ReceivedDataArgs ea)
