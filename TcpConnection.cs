@@ -187,8 +187,32 @@ namespace TwitchChatBot
 			//CurrentMessage wont be null if the queue was not empty
 			//CurrentMessage will be null if the queue was empty
 			if (CurrentMessage != null && mNetworkStream != null) {
+                try
+                {
+                    if (mTcpClient.Connected)
+                    {
+                        
+                    }
+                    else
+                    {
+                        //Disconnect();
+                        //Connect();
+                    }
+                    if (mTcpClient.Connected)
+                    {
+                        mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage), 0, Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
+                    }
+                    else {
+                        EmergencyDisc();
+                        return;
+                    }
+                }
+                catch (NullReferenceException ex)
+                {
+                    return;
+                }
 
-				mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage),0,Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
+
 			}
 		}
 
@@ -210,15 +234,20 @@ namespace TwitchChatBot
                     OnDataReceived(new ReceivedDataArgs(ReceivedData));
                     try
                     {
-                        mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                        if (mTcpClient.Connected)
+                        {
+                            mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                        }
+                        else
+                        {
+                            EmergencyDisc();
+                            return;
+                        }
+                        
                     }
                     catch (NullReferenceException ex)
                     {
                         return;
-                    }
-                    catch (IOException ex)
-                    {
-                        EmergencyDisc();
                     }
                 }
             }

@@ -355,7 +355,7 @@ namespace TwitchChatBot
             mDispatchTable["!RepeatQuestion"] = RepeatQuestion;
             mDispatchTable["!Commands"] = Commands;
             mDispatchTable["!Top5"] = Top5;
-            mDispatchTable["!Top<X>"] = Top5;
+            mDispatchTable["!TopX"] = Top5;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -469,7 +469,7 @@ namespace TwitchChatBot
                 IrcCommand ic = await tic;
 
                 //check privmsg for being a command
-                if (ic.Prefix != null)
+                if (ic != null && ic.Prefix != null)
                 {
                     string message = ic.Parameters[ic.Parameters.Length - 1].Value;
                     if (message.Length > 0 && message[0] == '!')
@@ -483,7 +483,7 @@ namespace TwitchChatBot
 
 
                 //here we have a privmsg and have to check for a valid answer
-                if (mCurrentObject != null && !(mCurrentObject.IsAnswered()) && ic.Prefix != null)
+                if (mCurrentObject != null && !(mCurrentObject.IsAnswered()) && ic != null &&  ic.Prefix != null)
                 {
 
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
@@ -1003,6 +1003,7 @@ namespace TwitchChatBot
         void Commands(string inSender)
         {
             string availableCommands = "Available commands: " + String.Join(" ",mDispatchTable.Select(p=>p.Key));
+
             SendMessage(availableCommands);
         }
 
