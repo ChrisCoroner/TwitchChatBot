@@ -164,93 +164,90 @@ namespace TwitchChatBot
 			//	result will be null if current call to the SendMessageCallback is a continuation of SendMessage execution 
 			if (result != null && mNetworkStream!= null) {
 				mNetworkStream.EndWrite(result);
-				
-				sending = false;
-			
-			}
+                lock(MessageQ){
+                    sending = false;
+                }
+            }
 
-			string CurrentMessage = null;
+            string CurrentMessage = null;
 
-			lock (MessageQ) {
-				//There is a possibility, that call to SendMessageCallback was made through SendMessage,
-				//while another writing is in progress, so the call just returns, as inMessage was appended to the queue, and will be delivered in its turn
-				if (sending) {
-					return;
-				}
-				if (MessageQ.Count != 0) {
-					sending = true;
-					CurrentMessage = MessageQ.Dequeue();
-					//Console.WriteLine(CurrentMessage);
-				}
-			}
+            lock (MessageQ)
+            {
+                //There is a possibility, that call to SendMessageCallback was made through SendMessage,
+                //while another writing is in progress, so the call just returns, as inMessage was appended to the queue, and will be delivered in its turn
+                if (sending)
+                {
+                    return;
+                }
+                if (MessageQ.Count != 0)
+                {
+                    sending = true;
+                    CurrentMessage = MessageQ.Dequeue();
+                    //Console.WriteLine(CurrentMessage);
+                }
+            }
 
-			//CurrentMessage wont be null if the queue was not empty
-			//CurrentMessage will be null if the queue was empty
-			if (CurrentMessage != null && mNetworkStream != null) {
+            //CurrentMessage wont be null if the queue was not empty
+            //CurrentMessage will be null if the queue was empty
+            if (CurrentMessage != null && mNetworkStream != null)
+            {
                 try
                 {
-                    if (mTcpClient.Connected)
-                    {
-                        
-                    }
-                    else
-                    {
-                        //Disconnect();
-                        //Connect();
-                    }
                     if (mTcpClient.Connected)
                     {
                         mNetworkStream.BeginWrite(Encoding.UTF8.GetBytes(CurrentMessage), 0, Encoding.UTF8.GetBytes(CurrentMessage).Length, new AsyncCallback(SendMessageCallback), null);
                     }
-                    else {
-                        EmergencyDisc();
-                        return;
-                    }
-                }
-                catch (NullReferenceException ex)
-                {
-                    return;
-                }
-
-
-			}
-		}
-
-        /*
-         *  Just passing received data to delegate and continue to read the stream
-        */
-		private void DataReceivedCallback( IAsyncResult result)
-		{
-
-            if (mNetworkStream != null)
-            {
-                int receivedDataLength = mNetworkStream.EndRead(result);
-                //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
-
-                byte[] ReceivedData = new byte[receivedDataLength];
-                Array.Copy(Buffer, ReceivedData, receivedDataLength);
-
-                OnDataReceived(new ReceivedDataArgs(ReceivedData));
-                try
-                {
-                    if (mTcpClient.Connected)
-                    {
-                        mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
-                    }
                     else
                     {
                         EmergencyDisc();
                         return;
                     }
-                        
                 }
                 catch (NullReferenceException ex)
                 {
                     return;
                 }
+
+
             }
-            
-		}
+        }
+
+        /*
+         *  Just passing received data to delegate and continue to read the stream
+        */
+        private void DataReceivedCallback(IAsyncResult result)
+        {
+            lock (mNetworkStreamLock)
+            {
+                if (mNetworkStream != null)
+                {
+                    int receivedDataLength = mNetworkStream.EndRead(result);
+                    //Console.WriteLine("Received {0} bytes:\n {1}", receivedDataLength, Encoding.UTF8.GetString(Buffer));
+
+                    byte[] ReceivedData = new byte[receivedDataLength];
+                    Array.Copy(Buffer, ReceivedData, receivedDataLength);
+
+                    OnDataReceived(new ReceivedDataArgs(ReceivedData));
+                    try
+                    {
+                        if (mTcpClient.Connected)
+                        {
+                            mNetworkStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(DataReceivedCallback), null);
+                        }
+                        else
+                        {
+                            EmergencyDisc();
+                            return;
+                        }
+
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
 
 		protected virtual void OnDataReceived (ReceivedDataArgs ea)
 		{

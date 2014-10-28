@@ -320,21 +320,45 @@ namespace TwitchChatBot
 
         public void Disconnect()
         {
+            if (ctsPing != null)
+            {
+                ctsPing.Cancel();
+            }
+
             if (IsQuizRunning)
             {
                 StopQuiz();
             }
+
             mTcpConnection.Disconnect();
             
             Connected = Connected;
         }
 
-		public void Connect ()
+		async public void Connect ()
 		{
 			mTcpConnection.Connect();
             Connected = Connected; //  trigger NotifyPropertyChangeds
+            if (Connected)
+            {
+                if (ctsPing != null)
+                {
+                    ctsPing.Cancel();
+                }
+                ctsPing = new CancellationTokenSource();
+                await PingServer(ctsPing.Token);
+            }
 		}
 
+        async Task PingServer(CancellationToken ct)
+        {
+            while (!(ct.IsCancellationRequested))
+            {
+                await Task.Delay(30000);
+                SendMessage(new IrcCommand(null, "PING", new IrcCommandParameter("TwitchQuizBot")).ToString() + "\r\n");
+                //SendMessageToCurrentChannel("lol");
+            }
+        }
 
 		public void SendMessage (string inMessage)
 		{
@@ -376,7 +400,7 @@ namespace TwitchChatBot
                         IrcCommand outCommand = mIrcCommandAnalyzer.GetResponse(IrcCommand.Parse(inMessage));
                         if (outCommand != null)
                         {
-                            SendMessage(outCommand.ToString());
+                            SendMessage(outCommand.ToString() + "\r\n");
                         }
                         if (incCommand.Name == "PRIVMSG")
                         {
@@ -868,6 +892,7 @@ namespace TwitchChatBot
             }
         }
 
+        CancellationTokenSource ctsPing;
         public event Action<String> NotifyAboutNotices; 
         List<String> privMessages = new List<string>();
 		TcpConnection mTcpConnection;
