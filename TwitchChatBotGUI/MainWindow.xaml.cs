@@ -168,6 +168,7 @@ namespace TwitchChatBotGUI
                     return;
                 }
                 //bot.Connect();
+                //bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "USER " + bot.Auth.AuthName + ' ' + "tmi.twitch.tv" + ' ' + "tmi.twitch.tv" + " :" + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
                 bot.SendMessage("PASS oauth:" + bot.Auth.AuthKey + "\r\n" + "NICK " + bot.Auth.AuthName + "\r\n" + "JOIN #" + bot.Auth.AuthName + "\r\n");
                 bot.TwitchChannel = bot.Auth.AuthName;
                 //bot.SendMessage( );

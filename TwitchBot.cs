@@ -520,7 +520,12 @@ namespace TwitchChatBot
         {
             if (inMessage != null)
             {
-                SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#" + TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
+                string name = null;
+                //if (AuthorizedName != null)
+                //{
+                //    name = AuthorizedName + "!" + AuthorizedName + "@" + AuthorizedName + ".tmi.twitch.tv";
+                //}
+                SendMessage(new IrcCommand(name, "PRIVMSG", new IrcCommandParameter("#" + TwitchChannel, false), new IrcCommandParameter(inMessage, true)).ToString() + "\r\n");
             }
         }
 
