@@ -335,10 +335,18 @@ namespace TwitchChatBot
             Connected = Connected;
         }
 
-		async public void Connect ()
+		public void Connect ()
 		{
 			mTcpConnection.Connect();
             Connected = Connected; //  trigger NotifyPropertyChangeds
+            if (Connected)
+            {
+                StartPinging();
+            }
+		}
+
+        async void StartPinging()
+        {
             if (Connected)
             {
                 if (ctsPing != null)
@@ -348,7 +356,7 @@ namespace TwitchChatBot
                 ctsPing = new CancellationTokenSource();
                 await PingServer(ctsPing.Token);
             }
-		}
+        }
 
         async Task PingServer(CancellationToken ct)
         {
