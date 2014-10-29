@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Net;
+using System.Web.Script.Serialization;
+using System.Runtime.Serialization;
 
 namespace TwitchChatBot
 {
@@ -356,6 +359,8 @@ namespace TwitchChatBot
             mDispatchTable["!Commands"] = Commands;
             mDispatchTable["!Top5"] = Top5;
             mDispatchTable["!TopX"] = Top5;
+            mDispatchTable["!ChuckNorris"] = ChuckNorris;
+            //mDispatchTable["!GetRandomQuote"] = GetRandomQuote;
 
             mIncomingMessagesQueue = new Queue<IrcCommand>();
             mScore = new Dictionary<string, int>();
@@ -930,6 +935,36 @@ namespace TwitchChatBot
         QuizHint mQuizHint;
 
         #region Bot Commands Dispatching
+
+        // { "type": "success", "value": { "id": 120, "joke": "Chuck Norris played Russian Roulette with a fully loaded gun and won.", "categories": [] } }
+
+        class ChuckNorrisJoke
+        {
+            public int id { get; set; }
+            public string joke { get; set; }
+            public string[] categories { get; set; } 
+        }
+
+        class ChuckNorrisObject
+        {
+            public string type { get; set; }
+            public ChuckNorrisJoke value { get; set; }
+        }
+
+        public void ChuckNorris(string inSender)
+        {
+            WebRequest request = WebRequest.Create("http://api.icndb.com/jokes/random");
+            HttpWebResponse httpWebResponse = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = httpWebResponse.GetResponseStream();
+            // Open the stream using a StreamReader for easy access.
+            StreamReader dataReader = new StreamReader(dataStream);
+            // Read the content. 
+            string responseFromServer = dataReader.ReadToEnd();
+            ChuckNorrisObject CNO = new JavaScriptSerializer().Deserialize<ChuckNorrisObject>(responseFromServer);
+            Console.WriteLine(CNO.value.joke);
+            SendMessage(CNO.value.joke);
+            
+        }
 
         void TopX(int inX)
         {

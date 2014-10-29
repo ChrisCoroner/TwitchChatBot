@@ -332,6 +332,11 @@ namespace TwitchChatBotGUI
             }
         }
 
+        async private void CreateRandomQuiz(object sender, RoutedEventArgs e)
+        {
+            await bot.GetRandomQuizQuestion();
+        }
+
         private void QuickAddQuestion(object sender, RoutedEventArgs e)
         {
             try

@@ -193,6 +193,16 @@
                             <DataGrid ColumnWidth="{Binding ElementName=QuizDataGrids,Path=ActualWidth,Converter={StaticResource converter},Mode=OneWay, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}" TargetUpdated="OnSourceUpdated" SourceUpdated="OnSourceUpdated" MinHeight="50" DockPanel.Dock="Top" Name="QuizDataGrid" ItemsSource="{Binding QuizListOrig, Mode=OneWay}" Margin="0 0 20 0" SelectionChanged="SelectionChangedOccured" SelectedItem="{Binding CurrentQuizObject,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGrid.ContextMenu>
                                     <ContextMenu>
+                                        <MenuItem Header="Add random questions" Click="CreateRandomQuiz">
+                                            <MenuItem.Icon>
+                                                <Rectangle Fill="White" Width="18" Height="18">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add_multiple}" />
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
                                         <MenuItem Header="Quick Add Question" Click="QuickAddQuestion">
                                             <MenuItem.Icon>
                                                 <Rectangle Width="18" Height="18">

@@ -364,8 +364,41 @@ namespace TwitchChatBot
             {
                 await Task.Delay(30000);
                 SendMessage(new IrcCommand(null, "PING", new IrcCommandParameter("TwitchQuizBot")).ToString() + "\r\n");
-                //SendMessageToCurrentChannel("lol");
+                //mQE.ChuckNorris("");
             }
+        }
+
+        class RandomQuizObject {
+            public string text { get; set; }
+            public int number { get; set; }
+            public bool found { get; set; }
+            public string type { get; set; }
+        }
+
+        void FillInQuiz()
+        {
+            
+            for (int i = 0; i < 20; i++)
+            {
+                WebRequest request = WebRequest.Create("https://numbersapi.p.mashape.com/random/trivia?fragment=true&json=true&max=99999&min=1");
+                request.Headers.Add("X-Mashape-Key", "NvahP1eNmSmsh4QkjEgVRNWyEQLyp1bwLL5jsnMaCxKFBDpzK7");
+                HttpWebResponse httpWebResponse = (HttpWebResponse)request.GetResponse();
+                Stream dataStream = httpWebResponse.GetResponseStream();
+                // Open the stream using a StreamReader for easy access.
+                StreamReader dataReader = new StreamReader(dataStream);
+                // Read the content. 
+                string responseFromServer = dataReader.ReadToEnd();
+                RandomQuizObject RQO = new JavaScriptSerializer().Deserialize<RandomQuizObject>(responseFromServer);
+                //Console.WriteLine(RQO.text);
+                mQE.AddNewQuizObject(RQO.text, RQO.number.ToString());
+                //Console.WriteLine(responseFromServer);
+            }
+        }
+
+        async public Task GetRandomQuizQuestion()
+        {
+            await Task.Factory.StartNew((System.Action)FillInQuiz, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            //await FillInQuiz();
         }
 
 		public void SendMessage (string inMessage)
