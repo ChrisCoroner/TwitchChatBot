@@ -17,7 +17,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Drawing;
 
 namespace TwitchChatBot
 {
@@ -329,7 +329,7 @@ namespace TwitchChatBot
             {
                 StopQuiz();
             }
-
+            mQE.EndAcceptMessages();
             mTcpConnection.Disconnect();
             
             Connected = Connected;
@@ -339,6 +339,7 @@ namespace TwitchChatBot
 		{
 			mTcpConnection.Connect();
             Connected = Connected; //  trigger NotifyPropertyChangeds
+            mQE.BeginAcceptMessages();
             if (Connected)
             {
                 StartPinging();
@@ -910,6 +911,18 @@ namespace TwitchChatBot
                 isQuizRunning = value;
                 IsConnectedAuthorizedAndQuizRunning = IsConnectedAuthorizedAndQuizRunning;
                 IsConnectedAuthorizedAndQuizNotRunning = IsConnectedAuthorizedAndQuizNotRunning;
+            }
+        }
+
+        public Action<Image> ShowStaff
+        {
+            get
+            {
+                return mQE.ShowStaff;
+            }
+            set
+            {
+                mQE.ShowStaff = value;
             }
         }
 

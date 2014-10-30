@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
+using System.Drawing;
 
 namespace TwitchChatBot
 {
@@ -61,6 +62,23 @@ namespace TwitchChatBot
         {
             Question = inQuestion;
             Answer = inAnswer;
+            if (!String.IsNullOrEmpty(inQuestion))
+            {
+                if (Uri.IsWellFormedUriString(inQuestion, UriKind.RelativeOrAbsolute))
+                {
+                    isImageQuestion = true;
+                    HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(inQuestion);
+
+                    using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                    {
+                        using (Stream stream = httpWebReponse.GetResponseStream())
+                        {
+                            mImageQuestion = Image.FromStream(stream);
+                        }
+                    }
+                }
+            }
+
         }
 
         public bool Equals(QuizObject other)
@@ -139,8 +157,20 @@ namespace TwitchChatBot
         {
             isAnswered = inAnswered;
         }
+        public bool IsImageQuestion()
+        {
+            return isImageQuestion;
+        }
+
+        public Image GetImageQuestion()
+        {
+            return mImageQuestion;
+        }
 
         bool isAnswered = false;
+        bool isImageQuestion = false;
+
+        Image mImageQuestion = null;
 
         public String Question { get; set; }
         public String Answer { get; set; }
@@ -473,6 +503,10 @@ namespace TwitchChatBot
                 Task<IrcCommand> tic = Task.Run((Func<Task<IrcCommand>>)GetMessageFromQ,ct);
                 IrcCommand ic = await tic;
 
+                if(ic != null){
+                    Console.WriteLine("InCommand: " + ic.ToString());
+                }
+
                 //check privmsg for being a command
                 if (ic != null && ic.Prefix != null)
                 {
@@ -488,7 +522,7 @@ namespace TwitchChatBot
 
 
                 //here we have a privmsg and have to check for a valid answer
-                if (mCurrentObject != null && !(mCurrentObject.IsAnswered()) && ic != null &&  ic.Prefix != null)
+                if (quizIsRunning && mCurrentObject != null && !(mCurrentObject.IsAnswered()) && ic != null &&  ic.Prefix != null)
                 {
 
                     Console.WriteLine("{0} is guessed it is \"{1}\" ({2})!", ic.Prefix, ic.Parameters[ic.Parameters.Length - 1].Value, mCurrentObject.Answer);
@@ -575,27 +609,55 @@ namespace TwitchChatBot
 
         public void StopQuiz()
         {
+            quizIsRunning = false;
+
+            if (ctsDelay != null) {
+                ctsDelay.Cancel();
+            }
+
+            mTimeToAskAQuestion.Enabled = false;
+            mTimeToGiveAHint.Enabled = false;
+            mTimeTillNextQuestion.Enabled = false;
+
+            string message = "Quiz is about to stop.";
+
+            if ( mCurrentObject != null && !(mCurrentObject.IsAnswered()))
+            {
+                mCurrentObject.SetAnswered(true);
+                string messageAppend = String.Format("The answer was: {0}!", mCurrentObject.Answer);
+                message = message + messageAppend;
+            }
+            SendMessage(message);
+        }
+
+        async public void BeginAcceptMessages()
+        {
             if (cts != null)
             {
-                if (ctsDelay != null) {
-                    ctsDelay.Cancel();
-                }
-
-                mTimeToAskAQuestion.Enabled = false;
-                mTimeToGiveAHint.Enabled = false;
-                mTimeTillNextQuestion.Enabled = false;
-
-                string message = "Quiz is about to stop.";
-
-                if ( mCurrentObject != null && !(mCurrentObject.IsAnswered()))
-                {
-                    mCurrentObject.SetAnswered(true);
-                    string messageAppend = String.Format("The answer was: {0}!", mCurrentObject.Answer);
-                    message = message + messageAppend;
-                }
-                SendMessage(message);
                 cts.Cancel();
-                
+            }
+
+            cts = new CancellationTokenSource();
+
+            if (cts != null) // will be set to null in StopQuiz,so have to check again after OnTimeToAskAQuestion 
+            {
+                await ReadIncomingMessages(cts.Token);
+            }
+        }
+
+        public void EndAcceptMessages()
+        {
+            //stop all running entertainment things
+            if (quizIsRunning)
+            {
+                InternalInitiationQuizStop();
+               
+            }
+
+            if (cts != null)
+            {
+                cts.Cancel();
+
                 cts = null;
             }
         }
@@ -606,13 +668,8 @@ namespace TwitchChatBot
                 throw new InvalidDataException("mQuizList is empty!");
             }
 
-            if (cts != null) {
-                mTimeToAskAQuestion.Enabled = false;
-                mTimeToGiveAHint.Enabled = false;
-                cts.Cancel();
-            }
-            cts = new CancellationTokenSource();
-
+            quizIsRunning = true;
+            
             mTimeToAskAQuestion = new System.Timers.Timer(mTimeBetweenQuestions);
             mTimeToGiveAHint = new System.Timers.Timer(mTimeBetweenHints);
             mTimeTillNextQuestion = new System.Timers.Timer(1000);
@@ -624,13 +681,7 @@ namespace TwitchChatBot
 
             mTimeTillNextQuestion.Elapsed += ReduceTimeTillQuestion;
             
-            
-            
             OnTimeToAskAQuestion(null, null);
-            if (cts != null) // will be set to null in StopQuiz,so have to check again after OnTimeToAskAQuestion 
-            {
-                await ReadIncomingMessages(cts.Token);
-            }
 
         }
 
@@ -686,7 +737,7 @@ namespace TwitchChatBot
             TimeTillNextQuestion = TimeBetweenQuestions / 1000;
             
             await DelayExecution(ctsDelay.Token);
-            if (mCurrentObject == null || cts == null) {
+            if (mCurrentObject == null || cts == null || !quizIsRunning) {
                 return;
             }
             mTimeToGiveAHint.Start();
@@ -696,6 +747,10 @@ namespace TwitchChatBot
             mTimeTillNextQuestion.Start();
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
             SendMessage(CurrentQuizObject.Question);
+            if (CurrentQuizObject.IsImageQuestion())
+            {
+                ShowStaff(CurrentQuizObject.GetImageQuestion());
+            }
         }
 
         public void AskScpecifiedQuestion(QuizObject inQuizObject)
@@ -775,7 +830,7 @@ namespace TwitchChatBot
             set;
         }
 
-        bool quizIsRunning;
+        bool quizIsRunning = false;
         public QuizObjectsList QuizListOrig
         {
             get
@@ -917,6 +972,14 @@ namespace TwitchChatBot
                 NotifyPropertyChanged();
             }
         }
+
+        public Action<Image> ShowStaff
+        {
+            get;
+            set;
+        }
+
+
 
         QuizObject mCurrentObject;
 

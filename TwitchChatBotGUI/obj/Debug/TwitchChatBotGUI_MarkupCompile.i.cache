@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Юрий\Documents\GitHub\TwitchChatBot\TwitchChatBotGUI\App.xaml
-9-2051670382
+10-1009401246
 7161930906
-17486782695
-19-1874482165
-MainWindow.xaml;MenuItems\AddNewQuizObjectPop.xaml;MenuItems\ChannelSettings.xaml;MenuItems\ErrorMessage.xaml;MenuItems\Info.xaml;MenuItems\LoyalityPointsRewards.xaml;MenuItems\NetworkSettings.xaml;MenuItems\QuizSettings.xaml;Resources\Icons.xaml;
+18-1371560502
+201732913478
+MainWindow.xaml;MenuItems\AddNewQuizObjectPop.xaml;MenuItems\ChannelSettings.xaml;MenuItems\ErrorMessage.xaml;MenuItems\ImagePop.xaml;MenuItems\Info.xaml;MenuItems\LoyalityPointsRewards.xaml;MenuItems\NetworkSettings.xaml;MenuItems\QuizSettings.xaml;Resources\Icons.xaml;
 
-True
+False
 

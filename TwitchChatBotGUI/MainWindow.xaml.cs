@@ -19,6 +19,7 @@ using TwitchChatBot;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Globalization;
+using System.Drawing;
 
 namespace TwitchChatBotGUI
 {
@@ -140,6 +141,7 @@ namespace TwitchChatBotGUI
             {
                 bot = new TwitchBot();
                 bot.NotifyAboutNotices += OpenErrorMessageFromDifThread;
+                bot.ShowStaff += ShowStaffFromDifThread; 
                 bot.Destination = new Endpoint();
                 bot.Destination.EndpointAddress = "irc.twitch.tv";
                 bot.Destination.EndpointPort = 6667;
@@ -434,12 +436,24 @@ namespace TwitchChatBotGUI
 
         #region functionality for menu-driven UI
 
+        private void ShowStaffFromDifThread(System.Drawing.Image inImage)
+        {
+            if (inImage != null)
+            {
+                this.Dispatcher.Invoke((Action<System.Drawing.Image>)ShowStaff, inImage);
+            }
+        }
+
         private void OpenErrorMessageFromDifThread(String inErrorMessage)
         {
             this.Dispatcher.Invoke((Action<string>)OpenErrorMessage, inErrorMessage);
         }
 
-
+        private void ShowStaff(System.Drawing.Image inImage)
+        {
+            Popup Pop = new Popup();
+            ShowPopupWithUserControl(new ImagePop(bot, Pop, inImage));
+        }
 
         private void OpenErrorMessage(String inErrorMessage)
         {
