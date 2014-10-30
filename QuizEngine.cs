@@ -64,18 +64,31 @@ namespace TwitchChatBot
             Answer = inAnswer;
             if (!String.IsNullOrEmpty(inQuestion))
             {
-                if (Uri.IsWellFormedUriString(inQuestion, UriKind.RelativeOrAbsolute))
-                {
-                    isImageQuestion = true;
-                    HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(inQuestion);
-
-                    using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                try{
+                    if (Uri.IsWellFormedUriString(inQuestion, UriKind.RelativeOrAbsolute))
                     {
-                        using (Stream stream = httpWebReponse.GetResponseStream())
+                        isImageQuestion = true;
+                        HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(inQuestion);
+
+                        using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse())
                         {
-                            mImageQuestion = Image.FromStream(stream);
+                            using (Stream stream = httpWebReponse.GetResponseStream())
+                            {
+                                mImageQuestion = new Bitmap(stream);
+
+                                var bmp = new Bitmap(mImageQuestion.Width, mImageQuestion.Height);
+                                var gBmp = System.Drawing.Graphics.FromImage(bmp);
+                                Color col = Color.FromArgb(0, 0, 0);
+                                gBmp.FillRectangle(new SolidBrush(col), new Rectangle(0, 0, mImageQuestion.Width, mImageQuestion.Height));
+
+                                mImageQuestionCovered = bmp;
+                            }
                         }
                     }
+                }
+                catch (UriFormatException ex)
+                {
+
                 }
             }
 
@@ -162,15 +175,42 @@ namespace TwitchChatBot
             return isImageQuestion;
         }
 
-        public Image GetImageQuestion()
+        public Bitmap GetImageQuestion()
         {
-            return mImageQuestion;
+            return mImageQuestionCovered;
         }
+
+        public void UncoverFullImage()
+        {
+            CopyRegionIntoImage(mImageQuestion, new Rectangle(0, 0, mImageQuestion.Width, mImageQuestion.Height), ref mImageQuestionCovered, new Rectangle(0, 0, mImageQuestion.Width, mImageQuestion.Height));
+        }
+
+        public void UncoverPartOfImageQuestion()
+        {
+            int x = rnd.Next(mImageQuestion.Width);
+            int y = rnd.Next(mImageQuestion.Height);
+
+            int width = (mImageQuestion.Width - x) * 3 / 10;
+            int height = (mImageQuestion.Height - y) * 3 / 10;
+
+            CopyRegionIntoImage(mImageQuestion, new Rectangle(x, y, width, height),ref mImageQuestionCovered, new Rectangle(x, y, width, height));
+        }
+
+        private static void CopyRegionIntoImage(Bitmap srcBitmap, Rectangle srcRegion, ref Bitmap destBitmap, Rectangle destRegion)
+        {
+            using (Graphics grD = Graphics.FromImage(destBitmap))
+            {
+                grD.DrawImage(srcBitmap, destRegion, srcRegion, GraphicsUnit.Pixel);
+            }
+        }
+
+        static Random rnd = new Random();
 
         bool isAnswered = false;
         bool isImageQuestion = false;
 
-        Image mImageQuestion = null;
+        Bitmap mImageQuestionCovered = null;
+        Bitmap mImageQuestion = null;
 
         public String Question { get; set; }
         public String Answer { get; set; }
@@ -577,6 +617,11 @@ namespace TwitchChatBot
 
                         //Console.WriteLine("{0} is right, it is \"{1}\" !", name, mCurrentQAPair.Item2);
                         string message = String.Format("{0} is right, it is \"{1}\", {0}'s score is {2}!", name, mCurrentObject.Answer, mScore[name]);
+                        if (mCurrentObject.IsImageQuestion())
+                        {
+                            mCurrentObject.UncoverFullImage();
+                            ShowStaff(mCurrentObject.GetImageQuestion());
+                        }
                         //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(message, true)).ToString() + "\r\n");
                         SendMessage(message);
                         string commandL = ProcessLoyalityCommand(name);
@@ -722,6 +767,11 @@ namespace TwitchChatBot
                 string message = String.Format("The answer was: {0}!", mCurrentObject.Answer);
                 mCurrentObject.SetAnswered(true);
                 SendMessage(message);
+                if (mCurrentObject.IsImageQuestion())
+                {
+                    mCurrentObject.UncoverFullImage();
+                    ShowStaff(mCurrentObject.GetImageQuestion());
+                }
             }
 
             CurrentQuizObject = GetQuizObject();
@@ -747,10 +797,9 @@ namespace TwitchChatBot
             mTimeTillNextQuestion.Start();
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
             SendMessage(CurrentQuizObject.Question);
-            if (CurrentQuizObject.IsImageQuestion())
-            {
-                ShowStaff(CurrentQuizObject.GetImageQuestion());
-            }
+
+            ShowStaff(CurrentQuizObject.GetImageQuestion());
+            
         }
 
         public void AskScpecifiedQuestion(QuizObject inQuizObject)
@@ -768,6 +817,11 @@ namespace TwitchChatBot
         void OnTimeToGiveAHint(object source, ElapsedEventArgs e)
         {
             string currentHint = mQuizHint.GiveAHint();
+            if (CurrentQuizObject.IsImageQuestion())
+            {
+                CurrentQuizObject.UncoverPartOfImageQuestion();
+                ShowStaff(CurrentQuizObject.GetImageQuestion());
+            }
             //SendMessage(new IrcCommand(null, "PRIVMSG", new IrcCommandParameter("#sovietmade", false), new IrcCommandParameter(currentHint, true)).ToString() + "\r\n");
             SendMessage(currentHint);
         }
@@ -973,7 +1027,7 @@ namespace TwitchChatBot
             }
         }
 
-        public Action<Image> ShowStaff
+        public Action<Bitmap> ShowStaff
         {
             get;
             set;

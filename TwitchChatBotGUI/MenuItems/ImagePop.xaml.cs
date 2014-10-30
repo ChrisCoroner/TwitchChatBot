@@ -27,7 +27,7 @@ namespace TwitchChatBotGUI.MenuItems
     /// </summary>
     public partial class ImagePop : System.Windows.Controls.UserControl, ITwitchMenuItem
     {
-        public ImagePop(TwitchBot inBot, Popup inCurrentPopup, System.Drawing.Image inImage)
+        public ImagePop(TwitchBot inBot, Popup inCurrentPopup, System.Drawing.Bitmap inImage)
         {
             Bot = inBot;
             CurrentPopup = inCurrentPopup;

@@ -914,7 +914,7 @@ namespace TwitchChatBot
             }
         }
 
-        public Action<Image> ShowStaff
+        public Action<Bitmap> ShowStaff
         {
             get
             {

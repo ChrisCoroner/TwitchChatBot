@@ -436,11 +436,15 @@ namespace TwitchChatBotGUI
 
         #region functionality for menu-driven UI
 
-        private void ShowStaffFromDifThread(System.Drawing.Image inImage)
+        private void ShowStaffFromDifThread(System.Drawing.Bitmap inImage)
         {
             if (inImage != null)
             {
-                this.Dispatcher.Invoke((Action<System.Drawing.Image>)ShowStaff, inImage);
+                this.Dispatcher.Invoke((Action<System.Drawing.Bitmap>)ShowStaff, inImage);
+            }
+            else {
+                this.Dispatcher.Invoke((Action)CloseImagePopUp);
+               
             }
         }
 
@@ -449,11 +453,24 @@ namespace TwitchChatBotGUI
             this.Dispatcher.Invoke((Action<string>)OpenErrorMessage, inErrorMessage);
         }
 
-        private void ShowStaff(System.Drawing.Image inImage)
+        private void CloseImagePopUp()
         {
+            tempImage.IsOpen = false;
+        }
+
+        private void ShowStaff(System.Drawing.Bitmap inImage)
+        {
+            if (tempImage != null)
+            {
+                tempImage.IsOpen = false;
+            }
+
             Popup Pop = new Popup();
+            tempImage = Pop;
             ShowPopupWithUserControl(new ImagePop(bot, Pop, inImage));
         }
+
+        Popup tempImage;
 
         private void OpenErrorMessage(String inErrorMessage)
         {

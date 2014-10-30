@@ -1,4 +1,5 @@
-﻿{Question}Target troop gets permanent -1[ATK]/-1[DEF].Draw a card.{Answer}Atrophy
+﻿{Question}http://hex.tcgbrowser.com/images/cards/big/ReplicatorsGambit_Kickstarter.jpg{Answer}Gambit
+{Question}Target troop gets permanent -1[ATK]/-1[DEF].Draw a card.{Answer}Atrophy
 {Question}Target troop gets permanent +1[ATK]/+1[DEF] and Lifedrain.{Answer}Blood Aura
 {Question}When this or another troop you control dies, gain 1 health.{Answer}Blood Bearer
 {Question}Sacrifice another troop : This troop becomes 5[ATK]/5[DEF] this turn.{Answer}Blood Cauldron Ritualist
