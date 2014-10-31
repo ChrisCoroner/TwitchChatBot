@@ -455,7 +455,10 @@ namespace TwitchChatBotGUI
 
         private void CloseImagePopUp()
         {
-            tempImage.IsOpen = false;
+            if (tempImage != null)
+            {
+                tempImage.IsOpen = false;
+            }
         }
 
         private void ShowStaff(System.Drawing.Bitmap inImage)
@@ -538,10 +541,20 @@ namespace TwitchChatBotGUI
             inControl.CurrentPopup.MinHeight = 200;
             inControl.CurrentPopup.MinWidth = 200;
             inControl.CurrentPopup.PlacementTarget = this;
-            inControl.CurrentPopup.Placement = PlacementMode.Center;
+            if (inControl is ImagePop)
+            {
+                inControl.CurrentPopup.Placement = PlacementMode.Right;
+                inControl.CurrentPopup.StaysOpen = true;
+            }
+            else
+            {
+                inControl.CurrentPopup.Placement = PlacementMode.Center;
+                inControl.CurrentPopup.StaysOpen = false;
+            }
+            
             inControl.CurrentPopup.Child = (inControl as UserControl);
             inControl.CurrentPopup.IsOpen = true;
-            inControl.CurrentPopup.StaysOpen = false;
+            
         }
 
         private void LogOutButtonClick(object sender, RoutedEventArgs e)

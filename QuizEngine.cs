@@ -13,6 +13,7 @@ using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using System.Drawing;
 
+
 namespace TwitchChatBot
 {
 
@@ -62,35 +63,7 @@ namespace TwitchChatBot
         {
             Question = inQuestion;
             Answer = inAnswer;
-            if (!String.IsNullOrEmpty(inQuestion))
-            {
-                try{
-                    if (Uri.IsWellFormedUriString(inQuestion, UriKind.RelativeOrAbsolute))
-                    {
-                        isImageQuestion = true;
-                        HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(inQuestion);
-
-                        using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse())
-                        {
-                            using (Stream stream = httpWebReponse.GetResponseStream())
-                            {
-                                mImageQuestion = new Bitmap(stream);
-
-                                var bmp = new Bitmap(mImageQuestion.Width, mImageQuestion.Height);
-                                var gBmp = System.Drawing.Graphics.FromImage(bmp);
-                                Color col = Color.FromArgb(0, 0, 0);
-                                gBmp.FillRectangle(new SolidBrush(col), new Rectangle(0, 0, mImageQuestion.Width, mImageQuestion.Height));
-
-                                mImageQuestionCovered = bmp;
-                            }
-                        }
-                    }
-                }
-                catch (UriFormatException ex)
-                {
-
-                }
-            }
+           
 
         }
 
@@ -187,11 +160,11 @@ namespace TwitchChatBot
 
         public void UncoverPartOfImageQuestion()
         {
-            int x = rnd.Next(mImageQuestion.Width);
-            int y = rnd.Next(mImageQuestion.Height);
+            int x = rnd.Next(mImageQuestion.Width / 64)*64;
+            int y = rnd.Next(mImageQuestion.Height / 64)*64;
 
-            int width = (mImageQuestion.Width - x) * 3 / 10;
-            int height = (mImageQuestion.Height - y) * 3 / 10;
+            int width = 64;
+            int height = 64;
 
             CopyRegionIntoImage(mImageQuestion, new Rectangle(x, y, width, height),ref mImageQuestionCovered, new Rectangle(x, y, width, height));
         }
@@ -212,7 +185,58 @@ namespace TwitchChatBot
         Bitmap mImageQuestionCovered = null;
         Bitmap mImageQuestion = null;
 
-        public String Question { get; set; }
+        string question;
+        public String Question 
+        {
+            get
+            {
+                return question;
+            }
+            set
+            {
+                question = value;
+                if (!String.IsNullOrEmpty(question))
+                {
+                    try
+                    {
+                        if (Uri.IsWellFormedUriString(question, UriKind.RelativeOrAbsolute))
+                        {
+                            isImageQuestion = true;
+                            HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(question);
+
+                            using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                            {
+                                using (Stream stream = httpWebReponse.GetResponseStream())
+                                {
+                                    mImageQuestion = new Bitmap(stream);
+
+
+
+                                    var bmp = new Bitmap(mImageQuestion.Width, mImageQuestion.Height);
+                                    var gBmp = System.Drawing.Graphics.FromImage(bmp);
+
+
+
+                                    Bitmap image1 = (Bitmap)Image.FromFile("favicon.ico", true);
+
+                                    TextureBrush texture = new TextureBrush(image1);
+                                    texture.WrapMode = System.Drawing.Drawing2D.WrapMode.Tile;
+
+                                    System.Drawing.Color col = System.Drawing.Color.FromArgb(0, 0, 0);
+                                    gBmp.FillRectangle(texture, new Rectangle(0, 0, mImageQuestion.Width, mImageQuestion.Height));
+
+                                    mImageQuestionCovered = bmp;
+                                }
+                            }
+                        }
+                    }
+                    catch (UriFormatException ex)
+                    {
+
+                    }
+                }
+            }
+        }
         public String Answer { get; set; }
     }
 
@@ -796,7 +820,10 @@ namespace TwitchChatBot
             
             mTimeTillNextQuestion.Start();
             //SendMessage(new IrcCommand(null,"PRIVMSG", new IrcCommandParameter("#sovietmade",false), new IrcCommandParameter(mCurrentQAPair.Item1,true)).ToString() + "\r\n");
-            SendMessage(CurrentQuizObject.Question);
+            if (!mCurrentObject.IsImageQuestion())
+            {
+                SendMessage(CurrentQuizObject.Question);
+            }
 
             ShowStaff(CurrentQuizObject.GetImageQuestion());
             

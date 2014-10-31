@@ -31,7 +31,7 @@ namespace TwitchChatBotGUI.MenuItems
         {
             Bot = inBot;
             CurrentPopup = inCurrentPopup;
-
+            
             if (inImage != null)
             {
                 var bitmap = new System.Windows.Media.Imaging.BitmapImage();
