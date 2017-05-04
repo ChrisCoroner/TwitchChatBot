@@ -1113,7 +1113,7 @@ namespace TwitchChatBot
         void TopX(int inX)
         {
             string score;
-            var result = mScoreList.OrderBy(p => p.Score).Where((p, i) => i < inX).Select(p => p.ToString());
+            var result = mScoreList.OrderByDescending(p => p.Score).Where((p, i) => i < inX).Select(p => p.ToString());
             score = String.Join(" ", result);
 
             SendMessage(score);
@@ -1168,7 +1168,7 @@ namespace TwitchChatBot
         void Top5(string inSender)
         {
             string score;
-            var result = mScoreList.OrderBy(p=>p.Score).Where((p,i)=>i<5).Select(p=>p.ToString());
+            var result = mScoreList.OrderByDescending(p=>p.Score).Where((p,i)=>i<5).Select(p=>p.ToString());
             score = String.Join(" ",result);
 
             SendMessage(score);
